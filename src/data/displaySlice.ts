@@ -13,7 +13,7 @@ export const displaySlice = createSlice({
   initialState,
   reducers: {
     setActiveProject: (state, action: PayloadAction<string>) => {
-      return {...state, activeProject: action.payload}
+      state.activeProject = action.payload;
     },
   },
 })

@@ -1,10 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getId } from './storageIds.ts';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // The structure of an individual project
 interface Project {
   title: string,
-  children: Array<string>,
+  mainGroup: string,
+}
+
+function newProject(groupId: string): Project {
+  return {
+    title: 'Project Title',
+    mainGroup: groupId,
+  };
 }
 
 export interface ProjectsState {
@@ -19,13 +25,12 @@ export const projectsSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
-    create: (state) => {
-      const project: Project = {
-        title: 'Project Title',
-        children: [],
-      };
-      const id = getId();
-      return {all:{...state.all, [id]: project}};
+    create: (state, action: PayloadAction<{projectId: string, groupId: string}>) => {
+      console.log(action.type);
+      console.log('projectId: ', action.payload.projectId);
+      console.log('groupId: ', action.payload.groupId);
+
+      state.all[action.payload.projectId] = newProject(action.payload.groupId);
     },
   },
 })

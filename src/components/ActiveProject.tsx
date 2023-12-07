@@ -1,4 +1,4 @@
-import type { RootState } from "../data/store.ts";
+import type { RootState } from '../data/store.ts';
 import { useSelector } from 'react-redux';
 
 function ActiveProject() {
@@ -6,9 +6,13 @@ function ActiveProject() {
   const activeProject = useSelector((state: RootState) => activeProjectId ? state.projects.all[activeProjectId] : null);
   return (
     <>
-      <h4>Active Project:</h4>
-      <p>{activeProjectId}</p>
-      {activeProject ? <p>{activeProject.title}</p> : null}
+      {activeProject ?
+        <>
+          <h4>Active Project:</h4>
+          <p>{activeProjectId}</p>
+          <p>{activeProject.title}</p>
+        </>
+      : null}
     </>
   );
 }

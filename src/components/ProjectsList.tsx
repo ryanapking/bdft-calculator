@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../data/store.ts";
-import { create } from "../data/projectsSlice.ts";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../data/store.ts";
 import { setActiveProject } from "../data/displaySlice.ts";
+import { addProject } from "../data/thunkActions.ts";
 
 function ProjectsList() {
   const list = useSelector((state: RootState) => state.projects.all)
 
   const projectIds = Object.keys(list);
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -15,9 +15,9 @@ function ProjectsList() {
       {projectIds.map(id =>
         <p key={id} onClick={() => dispatch(setActiveProject(id))}>{id}</p>
       )}
-      <button onClick={() => dispatch(create())}>Create project</button>
+      <button onClick={() => dispatch(addProject())}>Create project</button>
     </>
   )
 }
 
-export default ProjectsList
+export default ProjectsList;

@@ -1,15 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getId } from './storageIds.ts';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 // The structure of an individual project
 interface Part {
   title: string,
 }
 
-function getTemplatePart(): Part {
+function newPart(): Part {
   return {
     title: 'Part Title'
-  }
+  };
 }
 
 export interface PartsState {
@@ -24,10 +23,10 @@ export const partsSlice = createSlice({
   name: 'parts',
   initialState,
   reducers: {
-    create: (state) => {
-      const part: Part = getTemplatePart();
-      const id = getId();
-      return {all:{...state.all, [id]: part}};
+    create: (state, action: PayloadAction<string>) => {
+      console.log(action.type);
+      console.log('partId: ', action.payload)
+      state.all[action.payload] = newPart();
     },
   },
 })

@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import {
   persistReducer,
   persistStore,
@@ -13,11 +13,14 @@ import storage from 'redux-persist/lib/storage';
 import projectsSlice from './projectsSlice.ts';
 import partsSlice from './partsSlice.ts';
 import displaySlice from './displaySlice.ts';
+import groupsSlice from './groupsSlice.ts';
+import { useDispatch } from "react-redux";
 
 const combinedReducers = combineReducers({
   display: persistReducer({key: 'display', storage}, displaySlice),
   projects: persistReducer({key: 'projects', storage}, projectsSlice),
   parts: persistReducer({key: 'parts', storage}, partsSlice),
+  groups: persistReducer({key: 'groups', storage}, groupsSlice),
 })
 
 export const store = configureStore({
@@ -30,16 +33,11 @@ export const store = configureStore({
     }),
 })
 
-
-
-
-
-
-///////
 export const persistor = persistStore(store);
-////////
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
