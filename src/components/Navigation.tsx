@@ -2,6 +2,7 @@ import { Navbar, Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import { setActiveProject } from '../data/displaySlice.ts';
+import { addProject } from '../data/thunkActions.ts';
 
 function Navigation() {
   const projects = useSelector((state: RootState) => state.projects.all)
@@ -21,7 +22,7 @@ function Navigation() {
             <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{id}</Dropdown.Item>
           )}
           <Dropdown.Divider />
-          <Dropdown.Item>Create</Dropdown.Item>
+          <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
         </Dropdown>
         <Navbar.Toggle />
       </Navbar>

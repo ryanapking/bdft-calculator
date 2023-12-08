@@ -24,16 +24,20 @@ export const partsSlice = createSlice({
   initialState,
   reducers: {
     create: (state, action: PayloadAction<string>) => {
-      console.log(action.type);
-      console.log('partId: ', action.payload)
       state.all[action.payload] = newPart();
+    },
+    destroy: (state, action: PayloadAction<string|Array<string>>) => {
+      const toDestroy = typeof action.payload === 'string' ? [action.payload] : action.payload;
+      console.log('destroying parts: ', toDestroy);
+      toDestroy.forEach(id => delete state.all[id]);
     },
   },
 })
 
 // Action creators are generated for each case reducer function
 export const {
-  create
+  create,
+  destroy,
 } = partsSlice.actions
 
 export default partsSlice.reducer

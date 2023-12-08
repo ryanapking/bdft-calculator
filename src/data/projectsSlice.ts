@@ -26,18 +26,18 @@ export const projectsSlice = createSlice({
   initialState,
   reducers: {
     create: (state, action: PayloadAction<{projectId: string, groupId: string}>) => {
-      console.log(action.type);
-      console.log('projectId: ', action.payload.projectId);
-      console.log('groupId: ', action.payload.groupId);
-
       state.all[action.payload.projectId] = newProject(action.payload.groupId);
     },
+    destroy: (state, action: PayloadAction<string>) => {
+      delete state.all[action.payload];
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
 export const {
-  create
+  create,
+  destroy
 } = projectsSlice.actions
 
 export default projectsSlice.reducer
