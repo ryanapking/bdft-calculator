@@ -14,6 +14,7 @@ import projectsSlice from './projectsSlice.ts';
 import partsSlice from './partsSlice.ts';
 import displaySlice from './displaySlice.ts';
 import groupsSlice from './groupsSlice.ts';
+import materialsSlice from './materialsSlice.ts';
 import { useDispatch } from "react-redux";
 
 const combinedReducers = combineReducers({
@@ -21,6 +22,7 @@ const combinedReducers = combineReducers({
   projects: persistReducer({key: 'projects', storage}, projectsSlice),
   parts: persistReducer({key: 'parts', storage}, partsSlice),
   groups: persistReducer({key: 'groups', storage}, groupsSlice),
+  materials: persistReducer({key: 'materials', storage}, materialsSlice),
 })
 
 export const store = configureStore({

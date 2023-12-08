@@ -4,12 +4,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface Project {
   title: string,
   mainGroup: string,
+  materials: Array<string>,
 }
 
 function newProject(groupId: string): Project {
   return {
     title: 'Project Title',
     mainGroup: groupId,
+    materials: [],
   };
 }
 
@@ -30,6 +32,14 @@ export const projectsSlice = createSlice({
     },
     destroy: (state, action: PayloadAction<string>) => {
       delete state.all[action.payload];
+    },
+    addMaterial: (state, action: PayloadAction<{projectId: string, materialId: string}>) => {
+      const { projectId, materialId } = action.payload;
+      state.all[projectId].materials.push(materialId);
+    },
+    removeMaterial: (state, action: PayloadAction<{projectId: string, materialId: string}>) => {
+      const { projectId, materialId } = action.payload;
+      state.all[projectId].materials = state.all[projectId].materials.filter(id => id !== materialId);
     }
   },
 })
@@ -37,7 +47,9 @@ export const projectsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   create,
-  destroy
+  destroy,
+  addMaterial,
+  removeMaterial
 } = projectsSlice.actions
 
 export default projectsSlice.reducer

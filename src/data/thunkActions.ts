@@ -1,9 +1,10 @@
 import { AppDispatch, RootState } from './store.ts';
 import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
-import { create as createProject, destroy as destroyProject } from './projectsSlice.ts';
+import { create as createProject, destroy as destroyProject, addMaterial } from './projectsSlice.ts';
+import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
 import { setActiveProject } from './displaySlice.ts';
-import { PROJECT, GROUP, PART, getId, getDataTypeFromId } from './dataTypes.ts';
+import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
 
 export function addProject() {
   return (dispatch: AppDispatch) => {
@@ -14,6 +15,15 @@ export function addProject() {
     dispatch(createProject({projectId, groupId}));
 
     dispatch(setActiveProject(projectId));
+  };
+}
+
+export function addMaterialToProject(projectId: string) {
+  return (dispatch: AppDispatch) => {
+    const materialId = getId(MATERIAL);
+    dispatch(createMaterial(materialId));
+
+    dispatch(addMaterial({projectId, materialId}));
   };
 }
 
@@ -76,11 +86,16 @@ export function deleteGroup(parentId: string, groupId: string) {
   }
 }
 
-export function deleteProject(projectId: string, mainGroupId: string) {
+export function deleteProject(projectId: string) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(destroyProject(projectId));
+    const state = getState();
+    const mainGroupId = state.projects.all[projectId].mainGroup;
+    const materials = state.projects.all[projectId].materials;
 
-    const children = gatherChildren(mainGroupId, getState());
+    dispatch(destroyProject(projectId));
+    dispatch(destroyMaterial(materials));
+
+    const children = gatherChildren(mainGroupId, state);
 
     const childParts = children.filter(id => getDataTypeFromId(id) === PART);
     dispatch(destroyPart(childParts));

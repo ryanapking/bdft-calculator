@@ -1,34 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // The structure of an individual project
-interface Part {
+interface Material {
   title: string,
 }
 
-function newPart(): Part {
+function newMaterial(): Material {
   return {
-    title: 'Part Title'
+    title: 'Material Title'
   };
 }
 
-export interface PartsState {
-  all: { [key: string]: Part },
+export interface MaterialsState {
+  all: { [key: string]: Material },
 }
 
-const initialState: PartsState = {
+const initialState: MaterialsState = {
   all: {},
 }
 
-export const partsSlice = createSlice({
-  name: 'parts',
+export const materialsSlice = createSlice({
+  name: 'materials',
   initialState,
   reducers: {
     create: (state, action: PayloadAction<string>) => {
-      state.all[action.payload] = newPart();
+      state.all[action.payload] = newMaterial();
     },
     destroy: (state, action: PayloadAction<string|Array<string>>) => {
       const toDestroy = typeof action.payload === 'string' ? [action.payload] : action.payload;
-      console.log('destroying parts: ', toDestroy);
+      console.log('destroying materials: ', toDestroy);
       toDestroy.forEach(id => delete state.all[id]);
     },
   },
@@ -38,6 +38,6 @@ export const partsSlice = createSlice({
 export const {
   create,
   destroy,
-} = partsSlice.actions
+} = materialsSlice.actions
 
-export default partsSlice.reducer
+export default materialsSlice.reducer
