@@ -4,7 +4,7 @@ import { RootState, useAppDispatch } from '../data/store.ts';
 import { setActiveProject } from '../data/displaySlice.ts';
 import { addProject } from '../data/thunkActions.ts';
 
-function Navigation() {
+function Header() {
   const projects = useSelector((state: RootState) => state.projects.all)
 
   const projectIds = Object.keys(projects);
@@ -30,4 +30,4 @@ function Navigation() {
   );
 }
 
-export default Navigation;
+export default Header;

@@ -4,10 +4,13 @@ import { Dropdown } from 'flowbite-react';
 import { deletePart } from '../data/thunkActions.ts';
 import { useAppDispatch } from '../data/store.ts';
 
-function Part(props: {partId: string, parentId: string}) {
+function PartDetails(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
   const part = useSelector((state: RootState) => state.parts.all[partId]);
   const dispatch = useAppDispatch();
+
+  if (!part) return null;
+
   return (
     <div className='m-2'>
       <Dropdown inline label={`Part : ${partId} : ${part.title}`}>
@@ -17,4 +20,4 @@ function Part(props: {partId: string, parentId: string}) {
   )
 }
 
-export default Part;
+export default PartDetails;
