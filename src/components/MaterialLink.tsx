@@ -10,7 +10,7 @@ function MaterialLink(props:{materialId: string, parentId: string}) {
 
   return (
     <div className='m-2'>
-      <h4 onClick={() => dispatch(setActiveDetails({id: materialId, parentId}))}>Material : {materialId} : {material.title}</h4>
+      <h4 onClick={() => dispatch(setActiveDetails({id: materialId, parentId}))}>{material.title ? material.title : 'Unnamed Material'}</h4>
     </div>
   )
 }

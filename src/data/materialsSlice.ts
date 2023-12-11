@@ -10,7 +10,7 @@ export interface Material {
 
 function newMaterial(): Material {
   return {
-    title: 'Material Title',
+    title: 'New Material',
     cost: 3,
     type: BDFT.id,
   };

@@ -38,8 +38,10 @@ function MaterialDetails(props:{materialId: string, parentId: string}) {
       <form>
         <Label htmlFor='title'  value='Material Title' />
         <TextInput id='title' value={titleInput} onChange={(event) => setTitleInput(event.target.value)}/>
+        <br />
         <Label htmlFor='cost'  value='Cost' />
         <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost} />
+        <br />
         <Label htmlFor="materialType" value="Material Type" />
         <Select id="materialType" required value={materialType} onChange={(event) => setMaterialType(event.target.value)}>
           {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}

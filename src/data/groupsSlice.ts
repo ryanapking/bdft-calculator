@@ -1,16 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // The structure of an individual project
-interface Group {
+export interface Group {
   title: string,
   children: Array<string>,
+  qty: number
 }
 
 function newGroup(): Group {
   return {
-    title: 'Group Title',
+    title: 'New Group',
     children: [],
+    qty: 1,
   };
+}
+
+function filterGroup(group: Group): Group {
+  return {
+    title: group.title,
+    children: group.children,
+    qty: group.qty,
+  }
 }
 
 export interface GroupsState {
@@ -33,6 +43,10 @@ export const groupsSlice = createSlice({
       console.log('destroying groups: ', toDestroy);
       toDestroy.forEach(id => delete state.all[id]);
     },
+    update: (state, action: PayloadAction<{ groupId: string, group: Group }>) => {
+      const { groupId, group } = action.payload;
+      state.all[groupId] = filterGroup(group);
+    },
     addChild: (state, action: PayloadAction<{ groupId: string, childId: string }>) => {
       console.log(`addChild(): groupId: ${action.payload.groupId}, childId: ${action.payload.childId}`);
       state.all[action.payload.groupId].children.push(action.payload.childId);
@@ -51,6 +65,7 @@ export const groupsSlice = createSlice({
 export const {
   create,
   destroy,
+  update,
   addChild,
   removeChild,
 } = groupsSlice.actions

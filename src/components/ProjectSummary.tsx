@@ -12,7 +12,7 @@ function ProjectSummary(props: { projectId: string }) {
 
   return (
     <div>
-      <h1>{project.title}</h1>
+      <h1>{project.title ? project.title : 'Unnamed Project'}</h1>
       <h1 onClick={() => dispatch(setActiveDetails({id: projectId, parentId: ''}))}>View Project Details</h1>
     </div>
   )

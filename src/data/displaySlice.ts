@@ -29,6 +29,12 @@ export const displaySlice = createSlice({
     },
     setActiveDetails: (state, action: PayloadAction<{ id: string, parentId: string }>) => {
       state.activeDetails = action.payload;
+    },
+    clearActiveDetailsIf: (state, action: PayloadAction<string>) => {
+      if (state.activeDetails.id === action.payload) {
+        state.activeDetails.id = '';
+        state.activeDetails.parentId = '';
+      }
     }
   },
 })
@@ -37,6 +43,7 @@ export const displaySlice = createSlice({
 export const {
   setActiveProject,
   setActiveDetails,
+  clearActiveDetailsIf,
 } = displaySlice.actions
 
 export default displaySlice.reducer

@@ -3,7 +3,7 @@ import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
 import { create as createProject, destroy as destroyProject, addMaterial } from './projectsSlice.ts';
 import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
-import { setActiveProject } from './displaySlice.ts';
+import { setActiveProject, clearActiveDetailsIf } from './displaySlice.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
 
 export function addProject() {
@@ -53,8 +53,8 @@ export function addGroup(parentId: string) {
 
 export function deletePart(groupId: string, partId: string) {
   return (dispatch: AppDispatch) => {
+    dispatch(clearActiveDetailsIf(partId));
     dispatch(removeChild({ groupId, childId: partId }));
-
     dispatch(destroyPart(partId));
   }
 }
@@ -74,6 +74,7 @@ function gatherChildren(groupId: string, state: RootState) {
 
 export function deleteGroup(parentId: string, groupId: string) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(clearActiveDetailsIf(groupId));
     dispatch(removeChild({groupId: parentId, childId: groupId}));
 
     const children = gatherChildren(groupId, getState());
@@ -88,6 +89,8 @@ export function deleteGroup(parentId: string, groupId: string) {
 
 export function deleteProject(projectId: string) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(clearActiveDetailsIf(projectId));
+
     const state = getState();
     const mainGroupId = state.projects.all[projectId].mainGroup;
     const materials = state.projects.all[projectId].materials;

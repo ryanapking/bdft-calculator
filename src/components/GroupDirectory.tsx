@@ -20,7 +20,7 @@ function GroupDirectory(props: {groupId: string, parentId: string}) {
 
   return (
     <div className="m-2">
-      <h1 onClick={() => dispatch(setActiveDetails({id: groupId, parentId}))}>Group : {groupId} : {group.title}</h1>
+      <h1 onClick={() => dispatch(setActiveDetails({id: groupId, parentId}))}>{group.title ? group.title : 'Unnamed Group'}</h1>
       <ul className="pl-6">
         {group.children.map(childId => printChild(childId))}
       </ul>
