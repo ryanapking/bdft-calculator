@@ -1,14 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { BDFT } from './dataTypes.ts';
 
 // The structure of an individual project
-interface Material {
+export interface Material {
   title: string,
+  cost: number,
+  type: string,
 }
 
 function newMaterial(): Material {
   return {
-    title: 'Material Title'
+    title: 'Material Title',
+    cost: 3,
+    type: BDFT.id,
   };
+}
+
+function filteredMaterial(material: Material): Material {
+  return {
+    title: material.title,
+    cost: material.cost,
+    type: material.type,
+  }
 }
 
 export interface MaterialsState {
@@ -28,9 +41,12 @@ export const materialsSlice = createSlice({
     },
     destroy: (state, action: PayloadAction<string|Array<string>>) => {
       const toDestroy = typeof action.payload === 'string' ? [action.payload] : action.payload;
-      console.log('destroying materials: ', toDestroy);
       toDestroy.forEach(id => delete state.all[id]);
     },
+    update: (state, action: PayloadAction<{ materialId: string, material: Material }>) => {
+      const { materialId, material } = action.payload;
+      state.all[materialId] = filteredMaterial(material);
+    }
   },
 })
 
@@ -38,6 +54,7 @@ export const materialsSlice = createSlice({
 export const {
   create,
   destroy,
+  update,
 } = materialsSlice.actions
 
 export default materialsSlice.reducer

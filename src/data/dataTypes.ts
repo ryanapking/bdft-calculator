@@ -35,3 +35,23 @@ const nanoid = customAlphabet(alphabet, 16);
 export function getId(type: DataType) {
   return type.idPrefix + nanoid();
 }
+
+export interface MaterialType {
+  label: string,
+  shorthand: string,
+  id: string,
+}
+
+export const BDFT: MaterialType = {
+  label: 'Board Feet',
+  shorthand: 'bdft',
+  id: 'bdft'
+};
+
+export const SQFT: MaterialType = {
+  label: "Square Feet",
+  shorthand: 'sqft',
+  id: 'sqft',
+};
+
+export const MATERIALS_TYPES: Array<MaterialType> = [BDFT, SQFT];

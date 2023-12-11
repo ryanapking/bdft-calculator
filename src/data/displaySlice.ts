@@ -1,20 +1,20 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ActiveDetails {
-  id: string|null,
-  parentId: string|null,
+  id: string,
+  parentId: string,
 }
 
 export interface DisplayState {
-  activeProject: string|null,
+  activeProject: string,
   activeDetails: ActiveDetails,
 }
 
 const initialState: DisplayState = {
-  activeProject: null,
+  activeProject: '',
   activeDetails: {
-    id: null,
-    parentId: null,
+    id: '',
+    parentId: '',
   },
 }
 
@@ -25,7 +25,7 @@ export const displaySlice = createSlice({
     setActiveProject: (state, action: PayloadAction<string>) => {
       state.activeProject = action.payload;
     },
-    setActiveDetails: (state, action: PayloadAction<{ id: string, parentId?: string|null }>) => {
+    setActiveDetails: (state, action: PayloadAction<{ id: string, parentId: string }>) => {
       state.activeDetails = action.payload;
     }
   },

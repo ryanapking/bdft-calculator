@@ -8,21 +8,16 @@ import MaterialDetails from './MaterialDetails.tsx';
 
 function Details() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
+
   if (!activeDetails.id) return null;
 
   switch (getDataTypeFromId(activeDetails.id)) {
-    case PROJECT: return <ProjectDetails projectId={activeDetails.id} />;
-    case GROUP: return <GroupDetails groupId={activeDetails.id} parentId={activeDetails.parentId} />
-    case PART: return <PartDetails partId={activeDetails.id} parentId={activeDetails.parentId} />
-    case MATERIAL: return <MaterialDetails materialId={activeDetails.id} parentId={activeDetails.parentId}/>
+    case PROJECT: return <ProjectDetails key={activeDetails.id} projectId={activeDetails.id} />;
+    case GROUP: return <GroupDetails key={activeDetails.id} groupId={activeDetails.id} parentId={activeDetails.parentId} />;
+    case PART: return <PartDetails key={activeDetails.id} partId={activeDetails.id} parentId={activeDetails.parentId} />;
+    case MATERIAL: return <MaterialDetails key={activeDetails.id} materialId={activeDetails.id} parentId={activeDetails.parentId}/>;
+    default: return null;
   }
-  return (
-    <div>
-      <h1>Details component</h1>
-      <p>Active: {activeDetails.id}</p>
-      <p>Parent id: {activeDetails.parentId}</p>
-    </div>
-  )
 }
 
 export default Details;
