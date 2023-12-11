@@ -14,7 +14,7 @@ function ProjectDirectory() {
     <div className='pr-20'>
       <ProjectSummary projectId={activeProjectId} />
       <MaterialsDirectory materials={activeProject.materials} projectId={activeProjectId}/>
-      <GroupDirectory groupId={activeProject.mainGroup} parentId={activeProjectId}/>
+      <GroupDirectory groupId={activeProject.mainGroup} parentId={activeProjectId} mainGroup/>
     </div>
   );
 }
