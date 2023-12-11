@@ -5,6 +5,7 @@ interface Project {
   title: string,
   mainGroup: string,
   materials: Array<string>,
+  defaultMaterial: string,
 }
 
 function newProject(groupId: string): Project {
@@ -12,7 +13,17 @@ function newProject(groupId: string): Project {
     title: 'Project Title',
     mainGroup: groupId,
     materials: [],
+    defaultMaterial: '',
   };
+}
+
+function filteredProject(project: Project): Project {
+  return {
+    title: project.title,
+    mainGroup: project.mainGroup,
+    materials: project.materials,
+    defaultMaterial: project.defaultMaterial,
+  }
 }
 
 export interface ProjectsState {
@@ -33,6 +44,10 @@ export const projectsSlice = createSlice({
     destroy: (state, action: PayloadAction<string>) => {
       delete state.all[action.payload];
     },
+    update: (state, action: PayloadAction<{ projectId: string, project: Project }>) => {
+      const { projectId, project } = action.payload;
+      state.all[projectId] = filteredProject(project);
+    },
     addMaterial: (state, action: PayloadAction<{projectId: string, materialId: string}>) => {
       const { projectId, materialId } = action.payload;
       state.all[projectId].materials.push(materialId);
@@ -48,8 +63,9 @@ export const projectsSlice = createSlice({
 export const {
   create,
   destroy,
+  update,
   addMaterial,
-  removeMaterial
+  removeMaterial,
 } = projectsSlice.actions
 
 export default projectsSlice.reducer

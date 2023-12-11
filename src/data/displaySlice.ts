@@ -24,6 +24,8 @@ export const displaySlice = createSlice({
   reducers: {
     setActiveProject: (state, action: PayloadAction<string>) => {
       state.activeProject = action.payload;
+      state.activeDetails.id = action.payload;
+      state.activeDetails.parentId = '';
     },
     setActiveDetails: (state, action: PayloadAction<{ id: string, parentId: string }>) => {
       state.activeDetails = action.payload;

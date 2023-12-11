@@ -1,10 +1,17 @@
 import MaterialLink from './MaterialLink.tsx';
+import { useAppDispatch } from '../data/store.ts';
+import { addMaterialToProject } from '../data/thunkActions.ts';
+import { Dropdown } from 'flowbite-react';
 
 function MaterialsDirectory(props: {materials: Array<string>, projectId: string}) {
   const { materials, projectId } = props;
+  const dispatch = useAppDispatch();
+
   return (
     <div className={'mt-2'}>
-      <h1>Project Materials</h1>
+      <Dropdown inline label='Project Materials'>
+        <Dropdown.Item onClick={() => dispatch(addMaterialToProject(projectId))}>Add Material</Dropdown.Item>
+      </Dropdown>
       <ul>
         {materials.map(id => <MaterialLink key={id} materialId={id} parentId={projectId} /> )}
       </ul>
