@@ -9,7 +9,7 @@ function PartLink(props: {partId: string, parentId: string}) {
   const dispatch = useAppDispatch();
   return (
     <>
-      <h1 onClick={() => dispatch(setActiveDetails({ id: partId, parentId }))}>{part.title}</h1>
+      <h1 className='hover:cursor-pointer hover:underline' onClick={() => dispatch(setActiveDetails({ id: partId, parentId }))}>{part.title}</h1>
     </>
   )
 }

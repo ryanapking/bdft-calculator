@@ -34,6 +34,7 @@ function ProjectDetails(props: {projectId: string}) {
     <div>
       <h4>{project.title}</h4>
       <br />
+      <br />
       <form>
         <Label htmlFor='title' value='Project Title' />
         <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)} />
@@ -49,6 +50,7 @@ function ProjectDetails(props: {projectId: string}) {
         <br />
         <Button color='failure' onClick={() => dispatch(deleteProject(projectId))}>Delete Project</Button>
       </form>
+
     </div>
   )
 }

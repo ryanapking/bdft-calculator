@@ -8,9 +8,11 @@ import { useState } from 'react';
 import useDelayedSave from '../effects/useDelayedSave.ts';
 import { Group, update as updateGroup } from '../data/groupsSlice.ts';
 
-function GroupDetails(props:{groupId: string, parentId: string, mainGroup?: boolean}) {
-  const { mainGroup = false, groupId, parentId } = props;
+function GroupDetails(props:{groupId: string, parentId: string}) {
+  const { groupId, parentId } = props;
   const group = useSelector((state: RootState) => state.groups.all[groupId]);
+  const activeProject = useSelector((state: RootState) => state.display.activeProject);
+  const isMainGroup = parentId === activeProject;
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(group.title);
@@ -35,7 +37,7 @@ function GroupDetails(props:{groupId: string, parentId: string, mainGroup?: bool
       <h4>{group.title}</h4>
       <br />
       <form>
-        <Label htmlFor='title' value='Part Title'/>
+        <Label htmlFor='title' value='Group Title'/>
         <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
         <br/>
         <Label htmlFor='quantity' value='Quantity'/>
@@ -46,7 +48,7 @@ function GroupDetails(props:{groupId: string, parentId: string, mainGroup?: bool
         <br />
         <Button onClick={() => dispatch(addGroup(groupId))} >Add Subgroup</Button>
         <br />
-        {mainGroup ? null : <Button color='failure' onClick={() => dispatch(deleteGroup(parentId, groupId))}>Delete Group</Button> }
+        {isMainGroup ? null : <Button color='failure' onClick={() => dispatch(deleteGroup(parentId, groupId))}>Delete Group</Button> }
       </form>
       {savePending ? <p>save pending ...</p> : null}
 

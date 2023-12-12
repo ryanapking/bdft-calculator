@@ -1,11 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BDFT } from './dataTypes.ts';
 
+export const THICKNESSES = [
+  {label: '4/4', value: 1},
+  {label: '5/4', value: 1.25},
+  {label: '6/4', value: 1.5},
+  {label: '8/4', value: 2},
+  {label: '12/4', value: 3},
+]
+
 // The structure of an individual project
 export interface Material {
   title: string,
   cost: number,
   type: string,
+  thickness: number,
 }
 
 function newMaterial(): Material {
@@ -13,6 +22,7 @@ function newMaterial(): Material {
     title: 'New Material',
     cost: 3,
     type: BDFT.id,
+    thickness: 1,
   };
 }
 
@@ -21,6 +31,7 @@ function filteredMaterial(material: Material): Material {
     title: material.title,
     cost: material.cost,
     type: material.type,
+    thickness: material.thickness,
   }
 }
 

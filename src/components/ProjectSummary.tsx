@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import { setActiveDetails } from '../data/displaySlice.ts';
+import { Dropdown } from 'flowbite-react';
 
 function ProjectSummary(props: { projectId: string }) {
   const { projectId } = props;
@@ -12,8 +13,9 @@ function ProjectSummary(props: { projectId: string }) {
 
   return (
     <div>
-      <h1>{project.title ? project.title : 'Unnamed Project'}</h1>
-      <h1 onClick={() => dispatch(setActiveDetails({id: projectId, parentId: ''}))}>View Project Details</h1>
+      <Dropdown inline label={project.title ? project.title : 'Unnamed Project'}>
+        <Dropdown.Item onClick={() => dispatch(setActiveDetails({id: projectId, parentId: ''}))}>View Details</Dropdown.Item>
+      </Dropdown>
     </div>
   )
 }

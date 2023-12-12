@@ -11,8 +11,11 @@ export function addProject() {
     const groupId = getId(GROUP);
     dispatch(createGroup(groupId));
 
+    const materialId = getId(MATERIAL);
+    dispatch(createMaterial(materialId));
+
     const projectId = getId(PROJECT);
-    dispatch(createProject({projectId, groupId}));
+    dispatch(createProject({projectId, groupId, materialId}));
 
     dispatch(setActiveProject(projectId));
   };

@@ -8,12 +8,12 @@ interface Project {
   defaultMaterial: string,
 }
 
-function newProject(groupId: string): Project {
+function newProject(groupId: string, materialId: string): Project {
   return {
     title: 'Project Title',
     mainGroup: groupId,
-    materials: [],
-    defaultMaterial: '',
+    materials: [materialId],
+    defaultMaterial: materialId,
   };
 }
 
@@ -38,8 +38,9 @@ export const projectsSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
-    create: (state, action: PayloadAction<{projectId: string, groupId: string}>) => {
-      state.all[action.payload.projectId] = newProject(action.payload.groupId);
+    create: (state, action: PayloadAction<{projectId: string, groupId: string, materialId: string}>) => {
+      const { projectId, groupId, materialId } = action.payload;
+      state.all[projectId] = newProject(groupId, materialId);
     },
     destroy: (state, action: PayloadAction<string>) => {
       delete state.all[action.payload];

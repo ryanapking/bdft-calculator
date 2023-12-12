@@ -26,7 +26,7 @@ function filterPart(part: Part): Part {
     title: part.title,
     qty: part.qty,
     l: part.l,
-    w: part.l,
+    w: part.w,
     h: part.h,
     m: part.m,
   }

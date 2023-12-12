@@ -9,8 +9,8 @@ function MaterialLink(props:{materialId: string, parentId: string}) {
   const dispatch = useAppDispatch();
 
   return (
-    <div className='m-2'>
-      <h4 onClick={() => dispatch(setActiveDetails({id: materialId, parentId}))}>{material.title ? material.title : 'Unnamed Material'}</h4>
+    <div>
+      <h4 className='hover:cursor-pointer hover:underline' onClick={() => dispatch(setActiveDetails({id: materialId, parentId}))}>{material.title ? material.title : 'Unnamed Material'}</h4>
     </div>
   )
 }

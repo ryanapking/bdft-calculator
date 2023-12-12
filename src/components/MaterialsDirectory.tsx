@@ -8,11 +8,11 @@ function MaterialsDirectory(props: {materials: Array<string>, projectId: string}
   const dispatch = useAppDispatch();
 
   return (
-    <div className={'mt-2'}>
+    <div className={'mt-2 mb-2'}>
       <Dropdown inline label='Project Materials'>
         <Dropdown.Item onClick={() => dispatch(addMaterialToProject(projectId))}>Add Material</Dropdown.Item>
       </Dropdown>
-      <ul>
+      <ul className={'ml-4'}>
         {materials.map(id => <MaterialLink key={id} materialId={id} parentId={projectId} /> )}
       </ul>
     </div>

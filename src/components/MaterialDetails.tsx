@@ -3,7 +3,7 @@ import { RootState, useAppDispatch } from '../data/store.ts';
 import { useState } from 'react';
 import { Label, TextInput, Select } from 'flowbite-react';
 import useDelayedSave from '../effects/useDelayedSave.ts';
-import { Material, update as updateMaterial } from '../data/materialsSlice.ts';
+import { Material, THICKNESSES, update as updateMaterial } from '../data/materialsSlice.ts';
 import { MATERIALS_TYPES } from '../data/dataTypes.ts';
 import CurrencyInput from './CurrencyInput.tsx';
 
@@ -15,19 +15,21 @@ function MaterialDetails(props:{materialId: string, parentId: string}) {
   const [ titleInput, setTitleInput ] = useState<string>(material.title);
   const [ materialType, setMaterialType ] = useState<string>(material.type);
   const [ cost, setCost ] = useState<number>(material.cost);
+  const [ thicknessInput, setThicknessInput ] = useState<number>(material.thickness);
 
   function save() {
     const material: Material = {
       title: titleInput,
       type: materialType,
       cost,
+      thickness: +thicknessInput,
     };
 
     console.log('saving material: ', material);
     dispatch(updateMaterial({ materialId, material }));
   }
 
-  const delayedSavePending = useDelayedSave([titleInput, cost, materialType], save, 1000);
+  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput], save, 1000);
 
   if (!material) return null;
 
@@ -41,6 +43,11 @@ function MaterialDetails(props:{materialId: string, parentId: string}) {
         <br />
         <Label htmlFor='cost'  value='Cost' />
         <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost} />
+        <br />
+        <Label htmlFor="thickness" value="Stock Thickness" />
+        <Select id="thickness" required value={thicknessInput} onChange={(event) => setThicknessInput(+event.target.value)}>
+          {THICKNESSES.map(thickness => <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)}
+        </Select>
         <br />
         <Label htmlFor="materialType" value="Material Type" />
         <Select id="materialType" required value={materialType} onChange={(event) => setMaterialType(event.target.value)}>
