@@ -1,6 +1,6 @@
 import MaterialLink from './MaterialLink.tsx';
-import { useAppDispatch } from '../data/store.ts';
-import { addMaterialToProject } from '../data/thunkActions.ts';
+import { useAppDispatch } from '../../data/store.ts';
+import { addMaterialToProject } from '../../data/thunkActions.ts';
 import { Dropdown } from 'flowbite-react';
 
 function MaterialsDirectory(props: {materials: Array<string>, projectId: string}) {

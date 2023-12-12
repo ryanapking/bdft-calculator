@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../data/store.ts';
+import { RootState, useAppDispatch } from '../../data/store.ts';
 import { Button, Label, TextInput } from 'flowbite-react';
-import { deleteProject } from '../data/thunkActions.ts';
-import { update as updateProject } from '../data/projectsSlice.ts';
+import { deleteProject } from '../../data/thunkActions.ts';
+import { update as updateProject } from '../../data/projectsSlice.ts';
 import { useState } from 'react';
-import useDelayedSave from '../effects/useDelayedSave.ts';
-import MaterialsSelector from './MaterialsSelector.tsx';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
+import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 
 function ProjectDetails(props: {projectId: string}) {
   const { projectId } = props;

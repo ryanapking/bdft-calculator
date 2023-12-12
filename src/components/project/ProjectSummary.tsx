@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../data/store.ts';
-import { setActiveDetails } from '../data/displaySlice.ts';
+import { RootState, useAppDispatch } from '../../data/store.ts';
+import { setActiveDetails } from '../../data/displaySlice.ts';
 import { Dropdown } from 'flowbite-react';
 
 function ProjectSummary(props: { projectId: string }) {

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../data/store.ts';
-import { useAppDispatch } from '../data/store.ts';
-import { setActiveDetails } from '../data/displaySlice.ts';
+import { RootState } from '../../data/store.ts';
+import { useAppDispatch } from '../../data/store.ts';
+import { setActiveDetails } from '../../data/displaySlice.ts';
 
 function MaterialLink(props:{materialId: string, parentId: string}) {
   const { materialId, parentId } = props;

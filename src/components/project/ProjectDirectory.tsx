@@ -1,8 +1,8 @@
-import { RootState } from '../data/store.ts';
+import { RootState } from '../../data/store.ts';
 import { useSelector } from 'react-redux';
-import GroupDirectory from './GroupDirectory.tsx';
+import GroupDirectory from '../group/GroupDirectory.tsx';
 import ProjectSummary from './ProjectSummary.tsx';
-import MaterialsDirectory from './MaterialsDirectory.tsx';
+import MaterialsDirectory from '../material/MaterialsDirectory.tsx';
 
 function ProjectDirectory() {
   const activeProjectId = useSelector((state: RootState) => state.display.activeProject);

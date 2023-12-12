@@ -3,7 +3,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from "react-redux";
 import { store, persistor } from './data/store.ts';
 import Header from './components/Header.tsx';
-import ProjectDirectory from './components/ProjectDirectory.tsx';
+import ProjectDirectory from './components/project/ProjectDirectory.tsx';
 import Details from './components/Details.tsx';
 
 function App() {

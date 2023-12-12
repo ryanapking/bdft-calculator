@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../data/store.ts';
+import { RootState } from '../../data/store.ts';
 import { Button, Label, TextInput } from 'flowbite-react';
-import { deletePart } from '../data/thunkActions.ts';
-import { useAppDispatch } from '../data/store.ts';
+import { deletePart } from '../../data/thunkActions.ts';
+import { useAppDispatch } from '../../data/store.ts';
 import { useState } from 'react';
-import InchInput from './InchInput.tsx';
-import useDelayedSave from '../effects/useDelayedSave.ts';
-import { Part, update as updatePart } from '../data/partsSlice.ts';
-import QuantityInput from './QuantityInput.tsx';
+import InchInput from '../inputs/InchInput.tsx';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
+import { Part, update as updatePart } from '../../data/partsSlice.ts';
+import QuantityInput from '../inputs/QuantityInput.tsx';
 
 function PartDetails(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;

@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../data/store.ts";
+import { RootState } from "../../data/store.ts";
 import { Button, Label, TextInput } from 'flowbite-react';
-import { useAppDispatch } from "../data/store.ts";
-import { addPart, addGroup, deleteGroup } from "../data/thunkActions.ts";
-import QuantityInput from './QuantityInput.tsx';
+import { useAppDispatch } from "../../data/store.ts";
+import { addPart, addGroup, deleteGroup } from "../../data/thunkActions.ts";
+import QuantityInput from '../inputs/QuantityInput.tsx';
 import { useState } from 'react';
-import useDelayedSave from '../effects/useDelayedSave.ts';
-import { Group, update as updateGroup } from '../data/groupsSlice.ts';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
+import { Group, update as updateGroup } from '../../data/groupsSlice.ts';
 
 function GroupDetails(props:{groupId: string, parentId: string}) {
   const { groupId, parentId } = props;

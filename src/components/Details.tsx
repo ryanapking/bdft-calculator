@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../data/store.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getDataTypeFromId } from '../data/dataTypes.ts';
-import ProjectDetails from './ProjectDetails.tsx';
-import GroupDetails from './GroupDetails.tsx';
-import PartDetails from './PartDetails.tsx';
-import MaterialDetails from './MaterialDetails.tsx';
+import ProjectDetails from './project/ProjectDetails.tsx';
+import GroupDetails from './group/GroupDetails.tsx';
+import PartDetails from './part/PartDetails.tsx';
+import MaterialDetails from './material/MaterialDetails.tsx';
 
 function Details() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);

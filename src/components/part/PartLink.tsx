@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../data/store.ts';
-import { useAppDispatch } from '../data/store.ts';
-import { setActiveDetails } from '../data/displaySlice.ts';
+import { RootState } from '../../data/store.ts';
+import { useAppDispatch } from '../../data/store.ts';
+import { setActiveDetails } from '../../data/displaySlice.ts';
 
 function PartLink(props: {partId: string, parentId: string}) {
   const { partId, parentId } = props;

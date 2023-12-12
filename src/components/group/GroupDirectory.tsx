@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../data/store.ts';
-import { getDataTypeFromId, GROUP, PART } from '../data/dataTypes.ts';
-import PartLink from './PartLink.tsx';
-import { useAppDispatch } from '../data/store.ts';
-import { setActiveDetails } from '../data/displaySlice.ts';
-import { addPart, addGroup } from '../data/thunkActions.ts';
+import { RootState } from '../../data/store.ts';
+import { getDataTypeFromId, GROUP, PART } from '../../data/dataTypes.ts';
+import PartLink from '../part/PartLink.tsx';
+import { useAppDispatch } from '../../data/store.ts';
+import { setActiveDetails } from '../../data/displaySlice.ts';
+import { addPart, addGroup } from '../../data/thunkActions.ts';
 import { Dropdown } from 'flowbite-react';
 
 function GroupDirectory(props: {groupId: string, parentId: string}) {
