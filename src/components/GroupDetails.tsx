@@ -8,8 +8,8 @@ import { useState } from 'react';
 import useDelayedSave from '../effects/useDelayedSave.ts';
 import { Group, update as updateGroup } from '../data/groupsSlice.ts';
 
-function GroupDetails(props:{groupId: string, parentId: string}) {
-  const { groupId, parentId } = props;
+function GroupDetails(props:{groupId: string, parentId: string, mainGroup?: boolean}) {
+  const { mainGroup = false, groupId, parentId } = props;
   const group = useSelector((state: RootState) => state.groups.all[groupId]);
   const dispatch = useAppDispatch();
 
@@ -46,9 +46,10 @@ function GroupDetails(props:{groupId: string, parentId: string}) {
         <br />
         <Button onClick={() => dispatch(addGroup(groupId))} >Add Subgroup</Button>
         <br />
-        <Button color='failure' onClick={() => dispatch(deleteGroup(parentId, groupId))}>Delete Group</Button>
+        {mainGroup ? null : <Button color='failure' onClick={() => dispatch(deleteGroup(parentId, groupId))}>Delete Group</Button> }
       </form>
       {savePending ? <p>save pending ...</p> : null}
+
     </div>
   )
 }
