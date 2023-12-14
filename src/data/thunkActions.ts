@@ -3,8 +3,9 @@ import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
 import { create as createProject, destroy as destroyProject, addMaterial } from './projectsSlice.ts';
 import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
-import { setActiveProject, clearActiveDetailsIf } from './displaySlice.ts';
+import { setActiveProject, clearActiveDetailsIf, setActiveTableData, RecursiveChild } from './displaySlice.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
+import { useSelector } from 'react-redux';
 
 export function addProject() {
   return (dispatch: AppDispatch) => {
@@ -108,5 +109,73 @@ export function deleteProject(projectId: string) {
 
     const childGroups = children.filter(id => getDataTypeFromId(id) === GROUP);
     dispatch(destroyGroup([mainGroupId, ...childGroups]));
+  }
+}
+
+export function updateActiveTable() {
+  return (dispatch: appDispatch, getState: () => RootState) => {
+    const state = getState();
+    const activeProjectId = state.display.activeProject;
+    if (!activeProjectId) return;
+
+    console.log('updating activeTableData....')
+
+    const activeProject =  state.projects.all[activeProjectId];
+    const groups = state.groups.all;
+    const parts = state.parts.all;
+    const materials = state.materials.all;
+
+    const processGroup = (groupId: string): RecursiveChild => {
+      const group = groups[groupId];
+
+      const children = group.children.map(childId => {
+        switch (getDataTypeFromId(childId)) {
+          case PART: return processPart(childId);
+          default: return processGroup(childId);
+        }
+      });
+
+      const { bdft, cost} = children.reduce((tally, child) => {
+        return {
+          bdft: tally.bdft + child.totalBdft,
+          cost: tally.cost + child.totalCost,
+        }
+      }, {bdft: 0, cost: 0});
+
+      return {
+        type: GROUP,
+        children: children,
+        id: groupId,
+        title: group.title,
+        qty: group.qty,
+        bdft,
+        totalBdft: bdft,
+        cost,
+        totalCost: cost * group.qty,
+      };
+    };
+
+    const processPart = (partId: string): RecursiveChild => {
+      const part = parts[partId];
+      const material = materials[activeProject.defaultMaterial];
+      const bdft = ((part.l * part.w * material.thickness) / 144).toFixed(3);
+      const totalBdft = +bdft * part.qty;
+      const cost = (+bdft * material.cost).toFixed(2);
+      const totalCost = +cost * part.qty;
+      return {
+        type: PART,
+        id: partId,
+        title: part.title,
+        qty: part.qty,
+        bdft: +bdft,
+        totalBdft,
+        cost: +cost,
+        totalCost,
+        children: [],
+      };
+    };
+
+    const tableData = processGroup(activeProject.mainGroup);
+    dispatch(setActiveTableData(tableData));
   }
 }

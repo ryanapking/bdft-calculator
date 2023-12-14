@@ -1,4 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DataType } from './dataTypes.ts';
+
+export type RecursiveChild = {
+  type: DataType,
+  id: string,
+  title: string,
+  qty: number,
+  bdft: number,
+  totalBdft: number,
+  cost: number,
+  totalCost: number,
+  children: Array<RecursiveChild>
+}
 
 interface ActiveDetails {
   id: string,
@@ -8,6 +21,7 @@ interface ActiveDetails {
 export interface DisplayState {
   activeProject: string,
   activeDetails: ActiveDetails,
+  activeTableData: RecursiveChild | null
 }
 
 const initialState: DisplayState = {
@@ -16,6 +30,7 @@ const initialState: DisplayState = {
     id: '',
     parentId: '',
   },
+  activeTableData: null,
 }
 
 export const displaySlice = createSlice({
@@ -29,6 +44,9 @@ export const displaySlice = createSlice({
     },
     setActiveDetails: (state, action: PayloadAction<{ id: string, parentId: string }>) => {
       state.activeDetails = action.payload;
+    },
+    setActiveTableData: (state, action: PayloadAction<RecursiveChild>) => {
+      state.activeTableData = action.payload;
     },
     clearActiveDetailsIf: (state, action: PayloadAction<string>) => {
       if (state.activeDetails.id === action.payload) {
@@ -44,6 +62,7 @@ export const {
   setActiveProject,
   setActiveDetails,
   clearActiveDetailsIf,
+  setActiveTableData,
 } = displaySlice.actions
 
 export default displaySlice.reducer
