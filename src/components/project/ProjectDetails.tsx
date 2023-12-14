@@ -6,6 +6,7 @@ import { update as updateProject } from '../../data/projectsSlice.ts';
 import { useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
+import ProjectTable from './ProjectTable.tsx';
 
 function ProjectDetails(props: {projectId: string}) {
   const { projectId } = props;
@@ -34,6 +35,7 @@ function ProjectDetails(props: {projectId: string}) {
     <div>
       <h4>{project.title}</h4>
       <br />
+      <ProjectTable projectId={projectId}/>
       <br />
       <form>
         <Label htmlFor='title' value='Project Title' />
