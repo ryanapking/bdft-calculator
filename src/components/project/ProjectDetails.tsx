@@ -41,7 +41,7 @@ function ProjectDetails(props: {projectId: string}) {
     <div>
       <h4>{project.title}</h4>
       <br />
-      <Table data={tableData} />
+      {tableData ? <Table data={tableData} /> : null}
       <br />
       <form>
         <Label htmlFor='title' value='Project Title' />

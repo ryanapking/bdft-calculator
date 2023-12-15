@@ -5,7 +5,6 @@ import { create as createProject, destroy as destroyProject, addMaterial } from 
 import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
 import { setActiveProject, clearActiveDetailsIf, setActiveTableData, RecursiveChild } from './displaySlice.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
-import { useSelector } from 'react-redux';
 
 export function addProject() {
   return (dispatch: AppDispatch) => {
@@ -113,7 +112,7 @@ export function deleteProject(projectId: string) {
 }
 
 export function updateActiveTable() {
-  return (dispatch: appDispatch, getState: () => RootState) => {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const activeProjectId = state.display.activeProject;
     if (!activeProjectId) return;

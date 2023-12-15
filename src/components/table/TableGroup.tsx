@@ -5,16 +5,16 @@ import { GROUP } from '../../data/dataTypes.ts';
 
 type Props = {
   group: RecursiveChild,
-  depth: number,
-  multiplier: number,
-  keepExpanded: boolean,
-  excludeGroupRow: boolean
+  depth?: number,
+  multiplier?: number,
+  keepExpanded?: boolean,
+  excludeGroupRow?: boolean
 }
 
 function TableGroup(props: Props) {
   const {
     group,
-    multiplier,
+    multiplier = 1,
     keepExpanded = false,
     depth = 0,
     excludeGroupRow = false,

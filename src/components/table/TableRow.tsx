@@ -1,11 +1,28 @@
 import { RecursiveChild } from '../../data/displaySlice.ts';
 
-function TableRow(props: {rowData: RecursiveChild, depth: number, excludeTotals: boolean, titleAction: () => void | null }) {
-  const { rowData, depth, titleAction, excludeTotals = false } = props;
+type Props = {
+  rowData: RecursiveChild,
+  depth: number,
+  excludeTotals?: boolean,
+  titleAction?: null | (() => void),
+  multiplier?: number,
+}
+
+function TableRow(props: Props) {
+  const {
+    rowData,
+    depth,
+    titleAction = null,
+    excludeTotals = false,
+    multiplier = 1,
+  } = props;
+
   const prefix = '-'.repeat(depth).substring(1);
   const titleString = prefix + rowData.title;
   const title = titleAction ? <span className='hover:cursor-pointer' onClick={() => titleAction()}>{titleString}</span> : titleString;
-  const isMultiple = rowData.qty > 1;
+  const combinedMultiplier = multiplier * rowData.qty;
+  const isMultiple = combinedMultiplier > 1;
+
   return (
     <div className='grid grid-cols-3'>
       <div className='text-left'>{title}</div>
