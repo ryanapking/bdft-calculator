@@ -1,16 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DataType } from './dataTypes.ts';
 
+export type MaterialSummary = {
+  id: string,
+  bdft: number,
+  cost: number,
+  totalBdft: number,
+  totalCost: number,
+}
+
+export type MaterialList = { [key: string]: MaterialSummary };
+
 export type RecursiveChild = {
   type: DataType,
   id: string,
   title: string,
   qty: number,
-  bdft: number,
-  totalBdft: number,
-  cost: number,
-  totalCost: number,
-  children: Array<RecursiveChild>
+  children: Array<RecursiveChild>,
+  materials: MaterialList,
 }
 
 interface ActiveDetails {

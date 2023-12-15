@@ -2,8 +2,25 @@ import { Select } from 'flowbite-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 
-function MaterialsSelector(props: {id: string, materialIds: Array<string>, value: string, onValueChange: (_:string) => void}) {
-  const { id, materialIds, value, onValueChange } = props;
+type Props = {
+  id: string,
+  materialIds: Array<string>,
+  value: string,
+  onValueChange: (_:string) => void,
+  includeEmptyOption?: boolean,
+  emptyOptionLabel?: string,
+}
+
+function MaterialsSelector(props: Props) {
+  const {
+    id,
+    value,
+    materialIds,
+    onValueChange,
+    includeEmptyOption = false,
+    emptyOptionLabel = '',
+  } = props;
+
   const materials = useSelector((state: RootState) => state.materials.all);
 
   return (
@@ -12,9 +29,15 @@ function MaterialsSelector(props: {id: string, materialIds: Array<string>, value
       value={value}
       onChange={(event) => onValueChange(event.target.value)}
     >
+      {includeEmptyOption ?
+        <option value={''}>
+          {emptyOptionLabel}
+        </option>
+        : null
+      }
       {materialIds.map(materialId =>
         <option key={materialId} value={materialId}>
-          {materials[materialId].title}
+        {materials[materialId].title}
         </option>
       )}
     </Select>

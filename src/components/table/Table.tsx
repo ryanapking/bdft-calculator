@@ -21,10 +21,10 @@ function Table(props: {data: RecursiveChild}) {
       <div className='grid grid-cols-3'>
         <div></div>
         <div className='grid grid-cols-2'>
-          <div className='ml-5 text-right border-t-2'>{data.totalBdft.toFixed(3)}</div>
+          <div className='ml-5 text-right border-t-2'>{9.999.toFixed(3)}</div>
         </div>
         <div className='grid grid-cols-2'>
-          <div className='ml-5 text-right border-t-2'>${data.totalCost.toFixed(2)}</div>
+          <div className='ml-5 text-right border-t-2'>${9.99.toFixed(2)}</div>
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ function Header() {
         <Dropdown label="Projects">
           <Dropdown.Header>Load Project</Dropdown.Header>
           {projectIds.map(id =>
-            <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{id}</Dropdown.Item>
+            <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>
           )}
           <Dropdown.Divider />
           <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>

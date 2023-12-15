@@ -8,10 +8,12 @@ import InchInput from '../inputs/InchInput.tsx';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import { Part, update as updatePart } from '../../data/partsSlice.ts';
 import QuantityInput from '../inputs/QuantityInput.tsx';
+import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 
 function PartDetails(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
   const part = useSelector((state: RootState) => state.parts.all[partId]);
+  const materials = useSelector((state: RootState) => state.projects.all[state.display.activeProject].materials)
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(part.title);
@@ -19,8 +21,7 @@ function PartDetails(props: {partId: string, parentId: string}) {
   const [ widthInput, setWidthInput ] = useState<number>(part.w);
   const [ heightInput, setHeightInput ] = useState<number>(part.h);
   const [ quantityInput, setQuantityInput ] = useState<number>(part.qty);
-
-  // console.log('lengthInput: ', lengthInput);
+  const [ materialInput, setMaterialInput ] = useState<string>(part.m);
 
   function savePart() {
     const part: Part = {
@@ -29,12 +30,12 @@ function PartDetails(props: {partId: string, parentId: string}) {
       w: widthInput,
       h: heightInput,
       qty: quantityInput,
-      m: '',
+      m: materialInput,
     }
     dispatch(updatePart({ partId, part }));
   }
 
-  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput], savePart, 2000);
+  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 2000);
 
   if (!part) return null;
 
@@ -58,6 +59,16 @@ function PartDetails(props: {partId: string, parentId: string}) {
         <Label htmlFor='quantity' value='Quantity'/>
         <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
         <br/>
+        <Label htmlFor='material' value='Material' />
+        <MaterialsSelector
+          id='material'
+          value={materialInput}
+          materialIds={materials}
+          includeEmptyOption
+          emptyOptionLabel='Project Default'
+          onValueChange={material => setMaterialInput(material)}
+        />
+        <br />
         {savePending ? <p>Save pending...</p> : null}
         <Button color='failure' onClick={() => dispatch(deletePart(parentId, partId))}>Delete Part</Button>
       </form>

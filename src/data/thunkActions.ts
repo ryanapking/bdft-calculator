@@ -3,7 +3,14 @@ import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
 import { create as createProject, destroy as destroyProject, addMaterial } from './projectsSlice.ts';
 import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
-import { setActiveProject, clearActiveDetailsIf, setActiveTableData, RecursiveChild } from './displaySlice.ts';
+import {
+  setActiveProject,
+  clearActiveDetailsIf,
+  setActiveTableData,
+  RecursiveChild,
+  MaterialList,
+  MaterialSummary
+} from './displaySlice.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
 
 export function addProject() {
@@ -111,6 +118,18 @@ export function deleteProject(projectId: string) {
   }
 }
 
+function combineMaterials(m1: MaterialSummary, m2: MaterialSummary, qty: number): MaterialSummary {
+  const updatedBdft = m1.bdft + m2.bdft;
+  const updatedCost = m1.cost + m2.cost;
+  return {
+    id: m1.id,
+    bdft: updatedBdft,
+    cost: updatedCost,
+    totalBdft: +(updatedBdft * qty).toFixed(3),
+    totalCost: +(updatedCost * qty).toFixed(2),
+  };
+}
+
 export function updateActiveTable() {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
@@ -134,15 +153,14 @@ export function updateActiveTable() {
         }
       });
 
-      const { bdft, cost} = children.reduce((tally, child) => {
-        return {
-          bdft: tally.bdft + child.totalBdft,
-          cost: tally.cost + child.totalCost,
-        }
-      }, {bdft: 0, cost: 0});
-
-      const totalBdft = +(bdft * group.qty).toFixed(3);
-      const totalCost = +(cost * group.qty).toFixed(2);
+      const groupMaterials: MaterialList = children
+        .flatMap(child => Object.values(child.materials))
+        .reduce((list: MaterialList, current) => {
+          return {
+            ...list,
+            [current.id]: (current.id in list) ? combineMaterials(current, list[current.id], group.qty) : current
+          };
+        }, {});
 
       return {
         type: GROUP,
@@ -150,16 +168,14 @@ export function updateActiveTable() {
         id: groupId,
         title: group.title,
         qty: group.qty,
-        bdft,
-        totalBdft,
-        cost,
-        totalCost,
+        materials: groupMaterials,
       };
     };
 
     const processPart = (partId: string): RecursiveChild => {
       const part = parts[partId];
-      const material = materials[activeProject.defaultMaterial];
+      const materialId = part.m ? part.m : activeProject.defaultMaterial;
+      const material = materials[materialId];
 
       const bdft = +((part.l * part.w * material.thickness) / 144).toFixed(3);
       const cost = +(bdft * material.cost).toFixed(2);
@@ -172,10 +188,15 @@ export function updateActiveTable() {
         id: partId,
         title: part.title,
         qty: part.qty,
-        bdft,
-        totalBdft,
-        cost,
-        totalCost,
+        materials: {
+          [materialId]: {
+            id: materialId,
+            bdft,
+            cost,
+            totalBdft,
+            totalCost,
+          }
+        },
         children: [],
       };
     };
