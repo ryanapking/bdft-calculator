@@ -1,14 +1,15 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Label, TextInput } from 'flowbite-react';
 import { deletePart } from '../../data/thunkActions.ts';
 import { useAppDispatch } from '../../data/store.ts';
-import { useState } from 'react';
-import InchInput from '../inputs/InchInput.tsx';
-import useDelayedSave from '../../effects/useDelayedSave.ts';
 import { Part, update as updatePart } from '../../data/partsSlice.ts';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
+import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
+import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function PartDetails(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
@@ -70,7 +71,9 @@ function PartDetails(props: {partId: string, parentId: string}) {
         />
         <br />
         {savePending ? <p>Save pending...</p> : null}
-        <Button color='failure' onClick={() => dispatch(deletePart(parentId, partId))}>Delete Part</Button>
+        <ButtonConfirm color='failure' buttonText={'Delete Part'} onConfirm={() => dispatch(deletePart(parentId, partId))}>
+          Are you sure you want to delete this part?
+        </ButtonConfirm>
       </form>
     </div>
   )

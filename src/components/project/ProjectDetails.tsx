@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Label, TextInput } from 'flowbite-react';
 import { deleteProject, updateActiveTable } from '../../data/thunkActions.ts';
 import { update as updateProject } from '../../data/projectsSlice.ts';
 import { useEffect, useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import Table from '../table/Table.tsx';
+import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function ProjectDetails(props: {projectId: string}) {
   const { projectId } = props;
@@ -56,7 +57,9 @@ function ProjectDetails(props: {projectId: string}) {
         />
         {savePending ? <p>save pending...</p> : null}
         <br />
-        <Button color='failure' onClick={() => dispatch(deleteProject(projectId))}>Delete Project</Button>
+        <ButtonConfirm color='failure' buttonText={'Delete Project'} onConfirm={() => dispatch(deleteProject(projectId))}>
+          Are you sure you want to delete this project? All parts, groups, and materials will be lost.
+        </ButtonConfirm>
       </form>
 
     </div>

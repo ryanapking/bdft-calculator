@@ -7,6 +7,7 @@ import QuantityInput from '../inputs/QuantityInput.tsx';
 import { useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import { Group, update as updateGroup } from '../../data/groupsSlice.ts';
+import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function GroupDetails(props:{groupId: string, parentId: string}) {
   const { groupId, parentId } = props;
@@ -48,7 +49,11 @@ function GroupDetails(props:{groupId: string, parentId: string}) {
         <br />
         <Button onClick={() => dispatch(addGroup(groupId))} >Add Subgroup</Button>
         <br />
-        {isMainGroup ? null : <Button color='failure' onClick={() => dispatch(deleteGroup(parentId, groupId))}>Delete Group</Button> }
+        {isMainGroup ? null :
+          <ButtonConfirm onConfirm={() => dispatch(deleteGroup(parentId, groupId))} buttonText='Delete Group' color='failure'>
+            Are you sure you want to delete this group? All its parts and subgroups will also be deleted.
+          </ButtonConfirm>
+        }
       </form>
       {savePending ? <p>save pending ...</p> : null}
 
