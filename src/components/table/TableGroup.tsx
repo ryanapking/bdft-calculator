@@ -14,9 +14,9 @@ type Props = {
 function TableGroup(props: Props) {
   const {
     group,
+    depth = 0,
     multiplier = 1,
     keepExpanded = false,
-    depth = 0,
     excludeGroupRow = false,
   } = props;
 
@@ -27,13 +27,23 @@ function TableGroup(props: Props) {
   function printChild(child: RecursiveChild) {
     switch (child.type) {
       case GROUP: return <TableGroup key={child.id} depth={nextDepth} group={child} multiplier={group.qty * multiplier} />;
-      default: return <TableRow key={child.id} rowData={child} depth={nextDepth} multiplier={group.qty * multiplier}/>;
+      default: return <TableRow key={child.id} rowData={child} depth={nextDepth} multiplier={multiplier}/>;
     }
   }
 
   return (
     <div>
-      {excludeGroupRow ? null : <TableRow rowData={group} excludeTotals={expanded || keepExpanded} depth={depth} titleAction={keepExpanded ? null : () => setExpanded(!expanded)} />}
+      {excludeGroupRow ? null :
+        <TableRow
+          rowData={group}
+          depth={depth}
+          multiplier={multiplier}
+          excludeTotals={expanded || keepExpanded}
+          titleAction={keepExpanded ? null : () => setExpanded(!expanded)}
+          expandable={!keepExpanded && !expanded}
+          collapsible={!keepExpanded && expanded}
+        />
+      }
       {keepExpanded || expanded ? group.children.map(child => printChild(child)) : null}
     </div>
 

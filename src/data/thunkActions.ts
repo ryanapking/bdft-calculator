@@ -141,6 +141,9 @@ export function updateActiveTable() {
         }
       }, {bdft: 0, cost: 0});
 
+      const totalBdft = +(bdft * group.qty).toFixed(3);
+      const totalCost = +(cost * group.qty).toFixed(2);
+
       return {
         type: GROUP,
         children: children,
@@ -148,27 +151,30 @@ export function updateActiveTable() {
         title: group.title,
         qty: group.qty,
         bdft,
-        totalBdft: bdft,
+        totalBdft,
         cost,
-        totalCost: cost * group.qty,
+        totalCost,
       };
     };
 
     const processPart = (partId: string): RecursiveChild => {
       const part = parts[partId];
       const material = materials[activeProject.defaultMaterial];
-      const bdft = ((part.l * part.w * material.thickness) / 144).toFixed(3);
-      const totalBdft = +bdft * part.qty;
-      const cost = (+bdft * material.cost).toFixed(2);
-      const totalCost = +cost * part.qty;
+
+      const bdft = +((part.l * part.w * material.thickness) / 144).toFixed(3);
+      const cost = +(bdft * material.cost).toFixed(2);
+
+      const totalBdft = +(bdft * part.qty).toFixed(3);
+      const totalCost = +(totalBdft * material.cost).toFixed(2);
+
       return {
         type: PART,
         id: partId,
         title: part.title,
         qty: part.qty,
-        bdft: +bdft,
+        bdft,
         totalBdft,
-        cost: +cost,
+        cost,
         totalCost,
         children: [],
       };
