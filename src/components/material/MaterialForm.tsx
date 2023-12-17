@@ -1,13 +1,13 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { useState } from 'react';
 import { Label, TextInput, Select } from 'flowbite-react';
-import useDelayedSave from '../../effects/useDelayedSave.ts';
 import { Material, THICKNESSES, update as updateMaterial } from '../../data/materialsSlice.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
 
-function MaterialDetails(props:{materialId: string, parentId: string}) {
+function MaterialForm(props:{materialId: string, parentId: string}) {
   const { materialId } = props;
   const material = useSelector((state: RootState) => state.materials.all[materialId]);
   const dispatch = useAppDispatch();
@@ -59,4 +59,4 @@ function MaterialDetails(props:{materialId: string, parentId: string}) {
   )
 }
 
-export default MaterialDetails;
+export default MaterialForm;

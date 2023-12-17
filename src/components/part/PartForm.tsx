@@ -11,7 +11,7 @@ import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
-function PartDetails(props: {partId: string, parentId: string}) {
+function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
   const part = useSelector((state: RootState) => state.parts.all[partId]);
   const materials = useSelector((state: RootState) => state.projects.all[state.display.activeProject].materials)
@@ -79,4 +79,4 @@ function PartDetails(props: {partId: string, parentId: string}) {
   )
 }
 
-export default PartDetails;
+export default PartForm;

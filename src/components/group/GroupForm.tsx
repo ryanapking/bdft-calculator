@@ -1,15 +1,15 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../../data/store.ts";
-import { Button, Label, TextInput } from 'flowbite-react';
-import { useAppDispatch } from "../../data/store.ts";
-import { addPart, addGroup, deleteGroup } from "../../data/thunkActions.ts";
-import QuantityInput from '../inputs/QuantityInput.tsx';
 import { useState } from 'react';
-import useDelayedSave from '../../effects/useDelayedSave.ts';
+import { RootState } from "../../data/store.ts";
+import { useAppDispatch } from "../../data/store.ts";
+import { Button, Label, TextInput } from 'flowbite-react';
+import { addPart, addGroup, deleteGroup } from "../../data/thunkActions.ts";
 import { Group, update as updateGroup } from '../../data/groupsSlice.ts';
+import QuantityInput from '../inputs/QuantityInput.tsx';
+import useDelayedSave from '../../effects/useDelayedSave.ts';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
-function GroupDetails(props:{groupId: string, parentId: string}) {
+function GroupForm(props:{groupId: string, parentId: string}) {
   const { groupId, parentId } = props;
   const group = useSelector((state: RootState) => state.groups.all[groupId]);
   const activeProject = useSelector((state: RootState) => state.display.activeProject);
@@ -61,4 +61,4 @@ function GroupDetails(props:{groupId: string, parentId: string}) {
   )
 }
 
-export default GroupDetails;
+export default GroupForm;

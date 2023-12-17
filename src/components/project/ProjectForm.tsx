@@ -9,7 +9,7 @@ import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import Table from '../table/Table.tsx';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
-function ProjectDetails(props: {projectId: string}) {
+function ProjectForm(props: {projectId: string}) {
   const { projectId } = props;
   const project = useSelector((state: RootState) => state.projects.all[projectId]);
   const tableData = useSelector((state: RootState) => state.display.activeTableData);
@@ -66,4 +66,4 @@ function ProjectDetails(props: {projectId: string}) {
   )
 }
 
-export default ProjectDetails;
+export default ProjectForm;
