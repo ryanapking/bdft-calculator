@@ -1,10 +1,16 @@
-import { AppDispatch } from './store.ts';
-import { getId, GROUP, PROJECT } from './dataTypes.ts';
+import { AppDispatch, RootState } from './store.ts';
+import { getId, PROJECT } from './dataTypes.ts';
 import { create as createGroup } from './groupsSlice.ts';
-import { create as createMaterial } from './materialsSlice.ts';
-import { Project, create as createProject, update as updateProject } from './projectsSlice.ts';
-import { setActiveProject } from './displaySlice.ts';
+import { create as createMaterial, destroyMany as destroyManyMaterials } from './materialsSlice.ts';
+import {
+  Project,
+  create as createProject,
+  update as updateProject,
+  destroy as destroyProject
+} from './projectsSlice.ts';
+import { clearActiveDetailsIf, setActiveProject } from './displaySlice.ts';
 import { getEmptyMaterial } from './materialActions.ts';
+import { getEmptyGroup, deleteGroup } from './groupActions.ts';
 
 function getEmptyProject(mainGroupId: string, defaultMaterialId: string): Project {
   return {
@@ -18,16 +24,30 @@ function getEmptyProject(mainGroupId: string, defaultMaterialId: string): Projec
 
 export function addProject() {
   return (dispatch: AppDispatch) => {
-    const groupId = getId(GROUP);
-    dispatch(createGroup(groupId));
+    const mainGroup = getEmptyGroup();
+    dispatch(createGroup(mainGroup));
 
     const defaultMaterial = getEmptyMaterial();
     dispatch(createMaterial(defaultMaterial));
 
-    const newProject = getEmptyProject(groupId, defaultMaterial.id);
+    const newProject = getEmptyProject(mainGroup.id, defaultMaterial.id);
     dispatch(createProject(newProject));
     dispatch(setActiveProject(newProject.id));
   };
+}
+
+export function deleteProject(projectId: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(clearActiveDetailsIf(projectId));
+
+    const state = getState();
+    const mainGroupId = state.projects.entities[projectId].mainGroup;
+    const materials = state.projects.entities[projectId].materials;
+
+    dispatch(destroyProject(projectId));
+    dispatch(destroyManyMaterials(materials));
+    dispatch(deleteGroup(projectId, mainGroupId));
+  }
 }
 
 export function addMaterialToProject(projectId: string, materials: Array<string>) {

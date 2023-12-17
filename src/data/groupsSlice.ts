@@ -1,62 +1,35 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
 
 // The structure of an individual project
-export interface Group {
+export type Group = {
+  id: string,
   title: string,
   children: Array<string>,
   qty: number
-}
+};
 
-function newGroup(): Group {
-  return {
-    title: 'New Group',
-    children: [],
-    qty: 1,
-  };
-}
-
-function filterGroup(group: Group): Group {
-  return {
-    title: group.title,
-    children: group.children,
-    qty: group.qty,
-  }
-}
-
-export interface GroupsState {
-  all: { [key: string]: Group },
-}
-
-const initialState: GroupsState = {
-  all: {},
-}
+const groupsAdapter = createEntityAdapter({
+  selectId: (group: Group) => group.id,
+});
 
 export const groupsSlice = createSlice({
   name: 'groups',
-  initialState,
+  initialState: groupsAdapter.getInitialState(),
   reducers: {
-    create: (state, action: PayloadAction<string>) => {
-      state.all[action.payload] = newGroup();
-    },
-    destroy: (state, action: PayloadAction<string|Array<string>>) => {
-      const toDestroy = typeof action.payload === 'string' ? [action.payload] : action.payload;
-      console.log('destroying groups: ', toDestroy);
-      toDestroy.forEach(id => delete state.all[id]);
-    },
-    update: (state, action: PayloadAction<{ groupId: string, group: Group }>) => {
-      const { groupId, group } = action.payload;
-      state.all[groupId] = filterGroup(group);
-    },
+    create: groupsAdapter.addOne,
+    update: groupsAdapter.updateOne,
+    destroy: groupsAdapter.removeOne,
+    destroyMany: groupsAdapter.removeMany,
     addChild: (state, action: PayloadAction<{ groupId: string, childId: string }>) => {
-      console.log(`addChild(): groupId: ${action.payload.groupId}, childId: ${action.payload.childId}`);
-      state.all[action.payload.groupId].children.push(action.payload.childId);
+      const { groupId, childId } = action.payload;
+      state.entities[groupId].children.push(childId);
     },
     removeChild: (state, action: PayloadAction<{ groupId: string, childId: string}>) => {
       const { groupId, childId } = action.payload;
       console.log('removeChild()');
       console.log('groupId: ', groupId);
       console.log('childId: ', childId);
-      state.all[groupId].children = state.all[groupId].children.filter(id => id !== childId);
+      state.entities[groupId].children = state.entities[groupId].children.filter(id => id !== childId);
     }
   }
 })
@@ -64,8 +37,9 @@ export const groupsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   create,
-  destroy,
   update,
+  destroy,
+  destroyMany,
   addChild,
   removeChild,
 } = groupsSlice.actions

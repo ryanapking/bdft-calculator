@@ -4,13 +4,13 @@ import { getDataTypeFromId, GROUP, PART } from '../../data/dataTypes.ts';
 import PartLink from '../part/PartLink.tsx';
 import { useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
-import { addGroup } from '../../data/thunkActions.ts';
+import { addGroup } from '../../data/groupActions.ts';
 import { addPart } from '../../data/partActions.ts';
 import { Dropdown } from 'flowbite-react';
 
 function GroupDirectory(props: {groupId: string, parentId: string}) {
   const { groupId, parentId } = props;
-  const group = useSelector((state: RootState) => state.groups.all[groupId]);
+  const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const dispatch = useAppDispatch();
 
   const printChild = (childId: string) => {

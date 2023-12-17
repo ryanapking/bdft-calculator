@@ -3,16 +3,16 @@ import { useState } from 'react';
 import { RootState } from "../../data/store.ts";
 import { useAppDispatch } from "../../data/store.ts";
 import { Button, Label, TextInput } from 'flowbite-react';
-import { addGroup, deleteGroup } from "../../data/thunkActions.ts";
+import { addGroup, deleteGroup } from "../../data/groupActions.ts";
 import { addPart } from '../../data/partActions.ts';
-import { Group, update as updateGroup } from '../../data/groupsSlice.ts';
+import { update as updateGroup } from '../../data/groupsSlice.ts';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function GroupForm(props:{groupId: string, parentId: string}) {
   const { groupId, parentId } = props;
-  const group = useSelector((state: RootState) => state.groups.all[groupId]);
+  const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const activeProject = useSelector((state: RootState) => state.display.activeProject);
   const isMainGroup = parentId === activeProject;
   const dispatch = useAppDispatch();
@@ -21,13 +21,15 @@ function GroupForm(props:{groupId: string, parentId: string}) {
   const [ quantityInput, setQuantityInput ] = useState<number>(group.qty);
 
   function saveGroup() {
-    const groupUpdates: Group = {
-      title: titleInput,
-      qty: quantityInput,
-      children: group.children,
+    const updates = {
+      id: groupId,
+      changes: {
+        title: titleInput,
+        qty: quantityInput,
+      }
     }
 
-    dispatch(updateGroup({ groupId, group: groupUpdates }))
+    dispatch(updateGroup(updates))
   }
 
   const savePending = useDelayedSave([titleInput, quantityInput], saveGroup, 2000);
