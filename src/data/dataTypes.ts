@@ -55,3 +55,11 @@ export const SQFT: MaterialType = {
 };
 
 export const MATERIALS_TYPES: Array<MaterialType> = [BDFT, SQFT];
+
+export const THICKNESSES = [
+  {label: '4/4', value: 1},
+  {label: '5/4', value: 1.25},
+  {label: '6/4', value: 1.5},
+  {label: '8/4', value: 2},
+  {label: '12/4', value: 3},
+]

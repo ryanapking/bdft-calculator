@@ -2,7 +2,7 @@ import { AppDispatch, RootState } from './store.ts';
 import { destroyMany as destroyManyParts } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
 import { destroy as destroyProject } from './projectsSlice.ts';
-import { destroy as destroyMaterial } from './materialsSlice.ts';
+import { destroyMany as destroyManyMaterials } from './materialsSlice.ts';
 import {
   clearActiveDetailsIf,
   setActiveTableData,
@@ -61,7 +61,7 @@ export function deleteProject(projectId: string) {
     const materials = state.projects.entities[projectId].materials;
 
     dispatch(destroyProject(projectId));
-    dispatch(destroyMaterial(materials));
+    dispatch(destroyManyMaterials(materials));
 
     const children = gatherChildren(mainGroupId, state);
 
@@ -96,7 +96,7 @@ export function updateActiveTable() {
     const activeProject =  state.projects.entities[activeProjectId];
     const groups = state.groups.all;
     const parts = state.parts.entities;
-    const materials = state.materials.all;
+    const materials = state.materials.entities;
 
     const processGroup = (groupId: string): RecursiveChild => {
       const group = groups[groupId];

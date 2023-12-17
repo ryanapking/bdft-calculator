@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import { Label, TextInput, Select } from 'flowbite-react';
-import { Material, THICKNESSES, update as updateMaterial } from '../../data/materialsSlice.ts';
+import { update as updateMaterial } from '../../data/materialsSlice.ts';
+import { THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
 
 function MaterialForm(props:{materialId: string, parentId: string}) {
   const { materialId } = props;
-  const material = useSelector((state: RootState) => state.materials.all[materialId]);
+  const material = useSelector((state: RootState) => state.materials.entities[materialId]);
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(material.title);
@@ -18,15 +19,18 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
   const [ thicknessInput, setThicknessInput ] = useState<number>(material.thickness);
 
   function save() {
-    const material: Material = {
-      title: titleInput,
-      type: materialType,
-      cost,
-      thickness: +thicknessInput,
-    };
+    const updates = {
+      id: materialId,
+      changes: {
+        title: titleInput,
+        type: materialType,
+        cost,
+        thickness: +thicknessInput,
+      }
+    }
 
     console.log('saving material: ', material);
-    dispatch(updateMaterial({ materialId, material }));
+    dispatch(updateMaterial(updates));
   }
 
   const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput], save, 1000);

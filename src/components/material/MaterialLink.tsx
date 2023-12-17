@@ -5,7 +5,7 @@ import { setActiveDetails } from '../../data/displaySlice.ts';
 
 function MaterialLink(props:{materialId: string, parentId: string}) {
   const { materialId, parentId } = props;
-  const material = useSelector((state: RootState) => state.materials.all[materialId]);
+  const material = useSelector((state: RootState) => state.materials.entities[materialId]);
   const dispatch = useAppDispatch();
 
   return (

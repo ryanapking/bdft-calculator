@@ -3,7 +3,7 @@ import { RootState } from '../../data/store.ts';
 
 function MaterialSummary(props: {materialId: string}) {
   const { materialId } = props;
-  const material = useSelector((state: RootState) => state.materials.all[materialId])
+  const material = useSelector((state: RootState) => state.materials.entities[materialId])
   const activeData = useSelector((state: RootState) => state.display.activeTableData);
 
   const materialData = activeData && activeData.materials[materialId] ? activeData.materials[materialId] : null;

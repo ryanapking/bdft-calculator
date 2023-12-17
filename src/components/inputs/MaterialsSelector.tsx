@@ -21,7 +21,7 @@ function MaterialsSelector(props: Props) {
     emptyOptionLabel = '',
   } = props;
 
-  const materials = useSelector((state: RootState) => state.materials.all);
+  const materials = useSelector((state: RootState) => state.materials.entities);
 
   return (
     <Select
