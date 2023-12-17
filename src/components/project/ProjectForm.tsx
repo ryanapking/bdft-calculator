@@ -11,7 +11,7 @@ import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function ProjectForm(props: {projectId: string}) {
   const { projectId } = props;
-  const project = useSelector((state: RootState) => state.projects.all[projectId]);
+  const project = useSelector((state: RootState) => state.projects.entities[projectId]);
   const tableData = useSelector((state: RootState) => state.display.activeTableData);
   const dispatch = useAppDispatch();
 
@@ -24,14 +24,17 @@ function ProjectForm(props: {projectId: string}) {
   }, []);
 
   function saveForm() {
-    const updatedProject = {
-      ...project,
-      title: titleInput,
-      defaultMaterial: defaultMaterialInput,
-    };
+    const updates = {
+      id: projectId,
+      changes: {
+        ...project,
+        title: titleInput,
+        defaultMaterial: defaultMaterialInput,
+      }
+    }
 
-    console.log('saving project: ', updatedProject);
-    dispatch(updateProject({ projectId, project: updatedProject }));
+    console.log('saving project: ', updates);
+    dispatch(updateProject(updates));
   }
 
   const savePending = useDelayedSave([titleInput, defaultMaterialInput], saveForm, 2000);

@@ -1,41 +1,17 @@
 import { AppDispatch, RootState } from './store.ts';
 import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
-import { create as createProject, destroy as destroyProject, addMaterial } from './projectsSlice.ts';
-import { create as createMaterial, destroy as destroyMaterial } from './materialsSlice.ts';
+import { destroy as destroyProject } from './projectsSlice.ts';
+import { destroy as destroyMaterial } from './materialsSlice.ts';
 import {
-  setActiveProject,
   clearActiveDetailsIf,
   setActiveTableData,
   RecursiveChild,
   MaterialList,
   MaterialSummary
 } from './displaySlice.ts';
-import { PROJECT, GROUP, PART, MATERIAL, getId, getDataTypeFromId } from './dataTypes.ts';
+import { GROUP, PART, getId, getDataTypeFromId } from './dataTypes.ts';
 
-export function addProject() {
-  return (dispatch: AppDispatch) => {
-    const groupId = getId(GROUP);
-    dispatch(createGroup(groupId));
-
-    const materialId = getId(MATERIAL);
-    dispatch(createMaterial(materialId));
-
-    const projectId = getId(PROJECT);
-    dispatch(createProject({projectId, groupId, materialId}));
-
-    dispatch(setActiveProject(projectId));
-  };
-}
-
-export function addMaterialToProject(projectId: string) {
-  return (dispatch: AppDispatch) => {
-    const materialId = getId(MATERIAL);
-    dispatch(createMaterial(materialId));
-
-    dispatch(addMaterial({projectId, materialId}));
-  };
-}
 
 export function addPart(parentId: string) {
   return (dispatch: AppDispatch) => {
@@ -102,8 +78,8 @@ export function deleteProject(projectId: string) {
     dispatch(clearActiveDetailsIf(projectId));
 
     const state = getState();
-    const mainGroupId = state.projects.all[projectId].mainGroup;
-    const materials = state.projects.all[projectId].materials;
+    const mainGroupId = state.projects.entities[projectId].mainGroup;
+    const materials = state.projects.entities[projectId].materials;
 
     dispatch(destroyProject(projectId));
     dispatch(destroyMaterial(materials));
@@ -138,7 +114,7 @@ export function updateActiveTable() {
 
     console.log('updating activeTableData....')
 
-    const activeProject =  state.projects.all[activeProjectId];
+    const activeProject =  state.projects.entities[activeProjectId];
     const groups = state.groups.all;
     const parts = state.parts.all;
     const materials = state.materials.all;

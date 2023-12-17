@@ -2,12 +2,12 @@ import { Navbar, Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import { setActiveProject } from '../data/displaySlice.ts';
-import { addProject } from '../data/thunkActions.ts';
+import { addProject } from '../data/projectActions.ts';
 
 function Header() {
-  const projects = useSelector((state: RootState) => state.projects.all)
+  const projectIds = useSelector((state: RootState) => state.projects.ids);
+  const projects = useSelector((state: RootState) => state.projects.entities);
 
-  const projectIds = Object.keys(projects);
   const dispatch = useAppDispatch();
 
   return (

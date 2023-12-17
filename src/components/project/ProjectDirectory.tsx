@@ -6,7 +6,7 @@ import MaterialsDirectory from '../material/MaterialsDirectory.tsx';
 
 function ProjectDirectory() {
   const activeProjectId = useSelector((state: RootState) => state.display.activeProject);
-  const activeProject = useSelector((state: RootState) => activeProjectId ? state.projects.all[activeProjectId] : null);
+  const activeProject = useSelector((state: RootState) => activeProjectId ? state.projects.entities[activeProjectId] : null);
 
   if (!activeProject || !activeProjectId) return null;
 

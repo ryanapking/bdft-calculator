@@ -6,7 +6,7 @@ import MaterialSummary from '../material/MaterialSummary.tsx';
 
 function ProjectSummary(props: { projectId: string }) {
   const { projectId } = props;
-  const project = useSelector((state: RootState) => state.projects.all[projectId]);
+  const project = useSelector((state: RootState) => state.projects.entities[projectId]);
 
   const dispatch = useAppDispatch();
 

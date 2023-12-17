@@ -14,7 +14,7 @@ import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
   const part = useSelector((state: RootState) => state.parts.all[partId]);
-  const materials = useSelector((state: RootState) => state.projects.all[state.display.activeProject].materials)
+  const materials = useSelector((state: RootState) => state.projects.entities[state.display.activeProject].materials)
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(part.title);
