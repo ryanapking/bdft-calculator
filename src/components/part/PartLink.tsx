@@ -5,7 +5,7 @@ import { setActiveDetails } from '../../data/displaySlice.ts';
 
 function PartLink(props: {partId: string, parentId: string}) {
   const { partId, parentId } = props;
-  const part = useSelector((state: RootState) => state.parts.all[partId]);
+  const part = useSelector((state: RootState) => state.parts.entities[partId]);
   const dispatch = useAppDispatch();
   return (
     <>

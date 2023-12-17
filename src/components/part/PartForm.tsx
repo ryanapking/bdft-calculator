@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 import { Label, TextInput } from 'flowbite-react';
-import { deletePart } from '../../data/thunkActions.ts';
+import { deletePart } from '../../data/partActions.ts';
 import { useAppDispatch } from '../../data/store.ts';
-import { Part, update as updatePart } from '../../data/partsSlice.ts';
+import { update as updatePart } from '../../data/partsSlice.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
@@ -13,7 +13,7 @@ import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 
 function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
-  const part = useSelector((state: RootState) => state.parts.all[partId]);
+  const part = useSelector((state: RootState) => state.parts.entities[partId]);
   const materials = useSelector((state: RootState) => state.projects.entities[state.display.activeProject].materials)
   const dispatch = useAppDispatch();
 
@@ -25,15 +25,18 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
 
   function savePart() {
-    const part: Part = {
-      title: titleInput,
-      l: lengthInput,
-      w: widthInput,
-      h: heightInput,
-      qty: quantityInput,
-      m: materialInput,
+    const updates = {
+      id: partId,
+      changes: {
+        title: titleInput,
+        l: lengthInput,
+        w: widthInput,
+        h: heightInput,
+        qty: quantityInput,
+        m: materialInput,
+      }
     }
-    dispatch(updatePart({ partId, part }));
+    dispatch(updatePart(updates));
   }
 
   const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 2000);

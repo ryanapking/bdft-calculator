@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from './store.ts';
-import { create as createPart, destroy as destroyPart } from './partsSlice.ts';
+import { destroyMany as destroyManyParts } from './partsSlice.ts';
 import { create as createGroup, destroy as destroyGroup, addChild, removeChild } from './groupsSlice.ts';
 import { destroy as destroyProject } from './projectsSlice.ts';
 import { destroy as destroyMaterial } from './materialsSlice.ts';
@@ -12,19 +12,6 @@ import {
 } from './displaySlice.ts';
 import { GROUP, PART, getId, getDataTypeFromId } from './dataTypes.ts';
 
-
-export function addPart(parentId: string) {
-  return (dispatch: AppDispatch) => {
-    const partId = getId(PART);
-    dispatch(createPart(partId));
-
-    dispatch(addChild({
-      groupId: parentId,
-      childId: partId
-    }));
-  };
-}
-
 export function addGroup(parentId: string) {
   return (dispatch: AppDispatch) => {
     const groupId = getId(GROUP);
@@ -35,14 +22,6 @@ export function addGroup(parentId: string) {
       childId: groupId
     }));
   };
-}
-
-export function deletePart(groupId: string, partId: string) {
-  return (dispatch: AppDispatch) => {
-    dispatch(clearActiveDetailsIf(partId));
-    dispatch(removeChild({ groupId, childId: partId }));
-    dispatch(destroyPart(partId));
-  }
 }
 
 function gatherChildren(groupId: string, state: RootState) {
@@ -66,7 +45,7 @@ export function deleteGroup(parentId: string, groupId: string) {
     const children = gatherChildren(groupId, getState());
 
     const childParts = children.filter(id => getDataTypeFromId(id) === PART);
-    dispatch(destroyPart(childParts));
+    dispatch(destroyManyParts(childParts));
 
     const childGroups = children.filter(id => getDataTypeFromId(id) === GROUP);
     dispatch(destroyGroup([groupId, ...childGroups]));
@@ -87,7 +66,7 @@ export function deleteProject(projectId: string) {
     const children = gatherChildren(mainGroupId, state);
 
     const childParts = children.filter(id => getDataTypeFromId(id) === PART);
-    dispatch(destroyPart(childParts));
+    dispatch(destroyManyParts(childParts));
 
     const childGroups = children.filter(id => getDataTypeFromId(id) === GROUP);
     dispatch(destroyGroup([mainGroupId, ...childGroups]));
@@ -116,7 +95,7 @@ export function updateActiveTable() {
 
     const activeProject =  state.projects.entities[activeProjectId];
     const groups = state.groups.all;
-    const parts = state.parts.all;
+    const parts = state.parts.entities;
     const materials = state.materials.all;
 
     const processGroup = (groupId: string): RecursiveChild => {

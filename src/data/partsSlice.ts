@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 // The structure of an individual project
-export interface Part {
+export type Part = {
+  id: string,
   title: string,
   qty: number,
   l: number,
@@ -10,52 +11,18 @@ export interface Part {
   m: string,
 }
 
-function newPart(): Part {
-  return {
-    title: 'New Part',
-    qty: 1,
-    l: 12,
-    w: 3,
-    h: 1,
-    m: '',
-  };
-}
-
-function filterPart(part: Part): Part {
-  return {
-    title: part.title,
-    qty: part.qty,
-    l: part.l,
-    w: part.w,
-    h: part.h,
-    m: part.m,
-  }
-}
-
-export interface PartsState {
-  all: { [key: string]: Part },
-}
-
-const initialState: PartsState = {
-  all: {},
-}
+const partsAdapter = createEntityAdapter({
+  selectId: (part: Part) => part.id
+});
 
 export const partsSlice = createSlice({
   name: 'parts',
-  initialState,
+  initialState: partsAdapter.getInitialState(),
   reducers: {
-    create: (state, action: PayloadAction<string>) => {
-      state.all[action.payload] = newPart();
-    },
-    destroy: (state, action: PayloadAction<string|Array<string>>) => {
-      const toDestroy = typeof action.payload === 'string' ? [action.payload] : action.payload;
-      console.log('destroying parts: ', toDestroy);
-      toDestroy.forEach(id => delete state.all[id]);
-    },
-    update: (state, action: PayloadAction<{partId: string, part: Part}>) => {
-      const { partId, part } = action.payload;
-      state.all[partId] = filterPart(part);
-    }
+    create: partsAdapter.addOne,
+    destroy: partsAdapter.removeOne,
+    destroyMany: partsAdapter.removeMany,
+    update: partsAdapter.updateOne,
   },
 })
 
@@ -63,6 +30,7 @@ export const partsSlice = createSlice({
 export const {
   create,
   destroy,
+  destroyMany,
   update,
 } = partsSlice.actions
 
