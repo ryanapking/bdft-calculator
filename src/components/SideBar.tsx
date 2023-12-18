@@ -1,10 +1,10 @@
-import { RootState } from '../../data/store.ts';
+import { RootState } from '../data/store.ts';
 import { useSelector } from 'react-redux';
-import GroupDirectory from '../group/GroupDirectory.tsx';
-import ProjectSummary from './ProjectSummary.tsx';
-import MaterialsDirectory from '../material/MaterialsDirectory.tsx';
+import GroupDirectory from './group/GroupDirectory.tsx';
+import ProjectSummary from './project/ProjectSummary.tsx';
+import MaterialsDirectory from './material/MaterialsDirectory.tsx';
 
-function ProjectDirectory() {
+function SideBar() {
   const activeProjectId = useSelector((state: RootState) => state.display.activeProject);
   const activeProject = useSelector((state: RootState) => activeProjectId ? state.projects.entities[activeProjectId] : null);
 
@@ -19,4 +19,4 @@ function ProjectDirectory() {
   );
 }
 
-export default ProjectDirectory;
+export default SideBar;

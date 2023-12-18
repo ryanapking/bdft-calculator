@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import { Label, TextInput } from 'flowbite-react';
-import { updateActiveTable } from '../../data/thunkActions.ts';
+import { updateActiveTable } from '../../data/displayActions.ts';
 import { deleteProject } from '../../data/projectActions.ts';
 import { update as updateProject } from '../../data/projectsSlice.ts';
 import { useEffect, useState } from 'react';

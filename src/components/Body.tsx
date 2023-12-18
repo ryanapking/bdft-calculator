@@ -6,7 +6,7 @@ import GroupForm from './group/GroupForm.tsx';
 import PartForm from './part/PartForm.tsx';
 import MaterialForm from './material/MaterialForm.tsx';
 
-function Details() {
+function Body() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
 
   if (!activeDetails.id) return null;
@@ -20,4 +20,4 @@ function Details() {
   }
 }
 
-export default Details;
+export default Body;

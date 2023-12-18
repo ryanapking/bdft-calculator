@@ -3,8 +3,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from "react-redux";
 import { store, persistor } from './data/store.ts';
 import Header from './components/Header.tsx';
-import ProjectDirectory from './components/project/ProjectDirectory.tsx';
-import Details from './components/Details.tsx';
+import SideBar from './components/SideBar.tsx';
+import Body from './components/Body.tsx';
 
 function App() {
 
@@ -14,8 +14,8 @@ function App() {
         <main className={'container mx-auto'}>
           <Header />
           <div className={'flex'}>
-            <ProjectDirectory />
-            <Details />
+            <SideBar />
+            <Body />
           </div>
 
         </main>
