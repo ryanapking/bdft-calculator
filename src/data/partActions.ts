@@ -1,6 +1,6 @@
 import { AppDispatch } from './store.ts';
 import { getId, PART } from './dataTypes.ts';
-import { Part, create as createPart, destroy as destroyPart } from './partsSlice.ts';
+import { Part, create as createPart, destroy as destroyPart, update as updatePart } from './partsSlice.ts';
 import { addChild, removeChild } from './groupsSlice.ts';
 import { clearActiveDetailsIf } from './displaySlice.ts';
 
@@ -25,6 +25,18 @@ export function addPart(parentId: string) {
       groupId: parentId,
       childId: newPart.id
     }));
+  };
+}
+
+type PartUpdate = {
+  id: string,
+  changes: Omit<Part, 'id'>
+};
+
+export function savePartUpdates(updates: PartUpdate) {
+  return (dispatch: AppDispatch) => {
+    dispatch(updatePart(updates));
+    // TODO: trigger calculation
   };
 }
 

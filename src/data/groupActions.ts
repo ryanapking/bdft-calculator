@@ -3,6 +3,7 @@ import {
   addChild,
   removeChild,
   create as createGroup,
+  update as updateGroup,
   destroyMany as destroyManyGroups
 } from './groupsSlice.ts';
 import { getDataTypeFromId, getId, GROUP, PART } from './dataTypes.ts';
@@ -25,6 +26,18 @@ export function addGroup(parentId: string) {
     dispatch(createGroup(group));
 
     dispatch(addChild({ groupId: parentId, childId: group.id }));
+  }
+}
+
+type GroupUpdate = {
+  id: string,
+  changes: Omit<Group, 'id' | 'children'>
+};
+
+export function saveGroupUpdates(updates: GroupUpdate) {
+  return (dispatch: AppDispatch) => {
+    dispatch(updateGroup(updates));
+    // TODO: trigger calculation
   }
 }
 

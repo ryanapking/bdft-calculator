@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import { Label, TextInput } from 'flowbite-react';
 import { updateActiveTable } from '../../data/displayActions.ts';
-import { deleteProject } from '../../data/projectActions.ts';
-import { update as updateProject } from '../../data/projectsSlice.ts';
+import { deleteProject, saveProjectUpdates } from '../../data/projectActions.ts';
 import { useEffect, useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
@@ -25,17 +24,13 @@ function ProjectForm(props: {projectId: string}) {
   }, []);
 
   function saveForm() {
-    const updates = {
+    dispatch(saveProjectUpdates({
       id: projectId,
       changes: {
-        ...project,
         title: titleInput,
         defaultMaterial: defaultMaterialInput,
       }
-    }
-
-    console.log('saving project: ', updates);
-    dispatch(updateProject(updates));
+    }));
   }
 
   const savePending = useDelayedSave([titleInput, defaultMaterialInput], saveForm, 2000);

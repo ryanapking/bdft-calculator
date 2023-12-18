@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../data/store.ts";
 import { Button, Label, TextInput } from 'flowbite-react';
 import { addGroup, deleteGroup } from "../../data/groupActions.ts";
 import { addPart } from '../../data/partActions.ts';
-import { update as updateGroup } from '../../data/groupsSlice.ts';
+import { saveGroupUpdates } from '../../data/groupActions.ts';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
@@ -21,15 +21,13 @@ function GroupForm(props:{groupId: string, parentId: string}) {
   const [ quantityInput, setQuantityInput ] = useState<number>(group.qty);
 
   function saveGroup() {
-    const updates = {
+    dispatch(saveGroupUpdates({
       id: groupId,
       changes: {
         title: titleInput,
         qty: quantityInput,
       }
-    }
-
-    dispatch(updateGroup(updates))
+    }));
   }
 
   const savePending = useDelayedSave([titleInput, quantityInput], saveGroup, 2000);

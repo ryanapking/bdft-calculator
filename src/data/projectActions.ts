@@ -36,6 +36,18 @@ export function addProject() {
   };
 }
 
+type ProjectUpdate = {
+  id: string,
+  changes: Omit<Project, 'id' | 'mainGroup' | 'materials'>,
+};
+
+export function saveProjectUpdates(update: ProjectUpdate) {
+ return (dispatch: AppDispatch) => {
+   dispatch(updateProject(update));
+   // TODO: trigger calculation
+ };
+}
+
 export function deleteProject(projectId: string) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(clearActiveDetailsIf(projectId));

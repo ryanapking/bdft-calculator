@@ -4,7 +4,7 @@ import { RootState } from '../../data/store.ts';
 import { Label, TextInput } from 'flowbite-react';
 import { deletePart } from '../../data/partActions.ts';
 import { useAppDispatch } from '../../data/store.ts';
-import { update as updatePart } from '../../data/partsSlice.ts';
+import { savePartUpdates } from '../../data/partActions.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
@@ -25,7 +25,7 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
 
   function savePart() {
-    const updates = {
+    dispatch(savePartUpdates({
       id: partId,
       changes: {
         title: titleInput,
@@ -35,8 +35,7 @@ function PartForm(props: {partId: string, parentId: string}) {
         qty: quantityInput,
         m: materialInput,
       }
-    }
-    dispatch(updatePart(updates));
+    }));
   }
 
   const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 2000);
