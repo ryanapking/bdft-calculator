@@ -5,10 +5,17 @@ export type Part = {
   id: string,
   title: string,
   qty: number,
-  l: number,
-  w: number,
-  h: number,
-  m: string,
+  l: number, // length
+  w: number, // width
+  h: number, // height
+  m: string, // material id
+  calc: PartCalculated,
+}
+
+export type PartCalculated = {
+  type: string,
+  amt: number, // amount
+  cost: number,
 }
 
 const partsAdapter = createEntityAdapter({
@@ -23,6 +30,7 @@ export const partsSlice = createSlice({
     destroy: partsAdapter.removeOne,
     destroyMany: partsAdapter.removeMany,
     update: partsAdapter.updateOne,
+    updateMany: partsAdapter.updateMany,
   },
 })
 
@@ -32,6 +40,7 @@ export const {
   destroy,
   destroyMany,
   update,
+  updateMany,
 } = partsSlice.actions
 
 export default partsSlice.reducer

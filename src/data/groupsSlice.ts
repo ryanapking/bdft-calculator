@@ -26,9 +26,6 @@ export const groupsSlice = createSlice({
     },
     removeChild: (state, action: PayloadAction<{ groupId: string, childId: string}>) => {
       const { groupId, childId } = action.payload;
-      console.log('removeChild()');
-      console.log('groupId: ', groupId);
-      console.log('childId: ', childId);
       state.entities[groupId].children = state.entities[groupId].children.filter(id => id !== childId);
     }
   }

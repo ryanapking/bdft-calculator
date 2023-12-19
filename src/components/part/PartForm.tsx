@@ -10,6 +10,7 @@ import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
+import PartSummary from './PartSummary.tsx';
 
 function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
@@ -25,16 +26,13 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
 
   function savePart() {
-    dispatch(savePartUpdates({
-      id: partId,
-      changes: {
-        title: titleInput,
-        l: lengthInput,
-        w: widthInput,
-        h: heightInput,
-        qty: quantityInput,
-        m: materialInput,
-      }
+    dispatch(savePartUpdates(partId, {
+      title: titleInput,
+      l: lengthInput,
+      w: widthInput,
+      h: heightInput,
+      qty: quantityInput,
+      m: materialInput,
     }));
   }
 
@@ -77,6 +75,7 @@ function PartForm(props: {partId: string, parentId: string}) {
           Are you sure you want to delete this part?
         </ButtonConfirm>
       </form>
+      <PartSummary partId={partId}/>
     </div>
   )
 }

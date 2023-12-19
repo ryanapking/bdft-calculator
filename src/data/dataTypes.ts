@@ -49,12 +49,31 @@ export const BDFT: MaterialType = {
 };
 
 export const SQFT: MaterialType = {
-  label: "Square Feet",
+  label: 'Square Feet',
   shorthand: 'sqft',
   id: 'sqft',
 };
 
-export const MATERIALS_TYPES: Array<MaterialType> = [BDFT, SQFT];
+export const LFT: MaterialType = {
+  label: 'Linear Feet',
+  shorthand: 'lft',
+  id: 'lft,'
+}
+
+export const MATERIALS_TYPES: Array<MaterialType> = [
+  BDFT,
+  LFT,
+  SQFT,
+];
+
+export function getMaterialTypeFromId(id: string): MaterialType {
+  switch (id) {
+    case BDFT.id: return BDFT;
+    case SQFT.id: return SQFT;
+    case LFT.id: return LFT;
+    default: return BDFT;
+  }
+}
 
 export const THICKNESSES = [
   {label: '4/4', value: 1},
