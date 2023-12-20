@@ -26,13 +26,16 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
 
   function savePart() {
-    dispatch(savePartUpdates(partId, {
-      title: titleInput,
-      l: lengthInput,
-      w: widthInput,
-      h: heightInput,
-      qty: quantityInput,
-      m: materialInput,
+    dispatch(savePartUpdates({
+      id: partId,
+      changes: {
+        title: titleInput,
+        l: lengthInput,
+        w: widthInput,
+        h: heightInput,
+        qty: quantityInput,
+        m: materialInput,
+      }
     }));
   }
 

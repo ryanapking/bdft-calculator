@@ -1,6 +1,7 @@
 import { BDFT, getId, MATERIAL } from './dataTypes.ts';
 import { Material, update as updateMaterial } from './materialsSlice.ts';
 import { AppDispatch } from './store.ts';
+import { recalculateActiveProject } from './projectActions.ts';
 
 export function getEmptyMaterial(): Material {
   return {
@@ -20,6 +21,6 @@ type MaterialUpdates = {
 export function saveMaterialUpdates(updates: MaterialUpdates) {
   return (dispatch: AppDispatch) => {
     dispatch(updateMaterial(updates));
-    // TODO: trigger calculation
+    dispatch(recalculateActiveProject());
   }
 }

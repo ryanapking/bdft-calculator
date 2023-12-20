@@ -1,4 +1,5 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { MaterialList } from './materialsSlice.ts';
 
 // The structure of an individual project
 export type Part = {
@@ -9,13 +10,7 @@ export type Part = {
   w: number, // width
   h: number, // height
   m: string, // material id
-  calc: PartCalculated,
-}
-
-export type PartCalculated = {
-  type: string,
-  amt: number, // amount
-  cost: number,
+  calc: MaterialList,
 }
 
 const partsAdapter = createEntityAdapter({

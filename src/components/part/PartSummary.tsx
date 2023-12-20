@@ -5,12 +5,13 @@ import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
 function PartSummary(props: {partId: string}) {
   const { partId } = props;
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
-  const materialType = getMaterialTypeFromId(part.calc.type);
+  const usage = Object.values(part.calc.list)[0];
+  const materialType = getMaterialTypeFromId(usage.type);
 
   return (
     <div>
-      <p>${part.calc.cost.toFixed(2)}</p>
-      <p>{part.calc.amt} {materialType.shorthand}</p>
+      <p>${usage.cost.toFixed(2)}</p>
+      <p>{usage.amt} {materialType.shorthand}</p>
     </div>
   )
 }

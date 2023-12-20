@@ -9,6 +9,20 @@ export type Material = {
   thickness: number,
 }
 
+export type MaterialUsageSummary = {
+  id: string, // material id
+  type: string, // material type
+  amt: number, // amount (bdft, sqft, lft, etc)
+  cost: number,
+}
+
+export type MaterialList = {
+  totalCost: number,
+  list: {
+    [key: string]: MaterialUsageSummary
+  }
+}
+
 const materialsAdapter = createEntityAdapter({
   selectId: (material: Material) => material.id,
 });

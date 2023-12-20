@@ -10,7 +10,7 @@ import {
 } from './projectsSlice.ts';
 import { clearActiveDetailsIf, setActiveProject } from './displaySlice.ts';
 import { getEmptyMaterial } from './materialActions.ts';
-import { getEmptyGroup, deleteGroup } from './groupActions.ts';
+import { getEmptyGroup, deleteGroup, recalculateGroup } from './groupActions.ts';
 
 function getEmptyProject(mainGroupId: string, defaultMaterialId: string): Project {
   return {
@@ -38,13 +38,13 @@ export function addProject() {
 
 type ProjectUpdate = {
   id: string,
-  changes: Omit<Project, 'id' | 'mainGroup' | 'materials'>,
+  changes: Omit<Project, 'id' | 'materials' | 'mainGroup'>,
 };
 
 export function saveProjectUpdates(update: ProjectUpdate) {
  return (dispatch: AppDispatch) => {
    dispatch(updateProject(update));
-   // TODO: trigger calculation
+   dispatch(recalculateActiveProject());
  };
 }
 
@@ -76,4 +76,15 @@ export function addMaterialToProject(projectId: string, materials: Array<string>
 
     dispatch(updateProject(updates));
   };
+}
+
+export function recalculateActiveProject() {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const activeProject = state.display.activeProject;
+    if (!activeProject) return;
+
+    const mainGroup = state.projects.entities[activeProject].mainGroup;
+    dispatch(recalculateGroup(mainGroup));
+  }
 }

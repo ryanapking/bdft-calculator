@@ -1,11 +1,13 @@
 import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
+import { MaterialList } from './materialsSlice.ts';
 
 // The structure of an individual project
 export type Group = {
   id: string,
   title: string,
   children: Array<string>,
-  qty: number
+  qty: number,
+  calc: MaterialList,
 };
 
 const groupsAdapter = createEntityAdapter({
@@ -18,6 +20,7 @@ export const groupsSlice = createSlice({
   reducers: {
     create: groupsAdapter.addOne,
     update: groupsAdapter.updateOne,
+    updateMany: groupsAdapter.updateMany,
     destroy: groupsAdapter.removeOne,
     destroyMany: groupsAdapter.removeMany,
     addChild: (state, action: PayloadAction<{ groupId: string, childId: string }>) => {
@@ -35,6 +38,7 @@ export const groupsSlice = createSlice({
 export const {
   create,
   update,
+  updateMany,
   destroy,
   destroyMany,
   addChild,
