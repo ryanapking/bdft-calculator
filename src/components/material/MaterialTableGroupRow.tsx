@@ -6,22 +6,18 @@ import MaterialTablePartRow from './MaterialTablePartRow.tsx';
 type Props = {
   groupId: string,
   materialId: string,
-  isDefaultMaterial: boolean,
-  startingColorIndex: number,
   multiplier: number,
+  altBorder: string,
 }
 function MaterialTableGroupRow(props: Props) {
   const {
     groupId,
     materialId ,
-    isDefaultMaterial = false,
-    startingColorIndex = 0,
+    altBorder,
     multiplier = 1,
   } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
-  const bgColors = ['bg-gray-100', 'bg-gray-300'];
-
-  let colorIndex = startingColorIndex;
+  const allParts = useSelector((state: RootState) => state.parts.entities);
 
   return (
     <>
@@ -32,22 +28,24 @@ function MaterialTableGroupRow(props: Props) {
               key={childId}
               groupId={childId}
               materialId={materialId}
-              isDefaultMaterial={isDefaultMaterial}
-              startingColorIndex={colorIndex}
+              multiplier={group.qty * multiplier}
+              altBorder={altBorder}
+            />
+          );
+        }
+        else {
+          const usage = Object.values(allParts[childId].calc.list)[0];
+          if (usage.id !== materialId) return null;
+
+          return (
+            <MaterialTablePartRow
+              key={childId}
+              partId={childId}
+              altBorder={altBorder}
               multiplier={group.qty * multiplier}
             />
           );
         }
-        else return (
-          <MaterialTablePartRow
-            key={childId}
-            partId={childId}
-            materialId={materialId}
-            isDefaultMaterial={isDefaultMaterial}
-            bgColor={bgColors[colorIndex++ % 2]}
-            multiplier={group.qty * multiplier}
-          />
-        );
       })}
     </>
   );

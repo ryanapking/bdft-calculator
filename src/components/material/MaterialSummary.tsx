@@ -11,7 +11,7 @@ function MaterialSummary(props: {materialId: string, groupId: string}) {
   return (
     <div>
       <h3>{material.title}</h3>
-      <p className='pl-5'>${material.cost.toFixed(2)}/bdft</p>
+      <p className='pl-5'>${material.cost.toFixed(2)} / {materialData.type}</p>
       {materialData ?
         <>
           <p className='pl-5'>{materialData.amt} {materialData.type}</p>
