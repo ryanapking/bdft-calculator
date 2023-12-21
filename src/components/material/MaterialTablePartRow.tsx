@@ -1,8 +1,22 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 
-function MaterialTablePartRow(props: {partId: string, materialId: string, isDefaultMaterial: boolean}) {
-  const { partId, materialId , isDefaultMaterial = false} = props;
+type Props = {
+  partId: string,
+  materialId: string,
+  isDefaultMaterial: boolean,
+  bgColor: string,
+  multiplier: number,
+}
+
+function MaterialTablePartRow(props: Props) {
+  const {
+    partId,
+    materialId,
+    bgColor,
+    multiplier = 1,
+    isDefaultMaterial = false
+  } = props;
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
 
   // doesn't match, but might be default material
@@ -14,14 +28,14 @@ function MaterialTablePartRow(props: {partId: string, materialId: string, isDefa
   const usage = Object.values(part.calc.list)[0];
 
   return (
-    <div>
-      <div className='grid grid-cols-4'>
-        <div></div>
-        <div>{part.title}</div>
-        <div className='text-center'>{usage.amt}</div>
-        <div></div>
+    <>
+      <div className={`grid grid-cols-12 ${bgColor}`}>
+        <div className='col-span-3 pl-10'>{part.title}</div>
+        <div className='col-start-7'>{part.l} x {part.w}</div>
+        <div className='col-start-8 text-right'>{usage.amt.toFixed(3)}</div>
+        <div className='col-start-9 text-right'>{part.qty * multiplier}</div>
       </div>
-    </div>
+    </>
   );
 }
 
