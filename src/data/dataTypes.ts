@@ -57,7 +57,7 @@ export const SQFT: MaterialType = {
 export const LFT: MaterialType = {
   label: 'Linear Feet',
   shorthand: 'lft',
-  id: 'lft,'
+  id: 'lft',
 }
 
 export const MATERIALS_TYPES: Array<MaterialType> = [

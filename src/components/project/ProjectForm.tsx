@@ -8,6 +8,7 @@ import useDelayedSave from '../../effects/useDelayedSave.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import Table from '../table/Table.tsx';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
+import ProjectTable from './ProjectTable.tsx';
 
 function ProjectForm(props: {projectId: string}) {
   const { projectId } = props;
@@ -40,6 +41,8 @@ function ProjectForm(props: {projectId: string}) {
   return (
     <div>
       <h4>{project.title}</h4>
+      <br />
+      <ProjectTable projectId={project.id} />
       <br />
       {tableData ? <Table data={tableData} /> : null}
       <br />

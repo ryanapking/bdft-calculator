@@ -19,7 +19,7 @@ function ProjectSummary(props: { projectId: string }) {
       </Dropdown>
       <div>
         <h3>Materials</h3>
-        {project.materials.map(materialId => <MaterialSummary key={materialId} materialId={materialId} />)}
+        {project.materials.map(materialId => <MaterialSummary key={materialId} materialId={materialId} groupId={project.mainGroup} /> )}
       </div>
     </div>
   )
