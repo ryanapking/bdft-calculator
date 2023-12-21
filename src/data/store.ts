@@ -18,7 +18,7 @@ import materialsSlice from './materialsSlice.ts';
 import { useDispatch } from "react-redux";
 
 const combinedReducers = combineReducers({
-  display: persistReducer({key: 'display', storage, blacklist: ['activeTableData']}, displaySlice),
+  display: persistReducer({key: 'display', storage}, displaySlice),
   projects: persistReducer({key: 'projects', storage}, projectsSlice),
   parts: persistReducer({key: 'parts', storage}, partsSlice),
   groups: persistReducer({key: 'groups', storage}, groupsSlice),

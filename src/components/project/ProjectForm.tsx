@@ -1,28 +1,20 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import { Label, TextInput } from 'flowbite-react';
-import { updateActiveTable } from '../../data/displayActions.ts';
 import { deleteProject, saveProjectUpdates } from '../../data/projectActions.ts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
-import Table from '../table/Table.tsx';
 import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 import ProjectTable from './ProjectTable.tsx';
 
 function ProjectForm(props: {projectId: string}) {
   const { projectId } = props;
   const project = useSelector((state: RootState) => state.projects.entities[projectId]);
-  const tableData = useSelector((state: RootState) => state.display.activeTableData);
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(project.title);
   const [ defaultMaterialInput, setDefaultMaterialInput ] = useState<string>(project.defaultMaterial);
-
-  useEffect(() => {
-    console.log('useEffect()');
-    dispatch(updateActiveTable());
-  }, []);
 
   function saveForm() {
     dispatch(saveProjectUpdates({
@@ -43,8 +35,6 @@ function ProjectForm(props: {projectId: string}) {
       <h4>{project.title}</h4>
       <br />
       <ProjectTable projectId={project.id} />
-      <br />
-      {tableData ? <Table data={tableData} /> : null}
       <br />
       <form>
         <Label htmlFor='title' value='Project Title' />
