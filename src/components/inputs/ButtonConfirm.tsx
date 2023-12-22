@@ -1,6 +1,6 @@
-import { Button, Modal } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { useState, PropsWithChildren } from 'react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import ModalConfirm from './ModalConfirm.tsx';
 
 type Props = {
   buttonText: string,
@@ -26,21 +26,15 @@ function ButtonConfirm(props: PropsWithChildren<Props>) {
   return (
     <>
       <Button color={color} onClick={() => setOpenModal(true)}>{buttonText}</Button>
-      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <p className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              {props.children}
-            </p>
-            <div className="flex justify-center gap-4">
-              {excludeConfirm ? null : <Button color="failure" onClick={() => confirmed()}>{buttonText}</Button>}
-              <Button color="gray" onClick={() => setOpenModal(false)}>Cancel</Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <ModalConfirm
+        openModal={openModal}
+        onConfirm={() => confirmed()}
+        onCancel={() => setOpenModal(false)}
+        excludeConfirm={excludeConfirm}
+        confirmText={buttonText}
+      >
+        {props.children}
+      </ModalConfirm>
     </>
   );
 }

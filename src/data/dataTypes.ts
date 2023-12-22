@@ -20,13 +20,13 @@ export const PART: DataType = {
   idPrefix: 'P',
 };
 
-export function getDataTypeFromId(id: string): DataType|undefined {
+export function getDataTypeFromId(id: string): DataType {
   const prefix = id.charAt(0);
   switch (prefix) {
     case 'X': return PROJECT;
     case 'M': return MATERIAL;
     case 'G': return GROUP;
-    case 'P': return PART;
+    default: return PART;
   }
 }
 

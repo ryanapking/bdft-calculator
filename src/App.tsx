@@ -5,6 +5,7 @@ import { store, persistor } from './data/store.ts';
 import Header from './components/Header.tsx';
 import SideBar from './components/SideBar.tsx';
 import Body from './components/Body.tsx';
+import GlobalModal from './components/GlobalModal.tsx';
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
             <SideBar />
             <Body />
           </div>
-
+          <GlobalModal />
         </main>
       </PersistGate>
     </Provider>

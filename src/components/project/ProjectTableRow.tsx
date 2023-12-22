@@ -17,7 +17,7 @@ function ProjectTableRow(props: Props) {
 
   return (
     <div>
-      <div className={`grid grid-cols-12 ${bgColor}`}>
+      <div className={`grid grid-cols-12 py-1 ${bgColor}`}>
         <div className='col-span-4 hover:cursor-pointer pl-3' onClick={() => setExpanded(!expanded)}>{material.title} {expanded ? '-' : '+'}</div>
         <div className='col-start-8 text-right'>${material.cost.toFixed(2)}</div>
         <div className='col-start-9 pl-3'>/ {usageSummary.type}</div>

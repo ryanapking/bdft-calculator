@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Label, TextInput, Select } from 'flowbite-react';
+import { Label, TextInput, Select, Dropdown } from 'flowbite-react';
 import { saveMaterialUpdates } from '../../data/materialActions.ts';
-import { THICKNESSES } from '../../data/dataTypes.ts';
+import { MATERIAL, THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
-import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
-import { removeMaterialFromProject } from '../../data/projectActions.ts';
+import { setAlert, setPendingDelete } from '../../data/displaySlice.ts';
+import { deleteAlerts } from '../../data/messages.ts';
 
 function MaterialForm(props:{materialId: string, parentId: string}) {
   const { materialId, parentId } = props;
@@ -34,13 +34,21 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
     }));
   }
 
-  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput], save, 1000);
+  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput], save, 500);
 
-  if (!material) return null;
+  function attemptDelete() {
+    if (isDefaultMaterial) {
+      dispatch(setAlert(deleteAlerts[MATERIAL.idPrefix]));
+    } else {
+      dispatch(setPendingDelete({id: materialId, parentId: project.id}));
+    }
+  }
 
   return (
-    <div className='m-2'>
-      <h4>{material.title}</h4>
+    <div>
+      <Dropdown inline label={<h1 className='text-3xl'>{material.title}</h1>}>
+        <Dropdown.Item onClick={() => attemptDelete()}>Delete Material</Dropdown.Item>
+      </Dropdown>
       <br />
       <form>
         <Label htmlFor='title'  value='Material Title' />
@@ -59,15 +67,6 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
           {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}
         </Select>
         <br />
-        {isDefaultMaterial ?
-          <ButtonConfirm color='failure' buttonText={'Delete Material'} excludeConfirm>
-            The default material cannot be deleted. If you want to delete this material, set a different material as the project default.
-          </ButtonConfirm>
-          :
-          <ButtonConfirm color='failure' buttonText={'Delete Material'} onConfirm={() => dispatch(removeMaterialFromProject(materialId, parentId))}>
-            Are you sure you want to delete this material? All parts using this material will be switched to the project default material.
-          </ButtonConfirm>
-        }
       </form>
       {delayedSavePending ? <p>save pending ...</p> : null}
     </div>

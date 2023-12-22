@@ -11,11 +11,11 @@ function ProjectTable(props: { projectId: string }) {
 
   return (
     <div className='font-mono min-w-[1200px]'>
-      <div className='grid grid-cols-12'>
-        <div className='pl-3'>Material</div>
-        <div className='col-start-8 text-right'>Price</div>
-        <div className='col-start-10 text-right'>Total</div>
-        <div className='col-start-12 text-right pr-3'>Cost</div>
+      <div className='grid grid-cols-12 py-1'>
+        <div className=' col-span-4 mb-1 text-2xl'>Material Usage</div>
+        <div className='col-start-8 text-right self-end'>Price</div>
+        <div className='col-start-10 text-right self-end'>Total</div>
+        <div className='col-start-12 text-right pr-3 self-end'>Cost</div>
       </div>
       {mainGroup.calc.ids.map((materialId, index) =>
         <div className={bgColors[index % 2]} key={materialId}>
@@ -26,7 +26,7 @@ function ProjectTable(props: { projectId: string }) {
           />
         </div>
       )}
-      <div className='grid grid-cols-12'>
+      <div className='grid grid-cols-12 py-1'>
         <div className='col-start-12 text-right pr-3'>${mainGroup.calc.totalCost.toFixed(2)}</div>
       </div>
     </div>

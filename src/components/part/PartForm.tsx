@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Label, TextInput } from 'flowbite-react';
-import { deletePart } from '../../data/partActions.ts';
+import { Dropdown, Label, TextInput } from 'flowbite-react';
 import { useAppDispatch } from '../../data/store.ts';
 import { savePartUpdates } from '../../data/partActions.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
-import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
 import PartSummary from './PartSummary.tsx';
+import { setPendingDelete } from '../../data/displaySlice.ts';
 
 function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
@@ -39,13 +38,15 @@ function PartForm(props: {partId: string, parentId: string}) {
     }));
   }
 
-  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 2000);
+  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 500);
 
   if (!part) return null;
 
   return (
     <div className='m-2'>
-      <h4>{part.title}</h4>
+      <Dropdown inline label={<h1 className='text-3xl'>{part.title}</h1>}>
+        <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: partId, parentId: parentId}))}>Delete Item</Dropdown.Item>
+      </Dropdown>
       <br />
       <form>
         <Label htmlFor='title' value='Part Title'/>
@@ -74,9 +75,6 @@ function PartForm(props: {partId: string, parentId: string}) {
         />
         <br />
         {savePending ? <p>Save pending...</p> : null}
-        <ButtonConfirm color='failure' buttonText={'Delete Part'} onConfirm={() => dispatch(deletePart(parentId, partId))}>
-          Are you sure you want to delete this part?
-        </ButtonConfirm>
       </form>
       <PartSummary partId={partId}/>
     </div>

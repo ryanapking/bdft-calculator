@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface ActiveDetails {
+interface DisplayEntity {
   id: string,
   parentId: string,
 }
 
 export interface DisplayState {
   activeProject: string,
-  activeDetails: ActiveDetails,
+  activeDetails: DisplayEntity,
+  pendingDelete: DisplayEntity,
+  alert: string,
 }
 
 const initialState: DisplayState = {
@@ -16,6 +18,11 @@ const initialState: DisplayState = {
     id: '',
     parentId: '',
   },
+  pendingDelete: {
+    id: '',
+    parentId: '',
+  },
+  alert: '',
 }
 
 export const displaySlice = createSlice({
@@ -35,6 +42,19 @@ export const displaySlice = createSlice({
         state.activeDetails.id = '';
         state.activeDetails.parentId = '';
       }
+    },
+    setPendingDelete: (state, action: PayloadAction<DisplayEntity>) => {
+      state.pendingDelete = action.payload;
+    },
+    clearPendingDelete: (state) => {
+      state.pendingDelete.id = '';
+      state.pendingDelete.parentId = '';
+    },
+    setAlert: (state, action: PayloadAction<string>) => {
+      state.alert = action.payload;
+    },
+    clearAlert: (state) => {
+      state.alert = '';
     }
   },
 })
@@ -44,6 +64,10 @@ export const {
   setActiveProject,
   setActiveDetails,
   clearActiveDetailsIf,
+  setPendingDelete,
+  clearPendingDelete,
+  setAlert,
+  clearAlert,
 } = displaySlice.actions
 
 export default displaySlice.reducer

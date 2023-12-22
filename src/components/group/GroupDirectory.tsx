@@ -8,8 +8,20 @@ import { addGroup } from '../../data/groupActions.ts';
 import { addPart } from '../../data/partActions.ts';
 import { Dropdown } from 'flowbite-react';
 
-function GroupDirectory(props: {groupId: string, parentId: string}) {
-  const { groupId, parentId } = props;
+type Props = {
+  groupId: string,
+  parentId: string,
+  altTitle?: string
+  mainGroup?: boolean,
+}
+
+function GroupDirectory(props: Props) {
+  const {
+    groupId,
+    parentId,
+    altTitle = '',
+    mainGroup = false,
+  } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const dispatch = useAppDispatch();
 
@@ -21,18 +33,24 @@ function GroupDirectory(props: {groupId: string, parentId: string}) {
     }
   }
 
+  const title = <h3 className={mainGroup ? 'text-xl' : ''}>{altTitle ? altTitle : group.title}</h3>
+
   return (
-    <div>
+    <div className='text-sm'>
       <div className='hover:bg-gray-100'>
-        <Dropdown inline label={group.title ? group.title : 'Unnamed Group'}>
+        <Dropdown inline label={title}>
           <Dropdown.Item onClick={() => dispatch(addPart(groupId))}>Add Part</Dropdown.Item>
           <Dropdown.Item onClick={() => dispatch(addGroup(groupId))}>Add Group</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}>View Details</Dropdown.Item>
+          {mainGroup ? null :
+            <>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}>View Details</Dropdown.Item>
+            </>
+          }
         </Dropdown>
       </div>
 
-      <ul className="pl-6">
+      <ul className="pl-5">
         {group.children.map(childId => printChild(childId))}
       </ul>
     </div>

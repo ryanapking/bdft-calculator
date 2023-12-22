@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../data/store.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getDataTypeFromId } from '../data/dataTypes.ts';
-import ProjectForm from './project/ProjectForm.tsx';
 import GroupForm from './group/GroupForm.tsx';
 import PartForm from './part/PartForm.tsx';
 import MaterialForm from './material/MaterialForm.tsx';
+import ProjectDetails from './project/ProjectDetails.tsx';
 
 function Body() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
@@ -18,7 +18,7 @@ function Body() {
   switch (getDataTypeFromId(activeDetails.id)) {
     case PROJECT:
       if (!projectIds.includes(activeDetails.id)) return null;
-      return <ProjectForm key={activeDetails.id} projectId={activeDetails.id} />;
+      return <ProjectDetails key={activeDetails.id} projectId={activeDetails.id} />;
     case GROUP:
       if (!groupIds.includes(activeDetails.id)) return null;
       return <GroupForm key={activeDetails.id} groupId={activeDetails.id} parentId={activeDetails.parentId} />;
