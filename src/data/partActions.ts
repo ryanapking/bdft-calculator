@@ -22,7 +22,8 @@ function getEmptyPart(): Part {
     m: '',
     calc: {
       totalCost: 0,
-      list: {},
+      ids: [],
+      entities: {},
     }
   };
 }
@@ -72,7 +73,8 @@ function calculateBdft(part: Part, material: Material): MaterialList {
   const cost = +(bdft * material.cost).toFixed(2);
   return {
     totalCost: cost,
-    list: {
+    ids: [material.id],
+    entities: {
       [material.id]: {
         id: material.id,
         type: BDFT.id,
@@ -88,7 +90,8 @@ function calculateLft(part: Part, material: Material): MaterialList {
   const cost = +(lft * material.cost).toFixed(2);
   return {
     totalCost: cost,
-    list: {
+    ids: [material.id],
+    entities: {
       [material.id]: {
         id: material.id,
         type: LFT.id,
@@ -104,7 +107,8 @@ function calculateSqft(part: Part, material: Material): MaterialList {
   const cost = +(sqft * material.cost).toFixed(2);
   return {
     totalCost: cost,
-    list: {
+    ids: [material.id],
+    entities: {
       [material.id]: {
         id: material.id,
         type: SQFT.id,

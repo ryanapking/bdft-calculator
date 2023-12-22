@@ -18,7 +18,8 @@ export type MaterialUsageSummary = {
 
 export type MaterialList = {
   totalCost: number,
-  list: {
+  ids: Array<string>,
+  entities: {
     [key: string]: MaterialUsageSummary
   }
 }

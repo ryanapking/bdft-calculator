@@ -23,7 +23,8 @@ export function getEmptyGroup(): Group {
     qty: 1,
     calc: {
       totalCost: 0,
-      list: {},
+      ids: [],
+      entities: {},
     }
   };
 }
@@ -106,17 +107,17 @@ function combineUsage(s1: MaterialUsageSummary, s2: MaterialUsageSummary): Mater
 }
 
 function combineMaterialLists(l1: MaterialList, l2: MaterialList): MaterialList {
-  const combinedLists = Object.values(l1.list)
-    .reduce((runningList: { [key: string] : MaterialUsageSummary }, current: MaterialUsageSummary) => {
-      if (current.id in runningList) {
-        return { ...runningList, [current.id]: combineUsage(current, runningList[current.id]) };
-      }
-      return { ...runningList, [current.id]: current };
-    }, l2.list);
+  const combinedEntities = l1.ids.reduce((runningList: { [key: string] : MaterialUsageSummary }, currentId: string) => {
+    if (currentId in runningList) {
+      return { ...runningList, [currentId]: combineUsage(l1.entities[currentId], runningList[currentId]) };
+    }
+    return { ...runningList, [currentId]: l1.entities[currentId] };
+  }, l2.entities);
 
   return {
     totalCost: +(l1.totalCost + l2.totalCost).toFixed(2),
-    list: combinedLists,
+    ids: [...new Set([...l1.ids, ...l2.ids])],
+    entities: combinedEntities,
   };
 }
 
@@ -131,21 +132,31 @@ function multiplyMaterialUsageSummary(summary: MaterialUsageSummary, qty: number
 }
 
 function multiplyMaterialList(list: MaterialList, qty: number): MaterialList {
-  return Object.values(list.list)
-    .reduce((runningList: MaterialList, current: MaterialUsageSummary): MaterialList => {
-      const newSummary = multiplyMaterialUsageSummary(current, qty);
-      return {
-        totalCost: runningList.totalCost + newSummary.cost,
-        list: { ...runningList.list, [newSummary.id]: newSummary },
-      };
-    }, {totalCost: 0, list: {}});
+  return list.ids.reduce((runningList: MaterialList, currentId: string): MaterialList => {
+    const current = list.entities[currentId];
+    const newSummary = multiplyMaterialUsageSummary(current, qty);
+    return {
+      totalCost: runningList.totalCost + newSummary.cost,
+      ids: [...runningList.ids, currentId],
+      entities: { ...runningList.entities, [newSummary.id]: newSummary },
+    };
+  }, {totalCost: 0, ids: [], entities: {}});
+}
+
+function sortMaterialsByCost(list: MaterialList): MaterialList {
+  const sortedIds = list.ids.sort((a, b) => list.entities[a].cost - list.entities[b].cost)
+  return {
+    ...list,
+    ids: sortedIds,
+  };
 }
 
 function calculateGroup(children: Array<PartCalcChanges | GroupCalcChanges>): MaterialList {
   return children.reduce((runningList: MaterialList, child) => {
     const multiple = multiplyMaterialList(child.changes.calc, child.changes.qty);
-    return combineMaterialLists(multiple, runningList);
-  }, {totalCost: 0, list: {}});
+    const combined = combineMaterialLists(multiple, runningList);
+    return sortMaterialsByCost(combined);
+  }, {totalCost: 0, ids: [], entities: {}});
 }
 
 export function recalculateGroup(groupId: string) {

@@ -6,7 +6,6 @@ function ProjectTable(props: { projectId: string }) {
   const { projectId } = props;
   const project = useSelector((state: RootState) => state.projects.entities[projectId]);
   const mainGroup = useSelector((state: RootState) => state.groups.entities[project.mainGroup]);
-  const projectMaterials = Object.values(mainGroup.calc.list);
   const bgColors = ['bg-neutral-100', 'bg-neutral-300', ];
   const altBorders = ['border-b border-neutral-300', 'border-b border-neutral-100'];
 
@@ -18,10 +17,10 @@ function ProjectTable(props: { projectId: string }) {
         <div className='col-start-10 text-right'>Total</div>
         <div className='col-start-12 text-right pr-3'>Cost</div>
       </div>
-      {projectMaterials.map((usageSummary, index) =>
-        <div className={bgColors[index % 2]} key={usageSummary.id}>
+      {mainGroup.calc.ids.map((materialId, index) =>
+        <div className={bgColors[index % 2]} key={materialId}>
           <ProjectTableRow
-            usageSummary={usageSummary}
+            usageSummary={mainGroup.calc.entities[materialId]}
             bgColor={bgColors[index % 2]}
             altBorder={altBorders[index % 2]}
           />

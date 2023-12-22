@@ -6,7 +6,7 @@ function MaterialSummary(props: {materialId: string, groupId: string}) {
   const material = useSelector((state: RootState) => state.materials.entities[materialId]);
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
 
-  const materialData = group.calc.list[materialId];
+  const materialData = group.calc.entities?.[materialId];
 
   return (
     <div>

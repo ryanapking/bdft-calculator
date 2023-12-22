@@ -15,7 +15,7 @@ function MaterialTablePartRow(props: Props) {
     multiplier = 1,
   } = props;
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
-  const usage = Object.values(part.calc.list)[0];
+  const usage = part.calc.entities[part.calc.ids[0]];
 
   let partDimensions = `${part.l}" x ${part.w}"`;
   if (usage.type === LFT.id) partDimensions = `${part.l}"`;

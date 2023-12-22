@@ -34,7 +34,8 @@ function MaterialTableGroupRow(props: Props) {
           );
         }
         else {
-          const usage = Object.values(allParts[childId].calc.list)[0];
+          const part = allParts[childId];
+          const usage = part.calc.entities[part.calc.ids[0]]
           if (usage.id !== materialId) return null;
 
           return (
