@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from './store.ts';
-import { getId, PROJECT } from './dataTypes.ts';
+import { getDataTypeFromId, getId, GROUP, PROJECT } from './dataTypes.ts';
 import { create as createGroup } from './groupsSlice.ts';
 import { create as createMaterial, destroyMany as destroyManyMaterials } from './materialsSlice.ts';
 import {
@@ -8,9 +8,11 @@ import {
   update as updateProject,
   destroy as destroyProject
 } from './projectsSlice.ts';
+import { updateMany as updateManyParts } from './partsSlice.ts';
+import { destroy as destroyMaterial } from './materialsSlice.ts';
 import { clearActiveDetailsIf, setActiveProject } from './displaySlice.ts';
 import { getEmptyMaterial } from './materialActions.ts';
-import { getEmptyGroup, deleteGroup, recalculateGroup } from './groupActions.ts';
+import { getEmptyGroup, deleteGroup, recalculateGroup, gatherChildren } from './groupActions.ts';
 
 function getEmptyProject(mainGroupId: string, defaultMaterialId: string): Project {
   return {
@@ -76,6 +78,42 @@ export function addMaterialToProject(projectId: string, materials: Array<string>
 
     dispatch(updateProject(updates));
   };
+}
+
+export function removeMaterialFromProject(materialId: string, projectId: string) {
+ return (dispatch: AppDispatch, getState: () => RootState) => {
+   const state = getState();
+   const project = state.projects.entities[projectId];
+
+   // Find child parts of the material type and set them to the default material
+   const partUpdates = gatherChildren(project.mainGroup, state)
+     .filter(childId => {
+       if (getDataTypeFromId(childId) === GROUP) return false;
+       const part = state.parts.entities[childId];
+       return (part.m === materialId);
+     })
+     .map(partId => {
+       return {
+         id: partId,
+         changes: {
+           m: '',
+         }
+       };
+     });
+   dispatch(updateManyParts(partUpdates));
+
+   // Remove the material from the project
+   dispatch(updateProject({
+     id: projectId,
+     changes: {
+       materials: project.materials.filter(id => id !== materialId)
+     }
+   }));
+
+   dispatch(clearActiveDetailsIf(projectId));
+   dispatch(destroyMaterial(materialId));
+   dispatch(recalculateActiveProject());
+ }
 }
 
 export function recalculateActiveProject() {

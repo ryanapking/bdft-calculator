@@ -3,13 +3,19 @@ import { useState, PropsWithChildren } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 type Props = {
-  onConfirm: () => void,
   buttonText: string,
   color: string,
+  onConfirm?: () => void,
+  excludeConfirm?: boolean,
 }
 
 function ButtonConfirm(props: PropsWithChildren<Props>) {
-  const { onConfirm, buttonText, color } = props;
+  const {
+    buttonText,
+    color,
+    onConfirm = () => {},
+    excludeConfirm = false
+  } = props;
   const [openModal, setOpenModal] = useState(false);
 
   const confirmed = () => {
@@ -29,7 +35,7 @@ function ButtonConfirm(props: PropsWithChildren<Props>) {
               {props.children}
             </p>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => confirmed()}>{buttonText}</Button>
+              {excludeConfirm ? null : <Button color="failure" onClick={() => confirmed()}>{buttonText}</Button>}
               <Button color="gray" onClick={() => setOpenModal(false)}>Cancel</Button>
             </div>
           </div>

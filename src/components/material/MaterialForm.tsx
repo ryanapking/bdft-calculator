@@ -7,10 +7,14 @@ import { THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
+import ButtonConfirm from '../inputs/ButtonConfirm.tsx';
+import { removeMaterialFromProject } from '../../data/projectActions.ts';
 
 function MaterialForm(props:{materialId: string, parentId: string}) {
-  const { materialId } = props;
+  const { materialId, parentId } = props;
   const material = useSelector((state: RootState) => state.materials.entities[materialId]);
+  const project = useSelector((state: RootState) => state.projects.entities[parentId]);
+  const isDefaultMaterial = materialId === project.defaultMaterial;
   const dispatch = useAppDispatch();
 
   const [ titleInput, setTitleInput ] = useState<string>(material.title);
@@ -54,6 +58,16 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         <Select id="materialType" required value={materialType} onChange={(event) => setMaterialType(event.target.value)}>
           {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}
         </Select>
+        <br />
+        {isDefaultMaterial ?
+          <ButtonConfirm color='failure' buttonText={'Delete Material'} excludeConfirm>
+            The default material cannot be deleted. If you want to delete this material, set a different material as the project default.
+          </ButtonConfirm>
+          :
+          <ButtonConfirm color='failure' buttonText={'Delete Material'} onConfirm={() => dispatch(removeMaterialFromProject(materialId, parentId))}>
+            Are you sure you want to delete this material? All parts using this material will be switched to the project default material.
+          </ButtonConfirm>
+        }
       </form>
       {delayedSavePending ? <p>save pending ...</p> : null}
     </div>

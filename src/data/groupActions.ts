@@ -49,7 +49,7 @@ export function saveGroupUpdates(updates: GroupUpdate) {
   }
 }
 
-function gatherChildren(groupId: string, state: RootState) {
+export function gatherChildren(groupId: string, state: RootState) {
   let children: Array<string> = [];
 
   state.groups.entities[groupId].children.forEach((childId) => {
