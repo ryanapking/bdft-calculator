@@ -32,26 +32,33 @@ function GroupForm(props:{groupId: string, parentId: string}) {
 
   if (!group) return null;
 
+  const classes = {
+    form: 'my-5',
+    inputGroup: 'max-w-md my-1 w-full',
+  };
+
   return (
     <div className="m-2">
       <Dropdown inline label={<h1 className='text-3xl'>{group.title}</h1>}>
         <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: groupId, parentId}))}>Delete Group</Dropdown.Item>
       </Dropdown>
       <br />
-      <form onSubmit={e => e.preventDefault()}>
-        <Label htmlFor='title' value='Group Title'/>
-        <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
-        <br/>
-        <Label htmlFor='quantity' value='Quantity'/>
-        <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
-        <br/>
+      <form className={classes.form} onSubmit={e => e.preventDefault()}>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='title' value='Group Title'/>
+          <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='quantity' value='Quantity'/>
+          <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
+        </div>
         {savePending ? <p>Save pending...</p> : null}
-        <Button onClick={() => dispatch(addPart(groupId))} >Add Part</Button>
-        <br />
-        <Button onClick={() => dispatch(addGroup(groupId))} >Add Subgroup</Button>
-        <br />
+        <Button onClick={() => dispatch(addPart(groupId))}>Add Part</Button>
+        <br/>
+        <Button onClick={() => dispatch(addGroup(groupId))}>Add Subgroup</Button>
+        <br/>
       </form>
-      {savePending ? <Spinner /> : null}
+      {savePending ? <Spinner/> : null}
     </div>
   )
 }

@@ -26,18 +26,26 @@ function ProjectForm(props: {projectId: string}) {
 
   const savePending = useDelayedSave([titleInput, defaultMaterialInput], saveProject, 500);
 
+  const classes = {
+    form: 'my-5',
+    inputGroup: 'max-w-md my-1 w-full',
+  };
+
   return (
-    <form onSubmit={e => e.preventDefault()}>
-      <Label htmlFor='title' value='Project Title' />
-      <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)} />
-      <br />
-      <Label htmlFor='defaultMaterial' value='Default Project Material' />
-      <MaterialsSelector
-        id='defaultMaterial'
-        materialIds={project.materials}
-        value={defaultMaterialInput}
-        onValueChange={value => setDefaultMaterialInput(value)}
-      />
+    <form className={classes.form} onSubmit={e => e.preventDefault()}>
+      <div className={classes.inputGroup}>
+        <Label htmlFor='title' value='Project Title' />
+        <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)} />
+      </div>
+      <div className={classes.inputGroup}>
+        <Label htmlFor='defaultMaterial' value='Default Project Material' />
+        <MaterialsSelector
+          id='defaultMaterial'
+          materialIds={project.materials}
+          value={defaultMaterialInput}
+          onValueChange={value => setDefaultMaterialInput(value)}
+        />
+      </div>
       {savePending ? <Spinner /> : null}
     </form>
   )

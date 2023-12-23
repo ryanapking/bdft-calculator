@@ -44,31 +44,41 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
     }
   }
 
+  const classes = {
+    form: 'my-5',
+    inputGroup: 'max-w-md my-1 w-full',
+  };
+
   return (
     <div>
       <Dropdown inline label={<h1 className='text-3xl'>{material.title}</h1>}>
         <Dropdown.Item onClick={() => attemptDelete()}>Delete Material</Dropdown.Item>
       </Dropdown>
-      <br />
-      <form onSubmit={e => e.preventDefault()}>
-        <Label htmlFor='title'  value='Material Title' />
-        <TextInput id='title' value={titleInput} onChange={(event) => setTitleInput(event.target.value)}/>
-        <br />
-        <Label htmlFor='cost'  value='Cost' />
-        <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost} />
-        <br />
-        <Label htmlFor="thickness" value="Stock Thickness" />
-        <Select id="thickness" required value={thicknessInput} onChange={(event) => setThicknessInput(+event.target.value)}>
-          {THICKNESSES.map(thickness => <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)}
-        </Select>
-        <br />
-        <Label htmlFor="materialType" value="Material Type" />
-        <Select id="materialType" required value={materialType} onChange={(event) => setMaterialType(event.target.value)}>
-          {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}
-        </Select>
-        <br />
+      <form className={classes.form} onSubmit={e => e.preventDefault()}>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='title' value='Material Title'/>
+          <TextInput id='title' value={titleInput} onChange={e => setTitleInput(e.target.value)}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='cost' value='Cost'/>
+          <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor="thickness" value="Stock Thickness"/>
+          <Select id="thickness" required value={thicknessInput} onChange={e => setThicknessInput(+e.target.value)}>
+            {THICKNESSES.map(thickness => (
+              <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)
+            )}
+          </Select>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor="materialType" value="Material Type"/>
+          <Select id="materialType" required value={materialType} onChange={e => setMaterialType(e.target.value)}>
+            {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}
+          </Select>
+        </div>
       </form>
-      {delayedSavePending ? <Spinner /> : null}
+      {delayedSavePending ? <Spinner/> : null}
     </div>
   )
 }
