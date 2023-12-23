@@ -17,7 +17,6 @@ function InchInput(props: { id: string, value: number, onValueChange: ( _:number
   }, [ref, cursor, value]);
 
   function inputChanged(target: HTMLInputElement) {
-    console.log('inputChanged()')
     if (target.value === '') {
       onValueChange(0);
       setTrailing('');

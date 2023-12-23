@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Dropdown, Label, TextInput } from 'flowbite-react';
+import { Dropdown, Label, Spinner, TextInput } from 'flowbite-react';
 import { useAppDispatch } from '../../data/store.ts';
 import { savePartUpdates } from '../../data/partActions.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
@@ -47,34 +47,39 @@ function PartForm(props: {partId: string, parentId: string}) {
       <Dropdown inline label={<h1 className='text-3xl'>{part.title}</h1>}>
         <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: partId, parentId: parentId}))}>Delete Item</Dropdown.Item>
       </Dropdown>
-      <br />
-      <form>
-        <Label htmlFor='title' value='Part Title'/>
-        <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
-        <br/>
-        <Label htmlFor='length' value='Length (inches)'/>
-        <InchInput id='length' value={lengthInput} onValueChange={length => setLengthInput(length)}/>
-        <br/>
-        <Label htmlFor='width' value='Width (inches)'/>
-        <InchInput id='width' value={widthInput} onValueChange={width => setWidthInput(width)}/>
-        <br/>
-        <Label htmlFor='height' value='Height (inches)'/>
-        <InchInput id='height' value={heightInput} onValueChange={height => setHeightInput(height)}/>
-        <br/>
-        <Label htmlFor='quantity' value='Quantity'/>
-        <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
-        <br/>
-        <Label htmlFor='material' value='Material' />
-        <MaterialsSelector
-          id='material'
-          value={materialInput}
-          materialIds={materials}
-          includeEmptyOption
-          emptyOptionLabel='Project Default'
-          onValueChange={material => setMaterialInput(material)}
-        />
-        <br />
-        {savePending ? <p>Save pending...</p> : null}
+      <form className='w-full' onSubmit={e => e.preventDefault()}>
+        <div>
+          <Label htmlFor='title' value='Part Title'/>
+          <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
+        </div>
+        <div>
+          <Label htmlFor='length' value='Length (inches)'/>
+          <InchInput id='length' value={lengthInput} onValueChange={length => setLengthInput(length)}/>
+        </div>
+        <div>
+          <Label htmlFor='width' value='Width (inches)'/>
+          <InchInput id='width' value={widthInput} onValueChange={width => setWidthInput(width)}/>
+        </div>
+        <div>
+          <Label htmlFor='height' value='Height (inches)'/>
+          <InchInput id='height' value={heightInput} onValueChange={height => setHeightInput(height)}/>
+        </div>
+        <div>
+          <Label htmlFor='quantity' value='Quantity'/>
+          <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
+        </div>
+        <div>
+          <Label htmlFor='material' value='Material' />
+          <MaterialsSelector
+            id='material'
+            value={materialInput}
+            materialIds={materials}
+            includeEmptyOption
+            emptyOptionLabel='Project Default'
+            onValueChange={material => setMaterialInput(material)}
+          />
+        </div>
+        {savePending ? <Spinner /> : null}
       </form>
       <PartSummary partId={partId}/>
     </div>

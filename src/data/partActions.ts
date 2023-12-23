@@ -7,7 +7,7 @@ import {
   update as updatePart,
 } from './partsSlice.ts';
 import { addChild, removeChild } from './groupsSlice.ts';
-import { clearActiveDetailsIf } from './displaySlice.ts';
+import { clearActiveDetailsIf, setActiveDetails } from './displaySlice.ts';
 import { Material, MaterialList } from './materialsSlice.ts';
 import { recalculateActiveProject } from './projectActions.ts';
 
@@ -39,6 +39,7 @@ export function addPart(parentId: string) {
     }));
 
     dispatch(recalculateActiveProject());
+    dispatch(setActiveDetails({id: newPart.id, parentId}));
   };
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Label, TextInput, Select, Dropdown } from 'flowbite-react';
+import { Label, TextInput, Select, Dropdown, Spinner } from 'flowbite-react';
 import { saveMaterialUpdates } from '../../data/materialActions.ts';
 import { MATERIAL, THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
@@ -50,7 +50,7 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         <Dropdown.Item onClick={() => attemptDelete()}>Delete Material</Dropdown.Item>
       </Dropdown>
       <br />
-      <form>
+      <form onSubmit={e => e.preventDefault()}>
         <Label htmlFor='title'  value='Material Title' />
         <TextInput id='title' value={titleInput} onChange={(event) => setTitleInput(event.target.value)}/>
         <br />
@@ -68,7 +68,7 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         </Select>
         <br />
       </form>
-      {delayedSavePending ? <p>save pending ...</p> : null}
+      {delayedSavePending ? <Spinner /> : null}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useState } from 'react';
 import { RootState } from "../../data/store.ts";
 import { useAppDispatch } from "../../data/store.ts";
-import { Button, Dropdown, Label, TextInput } from 'flowbite-react';
+import { Button, Dropdown, Label, Spinner, TextInput } from 'flowbite-react';
 import { addGroup } from "../../data/groupActions.ts";
 import { addPart } from '../../data/partActions.ts';
 import { saveGroupUpdates } from '../../data/groupActions.ts';
@@ -38,7 +38,7 @@ function GroupForm(props:{groupId: string, parentId: string}) {
         <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: groupId, parentId}))}>Delete Group</Dropdown.Item>
       </Dropdown>
       <br />
-      <form>
+      <form onSubmit={e => e.preventDefault()}>
         <Label htmlFor='title' value='Group Title'/>
         <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
         <br/>
@@ -51,7 +51,7 @@ function GroupForm(props:{groupId: string, parentId: string}) {
         <Button onClick={() => dispatch(addGroup(groupId))} >Add Subgroup</Button>
         <br />
       </form>
-      {savePending ? <p>save pending ...</p> : null}
+      {savePending ? <Spinner /> : null}
     </div>
   )
 }

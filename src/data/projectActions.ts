@@ -10,7 +10,7 @@ import {
 } from './projectsSlice.ts';
 import { updateMany as updateManyParts } from './partsSlice.ts';
 import { destroy as destroyMaterial } from './materialsSlice.ts';
-import { clearActiveDetailsIf, setActiveProject } from './displaySlice.ts';
+import { clearActiveDetailsIf, setActiveDetails, setActiveProject } from './displaySlice.ts';
 import { getEmptyMaterial } from './materialActions.ts';
 import { getEmptyGroup, deleteGroup, recalculateGroup, gatherChildren } from './groupActions.ts';
 
@@ -77,6 +77,7 @@ export function addMaterialToProject(projectId: string, materials: Array<string>
     };
 
     dispatch(updateProject(updates));
+    dispatch(setActiveDetails({id: material.id, parentId: projectId}));
   };
 }
 

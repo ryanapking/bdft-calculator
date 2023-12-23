@@ -8,7 +8,7 @@ import {
   updateMany as updateManyGroups,
   destroyMany as destroyManyGroups,
 } from './groupsSlice.ts';
-import { clearActiveDetailsIf } from './displaySlice.ts';
+import { clearActiveDetailsIf, setActiveDetails } from './displaySlice.ts';
 import { MaterialList, MaterialUsageSummary } from './materialsSlice.ts';
 import { destroyMany as destroyManyParts, updateMany as updateManyParts } from './partsSlice.ts';
 import { calculatePart, getPartMaterial } from './partActions.ts';
@@ -35,6 +35,7 @@ export function addGroup(parentId: string) {
     dispatch(createGroup(group));
 
     dispatch(addChild({ groupId: parentId, childId: group.id }));
+    dispatch(setActiveDetails({id: group.id, parentId}));
   }
 }
 
