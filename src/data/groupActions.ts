@@ -51,6 +51,55 @@ export function saveGroupUpdates(updates: GroupUpdate) {
   }
 }
 
+export function moveChild(groupId: string, childId: string, fromIndex: number, toIndex: number) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const group = state.groups.entities[groupId];
+
+    if (childId !== group.children[fromIndex]) return;
+
+    const childrenCopy = group.children.filter(id => id !== childId);
+    childrenCopy.splice(toIndex, 0, childId);
+
+    dispatch(updateGroup({
+      id: groupId,
+      changes: {
+        children: childrenCopy,
+      }
+    }));
+  }
+}
+
+export function reHomeChild(data: { childId: string, fromGroupId: string, toGroupId: string, toIndex: number }) {
+  const { childId, fromGroupId, toGroupId, toIndex } = data;
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const fromGroup = state.groups.entities[fromGroupId];
+    const toGroup = state.groups.entities[toGroupId];
+
+    if (!fromGroup.children.includes(childId)) return;
+
+    const fromGroupUpdate = {
+      id: fromGroup.id,
+      changes: {
+        children: fromGroup.children.filter(id => id !== childId),
+      }
+    };
+
+    const toChildrenCopy = [...toGroup.children];
+    toChildrenCopy.splice(toIndex, 0, childId);
+
+    const toGroupUpdate = {
+      id: toGroup.id,
+      changes: {
+        children: toChildrenCopy,
+      }
+    };
+
+    dispatch(updateManyGroups([fromGroupUpdate, toGroupUpdate]));
+  }
+}
+
 export function gatherChildren(groupId: string, state: RootState) {
   let children: Array<string> = [];
 

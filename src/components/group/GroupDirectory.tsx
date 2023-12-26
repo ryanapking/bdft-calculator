@@ -41,12 +41,8 @@ function GroupDirectory(props: Props) {
         <Dropdown inline label={title}>
           <Dropdown.Item onClick={() => dispatch(addPart(groupId))}>Add Part</Dropdown.Item>
           <Dropdown.Item onClick={() => dispatch(addGroup(groupId))}>Add Group</Dropdown.Item>
-          {mainGroup ? null :
-            <>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}>View Details</Dropdown.Item>
-            </>
-          }
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}>{mainGroup ? 'Arrange Items' : 'View Details'}</Dropdown.Item>
         </Dropdown>
       </div>
 

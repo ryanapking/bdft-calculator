@@ -13,6 +13,10 @@ export type Part = {
   calc: MaterialList,
 }
 
+export type PartEntities = {
+  [key: string]: Part,
+}
+
 const partsAdapter = createEntityAdapter({
   selectId: (part: Part) => part.id
 });

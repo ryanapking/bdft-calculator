@@ -10,6 +10,10 @@ export type Group = {
   calc: MaterialList,
 };
 
+export type GroupEntities = {
+  [key: string]: Group,
+}
+
 const groupsAdapter = createEntityAdapter({
   selectId: (group: Group) => group.id,
 });

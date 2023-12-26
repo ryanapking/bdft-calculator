@@ -12,10 +12,12 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <main className={'container mx-auto'}>
-          <Header />
-          <div className={'flex'}>
+        <main className='flex'>
+          <div className='h-screen w-72'>
             <SideBar />
+          </div>
+          <div className='grow p-5'>
+            <Header />
             <Body />
           </div>
           <GlobalModal />

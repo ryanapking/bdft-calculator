@@ -1,4 +1,4 @@
-import { Navbar, Dropdown } from 'flowbite-react';
+import { Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import { setActiveProject } from '../data/displaySlice.ts';
@@ -11,22 +11,18 @@ function Header() {
   const dispatch = useAppDispatch();
 
   return (
-    <>
-      <Navbar fluid rounded>
-        <Navbar.Brand href="https://flowbite-react.com">
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Woodworking Calculator</span>
-        </Navbar.Brand>
-        <Dropdown label="Projects">
-          <Dropdown.Header>Load Project</Dropdown.Header>
-          {projectIds.map(id =>
-            <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>
-          )}
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
-        </Dropdown>
-        <Navbar.Toggle />
-      </Navbar>
-    </>
+    <div className='w-full flex justify-between mb-10'>
+      <h1 className='text-3xl font-semibold'>Woodworking Calculator</h1>
+
+      <Dropdown label="Projects">
+        <Dropdown.Header>Load Project</Dropdown.Header>
+        {projectIds.map(id =>
+          <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>
+        )}
+        <Dropdown.Divider />
+        <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
+      </Dropdown>
+    </div>
   );
 }
 

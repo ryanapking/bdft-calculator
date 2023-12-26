@@ -15,7 +15,7 @@ function ProjectDirectory(props: { projectId: string }) {
   if (!project) return null;
 
   return (
-    <div className='text-xl mr-20'>
+    <div className='text-xl'>
       <h1 className='hover:cursor-pointer hover:underline' onClick={() => dispatch(setActiveDetails({id: projectId, parentId: ''}))}>{project.title}</h1>
       <div className='mt-3'>
         <Dropdown inline label={<h3>Materials</h3>}>

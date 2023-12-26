@@ -9,7 +9,7 @@ function SideBar() {
   if (!activeProject || !activeProjectId) return null;
 
   return (
-    <div>
+    <div className='p-5'>
       <ProjectDirectory projectId={activeProjectId} />
     </div>
   );
