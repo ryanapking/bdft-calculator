@@ -51,52 +51,41 @@ export function saveGroupUpdates(updates: GroupUpdate) {
   }
 }
 
-export function moveChild(groupId: string, childId: string, fromIndex: number, toIndex: number) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const group = state.groups.entities[groupId];
-
-    if (childId !== group.children[fromIndex]) return;
-
-    const childrenCopy = group.children.filter(id => id !== childId);
-    childrenCopy.splice(toIndex, 0, childId);
-
-    dispatch(updateGroup({
-      id: groupId,
-      changes: {
-        children: childrenCopy,
-      }
-    }));
-  }
+export type ChildRelocation = {
+  id: string,
+  oldParent: string,
+  newParent: string,
+  newIndex: number,
 }
 
-export function reHomeChild(data: { childId: string, fromGroupId: string, toGroupId: string, toIndex: number }) {
-  const { childId, fromGroupId, toGroupId, toIndex } = data;
+export function relocateChild(relocation: ChildRelocation) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const fromGroup = state.groups.entities[fromGroupId];
-    const toGroup = state.groups.entities[toGroupId];
+    const allGroups = getState().groups.entities;
+    const fromGroup = allGroups[relocation.oldParent];
 
-    if (!fromGroup.children.includes(childId)) return;
+    const newFromChildren = fromGroup.children.filter(id => id !== relocation.id);
 
-    const fromGroupUpdate = {
+    const updates = [];
+    updates.push({
       id: fromGroup.id,
       changes: {
-        children: fromGroup.children.filter(id => id !== childId),
+        children: newFromChildren,
       }
-    };
+    });
 
-    const toChildrenCopy = [...toGroup.children];
-    toChildrenCopy.splice(toIndex, 0, childId);
+    const toGroup = allGroups[relocation.newParent];
+    const newToChildren = relocation.newParent === relocation.oldParent ? [...newFromChildren] : [...toGroup.children];
+    newToChildren.splice(relocation.newIndex, 0, relocation.id);
 
-    const toGroupUpdate = {
+    updates.push({
       id: toGroup.id,
       changes: {
-        children: toChildrenCopy,
+        children: newToChildren,
       }
-    };
+    });
 
-    dispatch(updateManyGroups([fromGroupUpdate, toGroupUpdate]));
+    dispatch(updateManyGroups(updates));
+    dispatch(recalculateActiveProject());
   }
 }
 
