@@ -1,11 +1,15 @@
 import { TextInput } from 'flowbite-react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, ComponentProps } from 'react';
 
 const isNumber = /^(\d*)(\.?)(\d*)$/;
 const getTrailingZeros = /0*$/;
 
-function InchInput(props: { id: string, value: number, onValueChange: ( _:number ) => void }) {
-  const { value, onValueChange, id } = props;
+type Props = ComponentProps<typeof TextInput> & {
+  onValueChange: ( _:number ) => void,
+}
+
+function InchInput(props: Props) {
+  const { value, onValueChange, ...remainingProps } = props;
 
   const [ trailing, setTrailing ] = useState<string>('');
   const [ cursor, setCursor ] = useState<number | null>(null);
@@ -58,7 +62,7 @@ function InchInput(props: { id: string, value: number, onValueChange: ( _:number
 
   return (
     <TextInput
-      id={id}
+      {...remainingProps}
       type='text'
       ref={ref}
       value={valueString}

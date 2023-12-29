@@ -29,13 +29,18 @@ export function getEmptyGroup(): Group {
   };
 }
 
-export function addGroup(parentId: string) {
+export function addGroup(parentId: string, prepend: boolean = false, redirect: boolean = true) {
   return (dispatch: AppDispatch) => {
     const group = getEmptyGroup();
     dispatch(createGroup(group));
 
-    dispatch(addChild({ groupId: parentId, childId: group.id }));
-    dispatch(setActiveDetails({id: group.id, parentId}));
+    dispatch(addChild({
+      groupId: parentId,
+      childId: group.id,
+      prepend,
+    }));
+
+    if (redirect) dispatch(setActiveDetails({id: group.id, parentId}));
   }
 }
 
@@ -47,6 +52,16 @@ type GroupUpdate = {
 export function saveGroupUpdates(updates: GroupUpdate) {
   return (dispatch: AppDispatch) => {
     dispatch(updateGroup(updates));
+    dispatch(recalculateActiveProject());
+  }
+}
+
+export type GroupPartial = Partial<Omit<Group, 'id' | 'children'>>
+
+export function saveGroupPartial(groupId: string, changes: GroupPartial) {
+  return (dispatch: AppDispatch) => {
+    const update = { id: groupId, changes };
+    dispatch(updateGroup(update));
     dispatch(recalculateActiveProject());
   }
 }

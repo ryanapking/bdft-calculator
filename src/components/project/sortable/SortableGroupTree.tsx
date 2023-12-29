@@ -18,14 +18,14 @@ import { CHILD_OFFSET, gatherSortableChildren, SortableChild } from './utilities
 import SortableTreeItem from './SortableTreeItem.tsx';
 import { useState } from 'react';
 import TreeItem from './TreeItem.tsx';
+import { Badge } from 'flowbite-react';
 
-function SortableProjectTree() {
+function SortableGroupTree(props: {groupId: string}) {
   const dispatch = useAppDispatch();
-  const project = useSelector((state: RootState) => state.projects.entities[state.display.activeProject]);
   const allGroups = useSelector((state: RootState) => state.groups.entities);
   const allParts = useSelector((state: RootState) => state.parts.entities);
-  const mainGroup = allGroups[project.mainGroup];
-  const sortableChildren = gatherSortableChildren(allGroups, allParts, mainGroup);
+  const group = allGroups[props.groupId];
+  const sortableChildren = gatherSortableChildren(allGroups, allParts, group);
 
   const [ activeItem, setActiveItem ] = useState<SortableChild|null>(null);
   const [ dropDepth, setDropDepth ] = useState<number>(0);
@@ -34,7 +34,7 @@ function SortableProjectTree() {
     // If we are moving an item from before, we need to account for that
     const searchIndex = activeIndex < dropIndex ? dropIndex : dropIndex - 1;
 
-    let newParent: UniqueIdentifier = mainGroup.id;
+    let newParent: UniqueIdentifier = group.id;
     for (let i = searchIndex; i >= 0; i--) {
       const item = sortableChildren[i];
       if (item.depth < dropDepth) {
@@ -141,7 +141,7 @@ function SortableProjectTree() {
   }
 
   return (
-    <div className='max-w-xl mb-96'>
+    <div className='w-full mb-96'>
       <DndContext
         onDragEnd={handleDragEnd}
         onDragMove={handleDragMove}
@@ -154,11 +154,17 @@ function SortableProjectTree() {
         </SortableContext>
 
         <DragOverlay>
-          {activeItem ? <TreeItem item={activeItem} dragging /> : null}
+          {activeItem ?
+            <TreeItem item={activeItem} dragging>
+              {activeItem.title}
+              {activeItem.descendants.length ? <Badge color='failure' className='ml-3'>{activeItem.descendants.length + 1}</Badge> : null}
+            </TreeItem>
+            : null
+          }
         </DragOverlay>
       </DndContext>
     </div>
   );
 }
 
-export default SortableProjectTree;
+export default SortableGroupTree;

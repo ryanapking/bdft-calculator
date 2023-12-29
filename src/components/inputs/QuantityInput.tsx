@@ -1,9 +1,17 @@
 import { TextInput } from 'flowbite-react';
+import { ComponentProps } from 'react';
 
 const intRegex = /^\d{0,4}$/;
 
-function QuantityInput(props: { id: string, value: number, onValueChange: ( _:number ) => void }) {
-  const { value, onValueChange, id } = props;
+type Props = ComponentProps<typeof TextInput> & {
+  onValueChange: ( _:number ) => void,
+}
+
+function QuantityInput(props: Props) {
+  const {
+    onValueChange,
+    ...remainingProps
+  } = props;
 
   function inputChanged(value: string) {
     if (value === '') {
@@ -12,16 +20,15 @@ function QuantityInput(props: { id: string, value: number, onValueChange: ( _:nu
     }
 
     if (intRegex.test(value)) {
-      onValueChange(parseInt(value));
+      onValueChange(+value);
     }
   }
 
   return (
     <TextInput
-      id={id}
+      {...remainingProps}
       type='text'
-      value={value}
-      onChange={(action) => inputChanged(action.target.value)}
+      onChange={action => inputChanged(action.target.value)}
     />
   )
 }

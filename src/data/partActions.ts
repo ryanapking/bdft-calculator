@@ -28,18 +28,19 @@ function getEmptyPart(): Part {
   };
 }
 
-export function addPart(parentId: string) {
+export function addPart(parentId: string, prepend: boolean = false, redirect: boolean = true) {
   return (dispatch: AppDispatch) => {
     const newPart = getEmptyPart();
     dispatch(createPart(newPart));
 
     dispatch(addChild({
+      prepend: prepend,
       groupId: parentId,
       childId: newPart.id
     }));
 
     dispatch(recalculateActiveProject());
-    dispatch(setActiveDetails({id: newPart.id, parentId}));
+    if (redirect) dispatch(setActiveDetails({id: newPart.id, parentId}));
   };
 }
 
@@ -53,6 +54,16 @@ export function savePartUpdates(partChanges: PartChanges) {
     dispatch(updatePart(partChanges));
     dispatch(recalculateActiveProject());
   };
+}
+
+export type PartPartial = Partial<Omit<Part, 'id'>>
+
+export function savePartPartial(partId: string, changes: PartPartial) {
+  return (dispatch: AppDispatch) => {
+    const update = { id: partId, changes };
+    dispatch(updatePart(update));
+    dispatch(recalculateActiveProject());
+  }
 }
 
 export function getPartMaterial(part: Part, state: RootState): Material {

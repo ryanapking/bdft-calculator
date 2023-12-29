@@ -2,16 +2,15 @@ import { useSelector } from "react-redux";
 import { useState } from 'react';
 import { RootState } from "../../data/store.ts";
 import { useAppDispatch } from "../../data/store.ts";
-import { Button, Dropdown, Label, Spinner, TextInput } from 'flowbite-react';
+import { Button, Label, Spinner, TextInput } from 'flowbite-react';
 import { addGroup } from "../../data/groupActions.ts";
 import { addPart } from '../../data/partActions.ts';
 import { saveGroupUpdates } from '../../data/groupActions.ts';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
-import { setPendingDelete } from '../../data/displaySlice.ts';
 
 function GroupForm(props:{groupId: string, parentId: string}) {
-  const { groupId, parentId } = props;
+  const { groupId} = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const dispatch = useAppDispatch();
 
@@ -39,10 +38,6 @@ function GroupForm(props:{groupId: string, parentId: string}) {
 
   return (
     <div className="m-2">
-      <Dropdown inline label={<h1 className='text-3xl'>{group.title}</h1>}>
-        <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: groupId, parentId}))}>Delete Group</Dropdown.Item>
-      </Dropdown>
-      <br />
       <form className={classes.form} onSubmit={e => e.preventDefault()}>
         <div className={classes.inputGroup}>
           <Label htmlFor='title' value='Group Title'/>
