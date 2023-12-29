@@ -35,7 +35,7 @@ function SortableProjectTree() {
     const searchIndex = activeIndex < dropIndex ? dropIndex : dropIndex - 1;
 
     let newParent: UniqueIdentifier = mainGroup.id;
-    for (let i = searchIndex; i > 0; i--) {
+    for (let i = searchIndex; i >= 0; i--) {
       const item = sortableChildren[i];
       if (item.depth < dropDepth) {
         newParent = item.id;
@@ -47,7 +47,8 @@ function SortableProjectTree() {
     for (let i = searchIndex; i >= 0; i--) {
       const item = sortableChildren[i];
       if (item.parent === newParent) {
-        newIndex = item.index > activeIndex ? item.index : item.index + 1;
+        newIndex = item.index + 1;
+        if (activeItem.parent === item.parent && activeItem.index < item.index) newIndex--;
         break;
       }
       if (item.id === newParent) break;
@@ -120,8 +121,8 @@ function SortableProjectTree() {
     const activeItem = sortableChildren[activeIndex];
     if (!activeItem) return;
 
-    const dropDepth = calculateDropDepth(e.active, e.over, e.delta.x);
-    const relocation = calculateRelocation(activeItem, activeIndex, dropIndex, dropDepth);
+    const depth = calculateDropDepth(e.active, e.over, e.delta.x);
+    const relocation = calculateRelocation(activeItem, activeIndex, dropIndex, depth);
     dispatch(relocateChild(relocation));
   }
 

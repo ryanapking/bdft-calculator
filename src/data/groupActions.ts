@@ -60,6 +60,9 @@ export type ChildRelocation = {
 
 export function relocateChild(relocation: ChildRelocation) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
+    // If provided parents aren't groups, cancel relocation
+    if (getDataTypeFromId(relocation.oldParent) !== GROUP || getDataTypeFromId(relocation.newParent) !== GROUP) return;
+
     const allGroups = getState().groups.entities;
     const fromGroup = allGroups[relocation.oldParent];
 
