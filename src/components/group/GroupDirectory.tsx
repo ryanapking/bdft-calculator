@@ -4,15 +4,11 @@ import { getDataTypeFromId, GROUP, PART } from '../../data/dataTypes.ts';
 import PartLink from '../part/PartLink.tsx';
 import { useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
-import { addGroup } from '../../data/groupActions.ts';
-import { addPart } from '../../data/partActions.ts';
-import { Dropdown } from 'flowbite-react';
 
 type Props = {
   groupId: string,
   parentId: string,
   altTitle?: string
-  mainGroup?: boolean,
 }
 
 function GroupDirectory(props: Props) {
@@ -20,30 +16,30 @@ function GroupDirectory(props: Props) {
     groupId,
     parentId,
     altTitle = '',
-    mainGroup = false,
   } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
+  const activeDetails = useSelector((state: RootState) => state.display.activeDetails.id);
   const dispatch = useAppDispatch();
 
   const printChild = (childId: string) => {
     const childType = getDataTypeFromId(childId);
     switch (childType) {
-      case PART: return <PartLink key={childId} partId={childId} parentId={groupId}/>
+      case PART: return <PartLink highlight={childId === activeDetails} key={childId} partId={childId} parentId={groupId}/>
       case GROUP: return <GroupDirectory key={childId} groupId={childId} parentId={groupId} />
     }
   }
 
-  const title = <h3 className={mainGroup ? 'text-xl' : ''}>{altTitle ? altTitle : group.title}</h3>
+  const highlight = groupId === activeDetails ? 'bg-gray-200' : '';
 
   return (
     <div className='text-sm'>
-      <div className='hover:bg-gray-100'>
-        <Dropdown inline label={title}>
-          <Dropdown.Item onClick={() => dispatch(addPart(groupId))}>Add Part</Dropdown.Item>
-          <Dropdown.Item onClick={() => dispatch(addGroup(groupId))}>Add Group</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}>{mainGroup ? 'Arrange Items' : 'View Details'}</Dropdown.Item>
-        </Dropdown>
+      <div className={`hover:bg-gray-100 ${highlight}`}>
+        <h2
+          className='hover:cursor-pointer hover:underline}'
+          onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}
+        >
+          {altTitle ? altTitle : group.title}
+        </h2>
       </div>
 
       <ul className="pl-5">

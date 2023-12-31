@@ -1,8 +1,9 @@
 import { Select } from 'flowbite-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
+import { ComponentProps } from 'react';
 
-type Props = {
+type Props = ComponentProps<typeof Select> & {
   id: string,
   materialIds: Array<string>,
   value: string,
@@ -19,12 +20,14 @@ function MaterialsSelector(props: Props) {
     onValueChange,
     includeEmptyOption = false,
     emptyOptionLabel = '',
+    ...remainingProps
   } = props;
 
   const materials = useSelector((state: RootState) => state.materials.entities);
 
   return (
     <Select
+      {...remainingProps}
       id={id}
       value={value}
       onChange={(event) => onValueChange(event.target.value)}

@@ -141,7 +141,7 @@ function SortableGroupTree(props: {groupId: string}) {
   }
 
   return (
-    <div className='w-full mb-96'>
+    <div className='w-full max-w-5xl mb-96'>
       <DndContext
         onDragEnd={handleDragEnd}
         onDragMove={handleDragMove}

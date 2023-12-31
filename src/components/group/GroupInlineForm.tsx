@@ -22,15 +22,30 @@ function GroupInlineForm(props: {groupId: string}) {
         saveString={(value) => saveGroup({title: value})}
         autoFocus
       />
-      <InlineInput
-        id='qty'
-        label='qty'
-        type='quantity'
-        numberVal={group.qty}
-        saveNumber={(quantity) => saveGroup({qty: quantity})}
-      />
-      <Button outline color='light' size='sm' onClick={() => dispatch(addPart(groupId, true, false))}>Add Part</Button>
-      <Button outline color='light' size='sm' onClick={() => dispatch(addGroup(groupId, true, false))}>Add Subgroup</Button>
+      <div className='w-full flex gap-3 justify-end'>
+        <InlineInput
+          id='qty'
+          label='qty'
+          type='quantity'
+          numberVal={group.qty}
+          className='w-[75px]'
+          saveNumber={(quantity) => saveGroup({qty: quantity})}
+        />
+        <Button
+          outline
+          color='light'
+          size='sm'
+          className='w-64'
+          onClick={() => dispatch(addPart(groupId, true, false))}
+        >Add Part</Button>
+        <Button
+          outline
+          color='light'
+          size='sm'
+          className='w-64'
+          onClick={() => dispatch(addGroup(groupId, true, false))}
+        >Add Subgroup</Button>
+      </div>
     </div>
   );
 }
