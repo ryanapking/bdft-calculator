@@ -1,8 +1,8 @@
 import { TextInput } from 'flowbite-react';
-import { useEffect, useState, useRef, ComponentProps } from 'react';
+import { useState, ComponentProps } from 'react';
 
-const isNumber = /^(\d*)(\.?)(\d*)$/;
-const getTrailingZeros = /0*$/;
+const fourDecimals = /\d*\.?\d{0,4}/;
+const emptyTrail = /\.?0*$/;
 
 type Props = ComponentProps<typeof TextInput> & {
   onValueChange: ( _:number ) => void,
@@ -10,63 +10,23 @@ type Props = ComponentProps<typeof TextInput> & {
 
 function InchInput(props: Props) {
   const { value, onValueChange, ...remainingProps } = props;
+  const [ trail, setTrail ] = useState<string>('');
 
-  const [ trailing, setTrailing ] = useState<string>('');
-  const [ cursor, setCursor ] = useState<number | null>(null);
-  const ref = useRef<HTMLInputElement>(null);
-  const valueString = value + trailing;
-
-  useEffect(() => {
-    ref.current?.setSelectionRange(cursor, cursor);
-  }, [ref, cursor, value]);
-
-  function inputChanged(target: HTMLInputElement) {
-    if (target.value === '') {
-      onValueChange(0);
-      setTrailing('');
-      setCursor(1);
-      return;
-    }
-
-    setCursor(target.selectionStart);
-
-    const numberParts = isNumber.exec(target.value);
-    if (!numberParts) return;
-
-    const [ , left, decimal, right ] = numberParts;
-    const trimmedRight = right.substring(0, 4);
-    const foundTrailingZeros = getTrailingZeros.exec(trimmedRight);
-    const trailingZeros = foundTrailingZeros ? foundTrailingZeros[0] : '';
-    const trailingZerosIndex = foundTrailingZeros ? foundTrailingZeros.index : trimmedRight.length;
-    const rightValue = trimmedRight.substring(0, trailingZerosIndex);
-
-    const trailingDecimal = (decimal && !rightValue) ? '.' : '';
-    setTrailing(trailingDecimal + trailingZeros);
-
-    // deal with trailing nonsense to allow for continued typing after empty decimal or trailing zero
-    if (decimal && !trimmedRight) {
-      setTrailing('.');
-    } else if (trailingZeros && trailingZeros.length === trimmedRight.length) {
-      setTrailing('.' + trailingZeros);
-    } else if (trailingZeros) {
-      setTrailing(trailingZeros);
-    } else {
-      setTrailing('');
-    }
-
-    if (right || left) {
-      const asFloat = parseFloat(left + decimal + trimmedRight);
-      onValueChange(asFloat);
-    }
+  function inputChanged(inputString: string) {
+    let [numString] = fourDecimals.exec(inputString) ?? ['0'];
+    const [trail] = emptyTrail.exec(numString) ?? [''];
+    setTrail(trail);
+    if (!numString.length || numString === trail) numString = '0';
+    const parsed = parseFloat(numString);
+    if (parsed !== value) onValueChange(parsed);
   }
 
   return (
     <TextInput
       {...remainingProps}
       type='text'
-      ref={ref}
-      value={valueString}
-      onChange={(action) => inputChanged(action.target)}
+      value={value + trail}
+      onChange={e => inputChanged(e.target.value)}
     />
   )
 }
