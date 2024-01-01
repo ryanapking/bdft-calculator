@@ -26,6 +26,7 @@ export const partsSlice = createSlice({
   initialState: partsAdapter.getInitialState(),
   reducers: {
     create: partsAdapter.addOne,
+    createMany: partsAdapter.addMany,
     destroy: partsAdapter.removeOne,
     destroyMany: partsAdapter.removeMany,
     update: partsAdapter.updateOne,
@@ -36,6 +37,7 @@ export const partsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   create,
+  createMany,
   destroy,
   destroyMany,
   update,

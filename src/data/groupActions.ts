@@ -4,13 +4,19 @@ import {
   addChild,
   removeChild,
   create as createGroup,
+  createMany as createManyGroups,
   update as updateGroup,
   updateMany as updateManyGroups,
   destroyMany as destroyManyGroups,
 } from './groupsSlice.ts';
+import {
+  Part,
+  destroyMany as destroyManyParts,
+  updateMany as updateManyParts,
+  createMany as createManyParts,
+} from './partsSlice.ts';
 import { clearActiveDetailsIf, setActiveDetails } from './displaySlice.ts';
 import { MaterialList, MaterialUsageSummary } from './materialsSlice.ts';
-import { destroyMany as destroyManyParts, updateMany as updateManyParts } from './partsSlice.ts';
 import { calculatePart, getPartMaterial } from './partActions.ts';
 import { getDataTypeFromId, getId, GROUP, PART } from './dataTypes.ts';
 import { recalculateActiveProject } from './projectActions.ts';
@@ -41,6 +47,69 @@ export function addGroup(parentId: string, prepend: boolean = false, redirect: b
     }));
 
     if (redirect) dispatch(setActiveDetails({id: group.id, parentId}));
+  }
+}
+
+export function duplicateGroup(parentId: string, groupId: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+
+    const parentGroup = state.groups.entities[parentId];
+    if (!parentGroup) return;
+
+    const originalIndex = parentGroup.children.indexOf(groupId);
+    if (originalIndex < 0) return;
+
+    const children = gatherChildren(groupId, state);
+
+    // Copy parts and store in a map
+    const partList = children.filter(id => getDataTypeFromId(id) === PART);
+    const partMap = partList.reduce((entities: { [key: string]: Part }, partId) => {
+      entities[partId] = structuredClone(state.parts.entities[partId]);
+      // entities[partId] = state.parts.entities[partId];
+      entities[partId].id = getId(PART);
+      return entities;
+    }, {});
+
+    // Copy groups and store in a map
+    const groupList = children.filter(id => getDataTypeFromId(id) === GROUP);
+    const groupMap = groupList.reduce((entities: { [key: string]: Group}, groupId) => {
+      entities[groupId] = structuredClone(state.groups.entities[groupId]);
+      // entities[groupId] = state.groups.entities[groupId];
+      entities[groupId].id = getId(GROUP);
+      return entities;
+    }, {});
+
+    // All the main group we are copying to the groups map
+    const groupCopy = structuredClone(state.groups.entities[groupId]);
+    // const groupCopy = state.groups.entities[groupId];
+    groupCopy.title = `Copy of ${groupCopy.title}`;
+    groupCopy.id = getId(GROUP);
+    groupMap[groupId] = groupCopy;
+    groupList.push(groupId);
+
+    // Map the children of all groups to their copy IDs
+    groupList.forEach(groupId => {
+      groupMap[groupId].children = groupMap[groupId].children.map(originalId => {
+        if (getDataTypeFromId(originalId) === PART) return partMap[originalId].id;
+        return groupMap[originalId].id;
+      });
+    });
+
+    // Add the main group copy to the original parent
+    const parentChildren = [...parentGroup.children];
+    parentChildren.splice(originalIndex, 0, groupMap[groupId].id);
+    const parentUpdate = {
+      id: parentId,
+      changes: {
+        children: parentChildren,
+      }
+    };
+
+    dispatch(createManyParts(Object.values(partMap)));
+    dispatch(createManyGroups(Object.values(groupMap)));
+    dispatch(updateGroup(parentUpdate));
+    dispatch(recalculateActiveProject());
   }
 }
 

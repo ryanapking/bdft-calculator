@@ -5,7 +5,7 @@ import SortableGroupTree from '../project/sortable/SortableGroupTree.tsx';
 import { Button, Dropdown } from 'flowbite-react';
 import { setPendingDelete } from '../../data/displaySlice.ts';
 import { addPart } from '../../data/partActions.ts';
-import { addGroup } from '../../data/groupActions.ts';
+import { addGroup, duplicateGroup } from '../../data/groupActions.ts';
 
 function GroupDetails(props: { groupId: string, parentId: string }) {
   const { groupId, parentId} = props;
@@ -17,6 +17,8 @@ function GroupDetails(props: { groupId: string, parentId: string }) {
     <div>
       <div className='mb-5'>
         <Dropdown inline label={<h1 className='text-3xl'>{group.title}</h1>}>
+          <Dropdown.Item onClick={() => dispatch(duplicateGroup(parentId, groupId))}>Duplicate Group</Dropdown.Item>
+          <Dropdown.Divider />
           <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: groupId, parentId}))}>Delete Group</Dropdown.Item>
         </Dropdown>
       </div>

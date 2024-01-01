@@ -23,6 +23,7 @@ export const groupsSlice = createSlice({
   initialState: groupsAdapter.getInitialState(),
   reducers: {
     create: groupsAdapter.addOne,
+    createMany: groupsAdapter.addMany,
     update: groupsAdapter.updateOne,
     updateMany: groupsAdapter.updateMany,
     destroy: groupsAdapter.removeOne,
@@ -42,6 +43,7 @@ export const groupsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   create,
+  createMany,
   update,
   updateMany,
   destroy,

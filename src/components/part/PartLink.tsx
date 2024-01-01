@@ -8,6 +8,8 @@ function PartLink(props: {partId: string, parentId: string, highlight?: boolean}
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
   const dispatch = useAppDispatch();
   const background = highlight ? 'bg-gray-200' : '';
+
+  if (!part) return null;
   return (
     <h2
       className={`hover:cursor-pointer hover:underline ${background}`}
