@@ -62,7 +62,7 @@ function InlineInput(props: Props) {
         {label ? <Label value={label + ':'}/> : null}
         <AltComponent
           {...remainingProps}
-          value={newValue}
+          value={+newValue}
           theme={customTheme}
           color={editing ? 'gray' : 'transparent'}
           onBlur={stopEditing}

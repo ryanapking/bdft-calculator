@@ -87,19 +87,19 @@ function PartForm(props: {partId: string, parentId: string}) {
           {dimensionFields.includes('length') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='length' value='Length (inches)'/>
-              <InchInput id='length' value={lengthInput} onValueChange={length => setLengthInput(length)}/>
+              <InchInput id='length' value={lengthInput} alignLeft onValueChange={length => setLengthInput(length)}/>
             </div>
           }
           {dimensionFields.includes('width') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='width' value='Width (inches)'/>
-              <InchInput id='width' value={widthInput} onValueChange={width => setWidthInput(width)}/>
+              <InchInput id='width' value={widthInput} alignLeft onValueChange={width => setWidthInput(width)}/>
             </div>
           }
           {dimensionFields.includes('height') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='height' value='Height (inches)'/>
-              <InchInput id='height' value={heightInput} onValueChange={height => setHeightInput(height)}/>
+              <InchInput id='height' value={heightInput} alignLeft onValueChange={height => setHeightInput(height)}/>
             </div>
           }
         </div>
