@@ -40,24 +40,35 @@ export interface MaterialType {
   label: string,
   shorthand: string,
   id: string,
+  partFields: Array<string>,
 }
 
 export const BDFT: MaterialType = {
   label: 'Board Feet',
   shorthand: 'bdft',
-  id: 'bdft'
+  id: 'bdft',
+  partFields: ['l', 'w'],
 };
 
 export const SQFT: MaterialType = {
   label: 'Square Feet',
   shorthand: 'sqft',
   id: 'sqft',
+  partFields: ['l', 'w'],
 };
 
 export const LFT: MaterialType = {
   label: 'Linear Feet',
   shorthand: 'lft',
   id: 'lft',
+  partFields: ['l'],
+}
+
+export const MISC: MaterialType = {
+  label: 'Miscellaneous',
+  shorthand: 'misc',
+  id: 'misc',
+  partFields: ['c'],
 }
 
 export const MATERIALS_TYPES: Array<MaterialType> = [
@@ -71,6 +82,7 @@ export function getMaterialTypeFromId(id: string): MaterialType {
     case BDFT.id: return BDFT;
     case SQFT.id: return SQFT;
     case LFT.id: return LFT;
+    case MISC.id: return MISC;
     default: return BDFT;
   }
 }

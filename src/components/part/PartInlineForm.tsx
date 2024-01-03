@@ -41,6 +41,7 @@ function PartInlineForm(props: {partId: string}) {
           id='material'
           value={part.m}
           includeEmptyOption
+          miscId={project.miscMaterial}
           emptyOptionLabel='Project Default'
           className={classes.materialsInput}
           materialIds={project.materials}

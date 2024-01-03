@@ -11,16 +11,17 @@ import {
 import { updateMany as updateManyParts } from './partsSlice.ts';
 import { destroy as destroyMaterial } from './materialsSlice.ts';
 import { clearActiveDetailsIf, setActiveDetails, setActiveProject } from './displaySlice.ts';
-import { getEmptyMaterial } from './materialActions.ts';
+import { getEmptyMaterial, getMiscMaterial } from './materialActions.ts';
 import { getEmptyGroup, deleteGroup, recalculateGroup, gatherChildren } from './groupActions.ts';
 
-function getEmptyProject(mainGroupId: string, defaultMaterialId: string): Project {
+function getEmptyProject(mainGroupId: string, defaultMaterialId: string, miscMaterialId: string): Project {
   return {
     id: getId(PROJECT),
     title: 'New Project',
     mainGroup: mainGroupId,
     materials: [defaultMaterialId],
-    defaultMaterial: defaultMaterialId
+    defaultMaterial: defaultMaterialId,
+    miscMaterial: miscMaterialId,
   };
 }
 
@@ -32,7 +33,10 @@ export function addProject() {
     const defaultMaterial = getEmptyMaterial();
     dispatch(createMaterial(defaultMaterial));
 
-    const newProject = getEmptyProject(mainGroup.id, defaultMaterial.id);
+    const miscMaterial = getMiscMaterial();
+    dispatch(createMaterial(miscMaterial));
+
+    const newProject = getEmptyProject(mainGroup.id, defaultMaterial.id, miscMaterial.id);
     dispatch(createProject(newProject));
     dispatch(setActiveProject(newProject.id));
   };
@@ -40,7 +44,7 @@ export function addProject() {
 
 type ProjectUpdate = {
   id: string,
-  changes: Omit<Project, 'id' | 'materials' | 'mainGroup'>,
+  changes: Omit<Project, 'id' | 'materials' | 'mainGroup' | 'miscMaterial'>,
 };
 
 export function saveProjectUpdates(update: ProjectUpdate) {

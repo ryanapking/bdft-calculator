@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from './store.ts';
-import { getId, PART, BDFT, SQFT, LFT } from './dataTypes.ts';
+import { getId, PART, BDFT, SQFT, LFT, MISC } from './dataTypes.ts';
 import {
   Part,
   create as createPart,
@@ -20,6 +20,7 @@ function getEmptyPart(): Part {
     w: 3,
     h: 1,
     m: '',
+    c: 0,
     calc: {
       totalCost: 0,
       ids: [],
@@ -131,11 +132,27 @@ function calculateSqft(part: Part, material: Material): MaterialList {
   };
 }
 
+function calculateMisc(part: Part, material: Material): MaterialList {
+  return {
+    totalCost: part.c,
+    ids: [material.id],
+    entities: {
+      [material.id]: {
+        id: material.id,
+        type: SQFT.id,
+        amt: 0,
+        cost: part.c,
+      }
+    }
+  };
+}
+
 export function calculatePart(part: Part, material: Material): MaterialList {
   switch (material.type) {
     case BDFT.id: return calculateBdft(part, material);
     case LFT.id: return calculateLft(part, material);
     case SQFT.id: return calculateSqft(part, material);
+    case MISC.id: return calculateMisc(part, material);
     default: return calculateBdft(part, material);
   }
 }

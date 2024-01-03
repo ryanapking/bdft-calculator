@@ -6,6 +6,7 @@ export type Part = {
   id: string,
   title: string,
   qty: number,
+  c: number, // cost
   l: number, // length
   w: number, // width
   h: number, // height

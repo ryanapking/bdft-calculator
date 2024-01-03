@@ -10,7 +10,8 @@ import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import PartSummary from './PartSummary.tsx';
 import { setPendingDelete } from '../../data/displaySlice.ts';
-import { BDFT, LFT, SQFT } from '../../data/dataTypes.ts';
+import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
+import CurrencyInput from '../inputs/CurrencyInput.tsx';
 
 function PartForm(props: {partId: string, parentId: string}) {
   const { partId, parentId} = props;
@@ -24,19 +25,11 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ heightInput, setHeightInput ] = useState<number>(part.h);
   const [ quantityInput, setQuantityInput ] = useState<number>(part.qty);
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
+  const [ costInput, setCostInput ] = useState<number>(part.c);
 
   const currentMaterialId = materialInput ? materialInput : project.defaultMaterial;
   const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
-
-  let dimensionFields: Array<string> = ['length', 'width', 'height'];
-  switch(currentMaterial.type) {
-    case SQFT.id:
-    case BDFT.id:
-      dimensionFields = ['width', 'length'];
-      break;
-    case LFT.id:
-      dimensionFields = ['length'];
-  }
+  const materialType = getMaterialTypeFromId(currentMaterial.type);
 
   function savePart() {
     dispatch(savePartUpdates({
@@ -48,11 +41,12 @@ function PartForm(props: {partId: string, parentId: string}) {
         h: heightInput,
         qty: quantityInput,
         m: materialInput,
+        c: costInput,
       }
     }));
   }
 
-  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput], savePart, 500);
+  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput, costInput], savePart, 500);
 
   if (!part) return null;
 
@@ -79,27 +73,34 @@ function PartForm(props: {partId: string, parentId: string}) {
             value={materialInput}
             materialIds={project.materials}
             includeEmptyOption
+            miscId={project.miscMaterial}
             emptyOptionLabel='Project Default'
             onValueChange={material => setMaterialInput(material)}
           />
         </div>
         <div className={classes.flexedInputGroup}>
-          {dimensionFields.includes('length') &&
+          {materialType.partFields.includes('l') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='length' value='Length (inches)'/>
               <InchInput id='length' value={lengthInput} alignLeft onValueChange={length => setLengthInput(length)}/>
             </div>
           }
-          {dimensionFields.includes('width') &&
+          {materialType.partFields.includes('w') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='width' value='Width (inches)'/>
               <InchInput id='width' value={widthInput} alignLeft onValueChange={width => setWidthInput(width)}/>
             </div>
           }
-          {dimensionFields.includes('height') &&
+          {materialType.partFields.includes('h') &&
             <div className={classes.inputGroup}>
               <Label htmlFor='height' value='Height (inches)'/>
               <InchInput id='height' value={heightInput} alignLeft onValueChange={height => setHeightInput(height)}/>
+            </div>
+          }
+          {materialType.partFields.includes('c') &&
+            <div className={classes.inputGroup}>
+              <Label htmlFor='cost' value='Cost'/>
+              <CurrencyInput id='cost' value={costInput} onValueChange={cost => setCostInput(cost)}/>
             </div>
           }
         </div>

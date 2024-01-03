@@ -22,6 +22,7 @@ function ProjectDirectory(props: { projectId: string }) {
           <Dropdown.Item onClick={() => dispatch(addMaterialToProject(projectId, project.materials))}>Add Material</Dropdown.Item>
         </Dropdown>
         {project.materials.map(materialId => <MaterialSummary key={materialId} materialId={materialId} projectId={projectId} groupId={project.mainGroup} /> )}
+        <MaterialSummary materialId={project.miscMaterial} projectId={projectId} groupId={project.mainGroup} />
       </div>
       <div className='mt-3'>
         <GroupDirectory altTitle='Components' groupId={project.mainGroup} parentId={projectId}/>

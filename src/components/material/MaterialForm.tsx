@@ -9,6 +9,8 @@ import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
 import { setAlert, setPendingDelete } from '../../data/displaySlice.ts';
 import { deleteAlerts } from '../../data/messages.ts';
+import QuantityInput from '../inputs/QuantityInput.tsx';
+import { PiPercent } from 'react-icons/pi';
 
 function MaterialForm(props:{materialId: string, parentId: string}) {
   const { materialId, parentId } = props;
@@ -21,6 +23,7 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
   const [ materialType, setMaterialType ] = useState<string>(material.type);
   const [ cost, setCost ] = useState<number>(material.cost);
   const [ thicknessInput, setThicknessInput ] = useState<number>(material.thickness);
+  const [ waste, setWaste ] = useState<number>(material.waste);
 
   function save() {
     dispatch(saveMaterialUpdates({
@@ -30,11 +33,12 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         type: materialType,
         cost,
         thickness: +thicknessInput,
+        waste,
       }
     }));
   }
 
-  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput], save, 500);
+  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput, waste], save, 500);
 
   function attemptDelete() {
     if (isDefaultMaterial) {
@@ -60,22 +64,29 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
           <TextInput id='title' value={titleInput} onChange={e => setTitleInput(e.target.value)}/>
         </div>
         <div className={classes.inputGroup}>
-          <Label htmlFor='cost' value='Cost'/>
-          <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost}/>
-        </div>
-        <div className={classes.inputGroup}>
-          <Label htmlFor="thickness" value="Stock Thickness"/>
-          <Select id="thickness" required value={thicknessInput} onChange={e => setThicknessInput(+e.target.value)}>
-            {THICKNESSES.map(thickness => (
-              <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)
-            )}
-          </Select>
-        </div>
-        <div className={classes.inputGroup}>
           <Label htmlFor="materialType" value="Material Type"/>
           <Select id="materialType" required value={materialType} onChange={e => setMaterialType(e.target.value)}>
             {MATERIALS_TYPES.map(type => <option key={type.id} value={type.id}>{type.label}</option>)}
           </Select>
+        </div>
+        {materialType === 'bdft' ?
+          <div className={classes.inputGroup}>
+            <Label htmlFor="thickness" value="Stock Thickness"/>
+            <Select id="thickness" required value={thicknessInput} onChange={e => setThicknessInput(+e.target.value)}>
+              {THICKNESSES.map(thickness => (
+                <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)
+              )}
+            </Select>
+          </div>
+          : null
+        }
+        <div className={classes.inputGroup}>
+          <Label htmlFor='cost' value='Cost'/>
+          <CurrencyInput id='cost' onValueChange={value => setCost(value)} value={cost}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='waste' value='Waste Factor'/>
+          <QuantityInput id='waste' value={waste} onValueChange={waste => setWaste(waste)} icon={PiPercent}/>
         </div>
       </form>
       {delayedSavePending ? <Spinner/> : null}

@@ -10,6 +10,7 @@ type Props = ComponentProps<typeof Select> & {
   onValueChange: (_:string) => void,
   includeEmptyOption?: boolean,
   emptyOptionLabel?: string,
+  miscId?: string,
 }
 
 function MaterialsSelector(props: Props) {
@@ -20,6 +21,7 @@ function MaterialsSelector(props: Props) {
     onValueChange,
     includeEmptyOption = false,
     emptyOptionLabel = '',
+    miscId = '',
     ...remainingProps
   } = props;
 
@@ -43,6 +45,12 @@ function MaterialsSelector(props: Props) {
         {materials[materialId].title}
         </option>
       )}
+      {miscId ?
+        <option value={ miscId }>
+          { materials[miscId].title }
+        </option>
+        : null
+      }
     </Select>
   );
 }

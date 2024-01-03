@@ -7,6 +7,7 @@ export type Material = {
   cost: number,
   type: string,
   thickness: number,
+  waste: number,
 }
 
 export type MaterialUsageSummary = {
