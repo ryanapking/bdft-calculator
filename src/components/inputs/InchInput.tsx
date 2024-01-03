@@ -10,6 +10,9 @@ const customTheme: CustomFlowbiteTheme['textInput'] = {
       withRightIcon: {
         on: 'pr-5 text-right',
       },
+      colors: {
+        transparent: 'bg-transparent border-transparent',
+      },
     }
   },
 };

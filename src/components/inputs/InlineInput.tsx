@@ -2,6 +2,7 @@ import { ComponentProps, useState } from 'react';
 import { CustomFlowbiteTheme, Label, TextInput } from 'flowbite-react';
 import QuantityInput from './QuantityInput.tsx';
 import InchInput from './InchInput.tsx';
+import CurrencyInput from './CurrencyInput.tsx';
 
 const customTheme: CustomFlowbiteTheme['textInput'] = {
   field: {
@@ -55,6 +56,7 @@ function InlineInput(props: Props) {
   let AltComponent = null;
   if (type === 'quantity') AltComponent = QuantityInput;
   else if (type === 'inch') AltComponent = InchInput;
+  else if (type === 'currency') AltComponent = CurrencyInput;
 
   if (AltComponent) {
     return (

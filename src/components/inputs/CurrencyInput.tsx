@@ -1,11 +1,20 @@
 import { TextInput } from 'flowbite-react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, ComponentProps } from 'react';
 import { BiDollar } from 'react-icons/bi';
 
 const currencyRegex = /^(\d*)(\.?)(\d*?)$/;
 
-function CurrencyInput(props: { id: string, value: number, onValueChange: ( _:number ) => void }) {
-  const { value, onValueChange, id } = props;
+type Props = Omit<ComponentProps<typeof TextInput>, 'value' | 'type'> & {
+  value: number,
+  onValueChange: ( _:number ) => void
+}
+
+function CurrencyInput(props: Props) {
+  const {
+    value,
+    onValueChange,
+    ...remainingProps
+  } = props;
 
   const [cursor, setCursor] = useState<number | null>(null);
   const ref = useRef<HTMLInputElement>(null);
@@ -25,9 +34,10 @@ function CurrencyInput(props: { id: string, value: number, onValueChange: ( _:nu
 
   return (
     <TextInput
-      id={id}
+      {...remainingProps}
       type='text'
-      icon={BiDollar} ref={ref}
+      ref={ref}
+      icon={BiDollar}
       value={value.toFixed(2)}
       onChange={(action) => inputChanged(action.target)}
     />

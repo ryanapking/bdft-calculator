@@ -3,6 +3,7 @@ import { RootState, useAppDispatch } from '../../data/store.ts';
 import InlineInput from '../inputs/InlineInput.tsx';
 import { PartPartial, savePartPartial } from '../../data/partActions.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
+import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
 
 function PartInlineForm(props: {partId: string}) {
   const { partId } = props;
@@ -10,67 +11,96 @@ function PartInlineForm(props: {partId: string}) {
   const project = useSelector((state: RootState) => state.projects.entities[state.display.activeProject]);
   const dispatch = useAppDispatch();
 
+  const currentMaterialId = part.m ? part.m : project.defaultMaterial;
+  const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
+  const materialType = getMaterialTypeFromId(currentMaterial.type);
+
   function savePart(changes: PartPartial) {
     dispatch(savePartPartial(partId, changes));
   }
 
   const classes = {
-    materialsInput: 'w-[200px]',
-    inchInput: 'w-[75px]',
-    qtyInput: 'w-[75px]',
+    container: 'w-full flex gap-12 items-center',
+    titleInput: 'w-full max-w-md',
+    allFields: 'w-full flex gap-3 justify-end',
+    mandatoryFields: 'flex gap-3',
+    conditionalFields: 'w-[250px] flex gap-3 justify-end',
+    narrowInput: 'w-[55px]',
   };
 
   return (
-    <div className='w-full flex gap-12 items-center'>
+    <div className={classes.container}>
       <InlineInput
         id='title'
         stringVal={part.title}
+        className={classes.titleInput}
         saveString={title => savePart({title})}
         autoFocus
       />
-      <div className='w-full flex gap-3 justify-end'>
-        <InlineInput
-          id='qty'
-          label='qty'
-          type='quantity'
-          className={classes.qtyInput}
-          numberVal={part.qty}
-          saveNumber={qty => savePart({qty})}
-        />
-        <MaterialsSelector
-          id='material'
-          value={part.m}
-          includeEmptyOption
-          miscId={project.miscMaterial}
-          emptyOptionLabel='Project Default'
-          className={classes.materialsInput}
-          materialIds={project.materials}
-          onValueChange={m => savePart({m})}
-        />
-        <InlineInput
-          id='length'
-          label='L'
-          type='inch'
-          className={classes.inchInput}
-          numberVal={part.l}
-          saveNumber={l => savePart({l})}
-        />
-        <InlineInput
-          id='width'
-          label='W'
-          type='inch'
-          className={classes.inchInput}
-          numberVal={part.w}
-          saveNumber={w => savePart({w})}
-        />
-        <InlineInput
-          id='height'
-          label='H'
-          type='inch'
-          className={classes.inchInput}
-          numberVal={part.h}
-          saveNumber={h => savePart({h})}
-        />
+      <div className={classes.allFields}>
+        <div className={classes.mandatoryFields}>
+          <InlineInput
+            id='qty'
+            label='qty'
+            type='quantity'
+            className={classes.narrowInput}
+            numberVal={part.qty}
+            saveNumber={qty => savePart({ qty })}
+          />
+          <MaterialsSelector
+            id='material'
+            value={part.m}
+            includeEmptyOption
+            miscId={project.miscMaterial}
+            emptyOptionLabel='Project Default'
+            materialIds={project.materials}
+            onValueChange={m => savePart({ m })}
+          />
+        </div>
+        <div className={classes.conditionalFields}>
+          {materialType.partFields.includes('l') ?
+            <InlineInput
+              id='length'
+              label='L'
+              type='inch'
+              className={classes.narrowInput}
+              numberVal={part.l}
+              saveNumber={l => savePart({ l })}
+            />
+            : null
+          }
+          {materialType.partFields.includes('w') ?
+            <InlineInput
+              id='width'
+              label='W'
+              type='inch'
+              className={classes.narrowInput}
+              numberVal={part.w}
+              saveNumber={w => savePart({ w })}
+            />
+            : null
+          }
+          {materialType.partFields.includes('h') ?
+            <InlineInput
+              id='height'
+              label='H'
+              type='inch'
+              className={classes.narrowInput}
+              numberVal={part.h}
+              saveNumber={h => savePart({ h })}
+            />
+            : null
+          }
+          {materialType.partFields.includes('c') ?
+            <InlineInput
+              id='cost'
+              type='currency'
+              numberVal={part.c}
+              saveNumber={c => savePart({ c })}
+            />
+            : null
+          }
+        </div>
       </div>
     </div>
   );
