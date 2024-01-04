@@ -80,9 +80,8 @@ export function duplicateGroup(parentId: string, groupId: string) {
       return entities;
     }, {});
 
-    // All the main group we are copying to the groups map
+    // Copy and rename the parent group, add to our groups info
     const groupCopy = structuredClone(state.groups.entities[groupId]);
-    // const groupCopy = state.groups.entities[groupId];
     groupCopy.title = `Copy of ${groupCopy.title}`;
     groupCopy.id = getId(GROUP);
     groupMap[groupId] = groupCopy;

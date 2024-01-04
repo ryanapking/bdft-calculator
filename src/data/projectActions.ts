@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from './store.ts';
-import { getDataTypeFromId, getId, GROUP, PART, PROJECT } from './dataTypes.ts';
+import { getDataTypeFromId, getId, GROUP, MATERIAL, PART, PROJECT } from './dataTypes.ts';
 import {
   GroupEntities,
   create as createGroup,
@@ -205,13 +205,61 @@ export function exportProject(projectId: string) {
 }
 
 export function importProject(projectImport: ProjectExport) {
-  return (dispatch: AppDispatch) => {
-    console.log('importing: ', projectImport);
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const existingProject = getState().projects.ids.includes(projectImport.project.id);
+    if (existingProject) {
+      dispatch(deleteProject(projectImport.project.id));
+    }
+
     dispatch(setManyMaterials(Object.values(projectImport.materials)));
     dispatch(setManyParts(Object.values(projectImport.parts)));
     dispatch(setManyGroups(Object.values(projectImport.groups)));
     dispatch(setProject(projectImport.project));
     dispatch(setActiveProject(projectImport.project.id));
+    dispatch(recalculateActiveProject());
     dispatch(endImport());
   };
+}
+
+export function importProjectAsNew(projectImport: ProjectExport) {
+  return (dispatch: AppDispatch) => {
+    // Generate new IDs
+    projectImport.project.id = getId(PROJECT);
+    Object.values(projectImport.parts)
+      .forEach(part => part.id = getId(PART));
+    Object.values(projectImport.groups)
+      .forEach(group => group.id = getId(GROUP));
+    Object.values(projectImport.materials)
+      .forEach(material => material.id = getId(MATERIAL));
+
+    // Assign new IDs to the project
+    projectImport.project.mainGroup = projectImport.groups[projectImport.project.mainGroup].id;
+    projectImport.project.miscMaterial = projectImport.materials[projectImport.project.miscMaterial].id;
+    projectImport.project.defaultMaterial = projectImport.materials[projectImport.project.defaultMaterial].id;
+    projectImport.project.materials = projectImport.project.materials.map(materialId => projectImport.materials[materialId].id);
+
+    // Update all part materials to new IDs
+    Object.values(projectImport.parts)
+      .forEach(part => {
+        if (part.m) {
+          part.m = projectImport.materials[part.m].id;
+        }
+      });
+
+    // Update all group children to new IDs
+    Object.values(projectImport.groups)
+      .forEach(group => {
+        group.children = group.children.map(childId => {
+          if (getDataTypeFromId(childId) === GROUP) {
+            return projectImport.groups[childId].id;
+          }
+          return projectImport.parts[childId].id;
+        });
+      });
+
+    // Append to name
+    projectImport.project.title += ' (Import)';
+
+    dispatch(importProject(projectImport));
+  }
 }
