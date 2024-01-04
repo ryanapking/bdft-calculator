@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Label, TextInput, Select, Dropdown, Spinner } from 'flowbite-react';
+import { Label, TextInput, Select, Dropdown, Spinner, Textarea } from 'flowbite-react';
 import { saveMaterialUpdates } from '../../data/materialActions.ts';
 import { MATERIAL, THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
@@ -24,6 +24,7 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
   const [ cost, setCost ] = useState<number>(material.cost);
   const [ thicknessInput, setThicknessInput ] = useState<number>(material.thickness);
   const [ waste, setWaste ] = useState<number>(material.waste);
+  const [ notesInput, setNotesInput ] = useState<string>(material.notes);
 
   function save() {
     dispatch(saveMaterialUpdates({
@@ -34,11 +35,12 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         cost,
         thickness: +thicknessInput,
         waste,
+        notes: notesInput,
       }
     }));
   }
 
-  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput, waste], save, 500);
+  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput, waste, notesInput], save, 500);
 
   function attemptDelete() {
     if (isDefaultMaterial) {
@@ -87,6 +89,10 @@ function MaterialForm(props:{materialId: string, parentId: string}) {
         <div className={classes.inputGroup}>
           <Label htmlFor='waste' value='Waste Factor'/>
           <QuantityInput id='waste' value={waste} onValueChange={waste => setWaste(waste)} icon={PiPercent}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='notes' value='Notes'/>
+          <Textarea id='notes' rows={4} value={notesInput} onChange={e => setNotesInput(e.target.value)}/>
         </div>
       </form>
       {delayedSavePending ? <Spinner/> : null}

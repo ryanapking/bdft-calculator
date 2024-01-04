@@ -11,6 +11,7 @@ export function getEmptyMaterial(): Material {
     type: BDFT.id,
     thickness: 1,
     waste: 0,
+    notes: '',
   };
 }
 
@@ -22,6 +23,7 @@ export function getMiscMaterial(): Material {
     type: MISC.id,
     thickness: 0,
     waste: 0,
+    notes: '',
   };
 }
 

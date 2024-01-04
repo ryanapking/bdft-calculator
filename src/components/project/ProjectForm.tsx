@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Label, Spinner, TextInput } from 'flowbite-react';
+import { Label, Spinner, Textarea, TextInput } from 'flowbite-react';
 import { saveProjectUpdates } from '../../data/projectActions.ts';
 import { useState } from 'react';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
@@ -13,6 +13,7 @@ function ProjectForm(props: {projectId: string}) {
 
   const [ titleInput, setTitleInput ] = useState<string>(project.title);
   const [ defaultMaterialInput, setDefaultMaterialInput ] = useState<string>(project.defaultMaterial);
+  const [ notesInput, setNotesInput ] = useState<string>(project.notes);
 
   function saveProject() {
     dispatch(saveProjectUpdates({
@@ -20,6 +21,7 @@ function ProjectForm(props: {projectId: string}) {
       changes: {
         title: titleInput,
         defaultMaterial: defaultMaterialInput,
+        notes: notesInput,
       }
     }));
   }
@@ -34,11 +36,11 @@ function ProjectForm(props: {projectId: string}) {
   return (
     <form className={classes.form} onSubmit={e => e.preventDefault()}>
       <div className={classes.inputGroup}>
-        <Label htmlFor='title' value='Project Title' />
-        <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)} />
+        <Label htmlFor='title' value='Project Title'/>
+        <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
       </div>
       <div className={classes.inputGroup}>
-        <Label htmlFor='defaultMaterial' value='Default Project Material' />
+        <Label htmlFor='defaultMaterial' value='Default Project Material'/>
         <MaterialsSelector
           id='defaultMaterial'
           materialIds={project.materials}
@@ -46,7 +48,11 @@ function ProjectForm(props: {projectId: string}) {
           onValueChange={value => setDefaultMaterialInput(value)}
         />
       </div>
-      {savePending ? <Spinner /> : null}
+      <div className={classes.inputGroup}>
+        <Label htmlFor='notes' value='Notes'/>
+        <Textarea id='notes' rows={4} value={notesInput} onChange={e => setNotesInput(e.target.value)}/>
+      </div>
+      {savePending ? <Spinner/> : null}
     </form>
   )
 }

@@ -8,6 +8,7 @@ export type Project = {
   materials: Array<string>,
   defaultMaterial: string,
   miscMaterial: string,
+  notes: string,
 }
 
 const projectsAdapter = createEntityAdapter({

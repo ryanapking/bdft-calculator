@@ -11,6 +11,7 @@ export type Part = {
   w: number, // width
   h: number, // height
   m: string, // material id
+  notes: string,
   calc: MaterialList,
 }
 

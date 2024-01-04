@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Dropdown, Label, Spinner, TextInput } from 'flowbite-react';
+import { Dropdown, Label, Spinner, Textarea, TextInput } from 'flowbite-react';
 import { useAppDispatch } from '../../data/store.ts';
 import { savePartUpdates } from '../../data/partActions.ts';
 import useDelayedSave from '../../effects/useDelayedSave.ts';
@@ -26,6 +26,7 @@ function PartForm(props: {partId: string, parentId: string}) {
   const [ quantityInput, setQuantityInput ] = useState<number>(part.qty);
   const [ materialInput, setMaterialInput ] = useState<string>(part.m);
   const [ costInput, setCostInput ] = useState<number>(part.c);
+  const [ notesInput, setNotesInput ] = useState<string>(part.notes);
 
   const currentMaterialId = materialInput ? materialInput : project.defaultMaterial;
   const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
@@ -42,11 +43,12 @@ function PartForm(props: {partId: string, parentId: string}) {
         qty: quantityInput,
         m: materialInput,
         c: costInput,
+        notes: notesInput,
       }
     }));
   }
 
-  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput, costInput], savePart, 500);
+  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput, costInput, notesInput], savePart, 500);
 
   if (!part) return null;
 
@@ -107,6 +109,10 @@ function PartForm(props: {partId: string, parentId: string}) {
         <div className={classes.inputGroup}>
           <Label htmlFor='quantity' value='Quantity'/>
           <QuantityInput id='quantity' value={quantityInput} onValueChange={quantity => setQuantityInput(quantity)}/>
+        </div>
+        <div className={classes.inputGroup}>
+          <Label htmlFor='notes' value='Notes'/>
+          <Textarea id='notes' rows={4} value={notesInput} onChange={e => setNotesInput(e.target.value)}/>
         </div>
         {savePending ? <Spinner/> : null}
       </form>

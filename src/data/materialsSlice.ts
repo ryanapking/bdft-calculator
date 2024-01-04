@@ -8,6 +8,7 @@ export type Material = {
   type: string,
   thickness: number,
   waste: number,
+  notes: string,
 }
 
 export type MaterialEntities = {

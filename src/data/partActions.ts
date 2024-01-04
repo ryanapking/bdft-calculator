@@ -21,6 +21,7 @@ function getEmptyPart(): Part {
     h: 1,
     m: '',
     c: 0,
+    notes: '',
     calc: {
       totalCost: 0,
       ids: [],

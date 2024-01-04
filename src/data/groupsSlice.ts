@@ -7,6 +7,7 @@ export type Group = {
   title: string,
   children: Array<string>,
   qty: number,
+  notes: string,
   calc: MaterialList,
 };
 

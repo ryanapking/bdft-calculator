@@ -18,8 +18,9 @@ const materialSchema: JSONSchemaType<Material> = {
     type: {type: 'string'},
     thickness: {type: 'number'},
     waste: {type: 'number'},
+    notes: {type: 'string'},
   },
-  required: ['id', 'title', 'cost', 'type', 'thickness', 'waste'],
+  required: ['id', 'title', 'cost', 'type', 'thickness', 'waste', 'notes'],
   additionalProperties: false,
 };
 
@@ -63,9 +64,10 @@ const partSchema: JSONSchemaType<Part> = {
     w: {  type: 'number' },
     h: {  type: 'number' },
     m: { type: 'string' },
+    notes: {type: 'string'},
     calc: materialListSchema,
   },
-  required: ['id', 'title', 'qty', 'c', 'l', 'w', 'h', 'm'],
+  required: ['id', 'title', 'qty', 'c', 'l', 'w', 'h', 'm', 'notes'],
   additionalProperties: false,
 }
 
@@ -76,9 +78,10 @@ const groupSchema: JSONSchemaType<Group> = {
     title: {type: 'string'},
     children: {type: 'array', items: {type: 'string'}},
     qty: {type: 'number'},
+    notes: {type: 'string'},
     calc: materialListSchema,
   },
-  required: ['id', 'title', 'children', 'qty', 'calc'],
+  required: ['id', 'title', 'children', 'qty', 'calc', 'notes'],
   additionalProperties: false,
 }
 
@@ -92,8 +95,9 @@ const projectSchema: JSONSchemaType<Project> = {
     materials: {type: 'array', items: {type: 'string'}},
     defaultMaterial: {type: 'string'},
     miscMaterial: {type: 'string'},
+    notes: {type: 'string'},
   },
-  required: ['id', 'title', 'mainGroup', 'materials', 'defaultMaterial', 'miscMaterial'],
+  required: ['id', 'title', 'mainGroup', 'materials', 'defaultMaterial', 'miscMaterial', 'notes'],
   additionalProperties: false,
 }
 

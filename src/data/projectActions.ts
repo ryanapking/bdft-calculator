@@ -38,6 +38,7 @@ function getEmptyProject(mainGroupId: string, defaultMaterialId: string, miscMat
     materials: [defaultMaterialId],
     defaultMaterial: defaultMaterialId,
     miscMaterial: miscMaterialId,
+    notes: '',
   };
 }
 

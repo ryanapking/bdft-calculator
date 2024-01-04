@@ -27,6 +27,7 @@ export function getEmptyGroup(): Group {
     title: 'New Group',
     children: [],
     qty: 1,
+    notes: '',
     calc: {
       totalCost: 0,
       ids: [],
