@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv';
+import Ajv, { JSONSchemaType } from 'ajv';
 import {
   Material,
   MaterialList,
@@ -101,7 +101,7 @@ const projectSchema: JSONSchemaType<Project> = {
   additionalProperties: false,
 }
 
-export const projectImportSchema: JSONSchemaType<ProjectExport> = {
+const projectImportSchema: JSONSchemaType<ProjectExport> = {
   type: 'object',
   properties: {
     project: projectSchema,
@@ -130,3 +130,6 @@ export const projectImportSchema: JSONSchemaType<ProjectExport> = {
   required: ['project', 'groups', 'parts', 'materials'],
   additionalProperties: false,
 };
+
+const ajv = new Ajv();
+export const validateProjectImport = ajv.compile(projectImportSchema);

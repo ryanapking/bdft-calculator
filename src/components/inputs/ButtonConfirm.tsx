@@ -1,10 +1,9 @@
 import { Button } from 'flowbite-react';
-import { useState, PropsWithChildren } from 'react';
+import { useState, PropsWithChildren, ComponentProps } from 'react';
 import ModalConfirm from './ModalConfirm.tsx';
 
-type Props = {
+type Props = Omit<ComponentProps<typeof Button>, 'onClick'> & {
   buttonText: string,
-  color: string,
   onConfirm?: () => void,
   excludeConfirm?: boolean,
 }
@@ -12,9 +11,9 @@ type Props = {
 function ButtonConfirm(props: PropsWithChildren<Props>) {
   const {
     buttonText,
-    color,
     onConfirm = () => {},
-    excludeConfirm = false
+    excludeConfirm = false,
+    ...remainingProps
   } = props;
   const [openModal, setOpenModal] = useState(false);
 
@@ -25,7 +24,7 @@ function ButtonConfirm(props: PropsWithChildren<Props>) {
 
   return (
     <>
-      <Button color={color} onClick={() => setOpenModal(true)}>{buttonText}</Button>
+      <Button {...remainingProps} onClick={() => setOpenModal(true)}>{buttonText}</Button>
       <ModalConfirm
         openModal={openModal}
         onConfirm={() => confirmed()}

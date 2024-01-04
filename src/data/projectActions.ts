@@ -24,11 +24,12 @@ import {
   updateMany as updateManyParts,
   setMany as setManyParts,
 } from './partsSlice.ts';
-import { clearActiveDetailsIf, endImport, setActiveDetails, setActiveProject } from './displaySlice.ts';
+import { clearActiveDetailsIf, endImport, setActiveDetails, setActiveProject, setAlert } from './displaySlice.ts';
 import { getEmptyMaterial, getMiscMaterial } from './materialActions.ts';
 import { getEmptyGroup, deleteGroup, recalculateGroup, gatherChildren } from './groupActions.ts';
 import { saveAs } from 'file-saver';
 import filenamify from 'filenamify/browser';
+import { validateProjectImport } from '../components/project/import/ImportSchema.ts';
 
 function getEmptyProject(mainGroupId: string, defaultMaterialId: string, miscMaterialId: string): Project {
   return {
@@ -263,4 +264,19 @@ export function importProjectAsNew(projectImport: ProjectExport) {
 
     dispatch(importProject(projectImport));
   }
+}
+
+export function fetchSampleProject() {
+  return async (dispatch: AppDispatch) => {
+    const response = await fetch("/sample-project.json");
+    const sampleProject: ProjectExport = await response.json();
+
+    const valid = validateProjectImport(sampleProject);
+    if (!valid) {
+      dispatch(setAlert('Error loading sample project. Sorry!'));
+      return;
+    }
+
+    dispatch(importProjectAsNew(sampleProject));
+  };
 }

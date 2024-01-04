@@ -1,6 +1,5 @@
 import { ProjectExport } from '../../../data/projectActions.ts';
-import Ajv from 'ajv';
-import { projectImportSchema } from './ImportSchema.ts';
+import { validateProjectImport } from './ImportSchema.ts';
 import { DragEvent, useState } from 'react';
 import { Alert, FileInput, Label, Modal } from 'flowbite-react';
 import { CiImport } from 'react-icons/ci';
@@ -37,8 +36,6 @@ function ImportSelect(props: Props) {
         return;
       }
 
-      const ajv = new Ajv();
-      const validateProjectImport = ajv.compile(projectImportSchema);
       const valid = validateProjectImport(projectImport);
       if (!valid) {
         setErrorMsg('File does not contain a valid project.');
