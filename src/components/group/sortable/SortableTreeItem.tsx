@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { CHILD_OFFSET, SortableChild } from './utilities.ts';
 import TreeItem from './TreeItem.tsx';
 import { getDataTypeFromId, GROUP } from '../../../data/dataTypes.ts';
-import GroupInlineForm from '../../group/GroupInlineForm.tsx';
+import GroupInlineForm from '../GroupInlineForm.tsx';
 import PartInlineForm from '../../part/PartInlineForm.tsx';
 
 type Props = {

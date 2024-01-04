@@ -1,7 +1,7 @@
 import GroupForm from './GroupForm.tsx';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import SortableGroupTree from '../project/sortable/SortableGroupTree.tsx';
+import SortableGroupTree from './sortable/SortableGroupTree.tsx';
 import { Button, Dropdown } from 'flowbite-react';
 import { setPendingDelete } from '../../data/displaySlice.ts';
 import { addPart } from '../../data/partActions.ts';
