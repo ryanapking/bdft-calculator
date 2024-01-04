@@ -10,6 +10,10 @@ export type Material = {
   waste: number,
 }
 
+export type MaterialEntities = {
+  [key: string]: Material,
+}
+
 export type MaterialUsageSummary = {
   id: string, // material id
   type: string, // material type
@@ -35,6 +39,7 @@ export const materialsSlice = createSlice({
   reducers: {
     create: materialsAdapter.addOne,
     update: materialsAdapter.updateOne,
+    setMany: materialsAdapter.setMany,
     destroy: materialsAdapter.removeOne,
     destroyMany: materialsAdapter.removeMany,
   },
@@ -44,6 +49,7 @@ export const materialsSlice = createSlice({
 export const {
   create,
   update,
+  setMany,
   destroy,
   destroyMany,
 } = materialsSlice.actions

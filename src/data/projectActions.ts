@@ -1,18 +1,34 @@
 import { AppDispatch, RootState } from './store.ts';
-import { getDataTypeFromId, getId, GROUP, PROJECT } from './dataTypes.ts';
-import { create as createGroup } from './groupsSlice.ts';
-import { create as createMaterial, destroyMany as destroyManyMaterials } from './materialsSlice.ts';
+import { getDataTypeFromId, getId, GROUP, PART, PROJECT } from './dataTypes.ts';
+import {
+  GroupEntities,
+  create as createGroup,
+  setMany as setManyGroups,
+} from './groupsSlice.ts';
+import {
+  MaterialEntities,
+  create as createMaterial,
+  destroyMany as destroyManyMaterials,
+  destroy as destroyMaterial,
+  setMany as setManyMaterials,
+} from './materialsSlice.ts';
 import {
   Project,
   create as createProject,
   update as updateProject,
-  destroy as destroyProject
+  destroy as destroyProject,
+  set as setProject,
 } from './projectsSlice.ts';
-import { updateMany as updateManyParts } from './partsSlice.ts';
-import { destroy as destroyMaterial } from './materialsSlice.ts';
-import { clearActiveDetailsIf, setActiveDetails, setActiveProject } from './displaySlice.ts';
+import {
+  PartEntities,
+  updateMany as updateManyParts,
+  setMany as setManyParts,
+} from './partsSlice.ts';
+import { clearActiveDetailsIf, endImport, setActiveDetails, setActiveProject } from './displaySlice.ts';
 import { getEmptyMaterial, getMiscMaterial } from './materialActions.ts';
 import { getEmptyGroup, deleteGroup, recalculateGroup, gatherChildren } from './groupActions.ts';
+import { saveAs } from 'file-saver';
+import filenamify from 'filenamify/browser';
 
 function getEmptyProject(mainGroupId: string, defaultMaterialId: string, miscMaterialId: string): Project {
   return {
@@ -61,9 +77,11 @@ export function deleteProject(projectId: string) {
     const state = getState();
     const mainGroupId = state.projects.entities[projectId].mainGroup;
     const materials = state.projects.entities[projectId].materials;
+    const miscMaterial = state.projects.entities[projectId].miscMaterial;
 
     dispatch(destroyProject(projectId));
     dispatch(destroyManyMaterials(materials));
+    dispatch(destroyMaterial(miscMaterial));
     dispatch(deleteGroup(projectId, mainGroupId));
   }
 }
@@ -130,4 +148,70 @@ export function recalculateActiveProject() {
     const mainGroup = state.projects.entities[activeProject].mainGroup;
     dispatch(recalculateGroup(mainGroup));
   }
+}
+
+export type ProjectExport = {
+  project: Project,
+  groups: GroupEntities,
+  parts: PartEntities,
+  materials: MaterialEntities,
+}
+
+
+
+export function exportProject(projectId: string) {
+  return (_dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const project = state.projects.entities[projectId];
+    const children = gatherChildren(project.mainGroup, state);
+
+    const projectExport: ProjectExport = {
+      project: project,
+      groups: {},
+      parts: {},
+      materials: {},
+    };
+
+    // Add child parts to the export
+    children.filter(id => getDataTypeFromId(id) === PART)
+      .forEach(partId => {
+        projectExport.parts[partId] = state.parts.entities[partId]
+      });
+
+    // Add child groups to the export
+    children.filter(id => getDataTypeFromId(id) === GROUP)
+      .forEach(groupId => {
+        projectExport.groups[groupId] = state.groups.entities[groupId];
+      });
+
+    // Add materials to the export
+    project.materials.forEach(materialId => {
+      projectExport.materials[materialId] = state.materials.entities[materialId];
+    });
+
+    // Add misc materials to the export
+    projectExport.materials[project.miscMaterial] = state.materials.entities[project.miscMaterial];
+
+    // Add project main group to the export
+    projectExport.groups[project.mainGroup] = state.groups.entities[project.mainGroup];
+
+    // Now we need to do something with it
+    const fileName = filenamify(`${project.title}.json`);
+    const fileToSave = new Blob([JSON.stringify(projectExport)], {
+      type: 'application/json'
+    });
+    saveAs(fileToSave, fileName);
+  }
+}
+
+export function importProject(projectImport: ProjectExport) {
+  return (dispatch: AppDispatch) => {
+    console.log('importing: ', projectImport);
+    dispatch(setManyMaterials(Object.values(projectImport.materials)));
+    dispatch(setManyParts(Object.values(projectImport.parts)));
+    dispatch(setManyGroups(Object.values(projectImport.groups)));
+    dispatch(setProject(projectImport.project));
+    dispatch(setActiveProject(projectImport.project.id));
+    dispatch(endImport());
+  };
 }

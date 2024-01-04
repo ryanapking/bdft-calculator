@@ -5,10 +5,12 @@ import { clearAlert, clearPendingDelete } from '../data/displaySlice.ts';
 import { getDataTypeFromId } from '../data/dataTypes.ts';
 import { processPendingDelete } from '../data/displayActions.ts';
 import { deleteMessages } from '../data/messages.ts';
+import ImportModal from './project/import/ImportModal.tsx';
 
 function GlobalModal() {
   const pendingDelete = useSelector((state: RootState) => state.display.pendingDelete);
   const alert = useSelector((state: RootState) => state.display.alert);
+  const importing = useSelector((state: RootState) => state.display.importing);
   const dispatch = useAppDispatch();
 
   if (alert) return (
@@ -20,6 +22,10 @@ function GlobalModal() {
       {deleteMessages[getDataTypeFromId(pendingDelete.id).idPrefix]}
     </ModalConfirm>
   );
+
+  if (importing) return (
+    <ImportModal />
+  )
 
   return null;
 }

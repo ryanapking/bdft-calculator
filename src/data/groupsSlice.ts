@@ -24,6 +24,7 @@ export const groupsSlice = createSlice({
   reducers: {
     create: groupsAdapter.addOne,
     createMany: groupsAdapter.addMany,
+    setMany: groupsAdapter.setMany,
     update: groupsAdapter.updateOne,
     updateMany: groupsAdapter.updateMany,
     destroy: groupsAdapter.removeOne,
@@ -44,6 +45,7 @@ export const groupsSlice = createSlice({
 export const {
   create,
   createMany,
+  setMany,
   update,
   updateMany,
   destroy,

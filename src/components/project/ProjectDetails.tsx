@@ -5,6 +5,7 @@ import { useState } from 'react';
 import ProjectForm from './ProjectForm.tsx';
 import { Button, Dropdown } from 'flowbite-react';
 import { setPendingDelete } from '../../data/displaySlice.ts';
+import { exportProject } from '../../data/projectActions.ts';
 
 function ProjectDetails(props: {projectId: string}) {
   const { projectId } = props;
@@ -33,6 +34,8 @@ function ProjectDetails(props: {projectId: string}) {
       <div className='flex mb-5'>
         <Dropdown className='text-3xl' inline label={<h1 className='text-3xl'>{project.title}</h1>}>
           <Dropdown.Item onClick={() => setShowForm(true)}>Edit Project</Dropdown.Item>
+          <Dropdown.Divider/>
+          <Dropdown.Item onClick={() => dispatch(exportProject(projectId))}>Export Project</Dropdown.Item>
           <Dropdown.Divider/>
           <Dropdown.Item onClick={() => dispatch(setPendingDelete({id: projectId, parentId: ''}))}>Delete Project</Dropdown.Item>
         </Dropdown>

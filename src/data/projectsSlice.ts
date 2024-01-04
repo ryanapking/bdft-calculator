@@ -19,6 +19,7 @@ export const projectsSlice = createSlice({
   initialState: projectsAdapter.getInitialState(),
   reducers: {
     create: projectsAdapter.addOne,
+    set: projectsAdapter.setOne,
     destroy: projectsAdapter.removeOne,
     update: projectsAdapter.updateOne,
   },
@@ -27,6 +28,7 @@ export const projectsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   create,
+  set,
   destroy,
   update,
 } = projectsSlice.actions

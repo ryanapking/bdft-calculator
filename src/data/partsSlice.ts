@@ -28,6 +28,7 @@ export const partsSlice = createSlice({
   reducers: {
     create: partsAdapter.addOne,
     createMany: partsAdapter.addMany,
+    setMany: partsAdapter.setMany,
     destroy: partsAdapter.removeOne,
     destroyMany: partsAdapter.removeMany,
     update: partsAdapter.updateOne,
@@ -39,6 +40,7 @@ export const partsSlice = createSlice({
 export const {
   create,
   createMany,
+  setMany,
   destroy,
   destroyMany,
   update,

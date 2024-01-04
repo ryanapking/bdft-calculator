@@ -1,7 +1,7 @@
 import { Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
-import { setActiveProject } from '../data/displaySlice.ts';
+import { beginImport, setActiveProject } from '../data/displaySlice.ts';
 import { addProject } from '../data/projectActions.ts';
 
 function Header() {
@@ -15,11 +15,11 @@ function Header() {
       <h1 className='text-3xl font-semibold'>Woodworking Calculator</h1>
 
       <Dropdown label="Projects">
-        <Dropdown.Header>Load Project</Dropdown.Header>
         {projectIds.map(id =>
           <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>
         )}
         <Dropdown.Divider />
+        <Dropdown.Item onClick={() => dispatch(beginImport())}>Import Project</Dropdown.Item>
         <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
       </Dropdown>
     </div>
