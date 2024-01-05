@@ -12,10 +12,10 @@ function MaterialTable(props: {materialId: string, altBorder: string}) {
   return (
     <div className='font-mono pb-6 pt-3'>
       <div className='grid grid-cols-12'>
-        <div className={`col-start-2 col-span-3 ${altBorder}`}></div>
-        <div className={`col-start-5 ${altBorder}`}>Dimensions</div>
-        <div className={`text-right ${altBorder}`}>{materialType.shorthand}</div>
-        <div className={`text-right pr-3 ${altBorder}`}>Qty</div>
+        <div className={`col-span-4 ${altBorder}`}></div>
+        <div className={`col-span-3 ${altBorder}`}>Dimensions</div>
+        <div className={`col-span-3 text-right ${altBorder}`}>{materialType.shorthand}</div>
+        <div className={`col-span-2 text-right pr-3 ${altBorder}`}>Qty</div>
       </div>
       <MaterialTableGroupRow
         materialId={materialId}

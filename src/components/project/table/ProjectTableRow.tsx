@@ -24,8 +24,13 @@ function ProjectTableRow(props: Props) {
         <div className='col-start-10 text-right'>{usageSummary.amt}</div>
         <div className='col-start-11 pl-3'>{usageSummary.type}</div>
         <div className='col-start-12 text-right pr-3'>${usageSummary.cost.toFixed(2)}</div>
+        {expanded ?
+          <div className='col-start-2 col-span-6'>
+            <MaterialTable materialId={material.id} altBorder={altBorder} />
+          </div>
+          : null
+        }
       </div>
-      {expanded ? <MaterialTable materialId={material.id} altBorder={altBorder} /> : null}
     </div>
 
   );

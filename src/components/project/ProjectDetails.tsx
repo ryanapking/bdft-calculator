@@ -35,8 +35,9 @@ function ProjectDetails(props: {projectId: string}) {
       <Dropdown className='text-3xl' inline label={<h1 className='text-3xl font-semibold'>{project.title}</h1>}>
         <Dropdown.Item icon={CiEdit} onClick={() => setShowForm(true)}>Edit Project</Dropdown.Item>
         <Dropdown.Item icon={CiExport} onClick={() => dispatch(exportProject(projectId))}>Export Project</Dropdown.Item>
-        <Dropdown.Item icon={CiTrash} onClick={() => dispatch(setPendingDelete({ id: projectId, parentId: '' }))}>Delete
-          Project</Dropdown.Item>
+        <Dropdown.Item icon={CiTrash} onClick={() => dispatch(setPendingDelete({ id: projectId, parentId: '' }))}>
+          Delete Project
+        </Dropdown.Item>
       </Dropdown>
       <h5 className='text-xs font-light mb-5'>Project</h5>
       {showForm ? projectForm : projectInfo}

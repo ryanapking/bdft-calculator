@@ -22,10 +22,10 @@ function MaterialTablePartRow(props: Props) {
 
   return (
     <div className={`grid grid-cols-12`}>
-      <div className={`col-start-2 col-span-3 pl-3 ${altBorder}`}>{part.title}</div>
-      <div className={`${altBorder}`}>{partDimensions}</div>
-      <div className={`text-right ${altBorder}`}>{usage.amt.toFixed(3)}</div>
-      <div className={`text-right pr-3 ${altBorder}`}>{part.qty * multiplier}</div>
+      <div className={`col-span-4 pl-3 ${altBorder}`}>{part.title}</div>
+      <div className={`col-span-3 ${altBorder}`}>{partDimensions}</div>
+      <div className={`col-span-3 text-right ${altBorder}`}>{usage.amt.toFixed(3)}</div>
+      <div className={`col-span-2 text-right pr-3 ${altBorder}`}>{part.qty * multiplier}</div>
     </div>
   );
 }

@@ -3,9 +3,9 @@ import { RootState, useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
 import MaterialSummary from '../material/MaterialSummary.tsx';
 import GroupDirectory from '../group/GroupDirectory.tsx';
-import { Dropdown } from 'flowbite-react';
 import { addMaterialToProject } from '../../data/projectActions.ts';
-import { RxPlusCircled } from 'react-icons/rx';
+import { RxPlus } from 'react-icons/rx';
+import GroupActionIcons from '../group/GroupActionIcons.tsx';
 
 function ProjectDirectory(props: { projectId: string }) {
   const { projectId } = props;
@@ -22,10 +22,17 @@ function ProjectDirectory(props: { projectId: string }) {
       </div>
 
       <div className='mt-3'>
-        <Dropdown inline label={<h3 className='font-semibold'>Materials</h3>}>
-          <Dropdown.Item icon={RxPlusCircled} onClick={() => dispatch(addMaterialToProject(projectId, project.materials))}>Add
-            Material</Dropdown.Item>
-        </Dropdown>
+        <div className='flex justify-between'>
+          <h3 className='font-semibold'>Materials</h3>
+          <button
+            title='add material'
+            className='hover:bg-gray-200 hover:cursor-pointer px-1 text-sm'
+            onClick={() => dispatch(addMaterialToProject(projectId, project.materials))}
+          >
+            <RxPlus/>
+          </button>
+        </div>
+
         {project.materials.map(materialId => (
           <MaterialSummary key={materialId} materialId={materialId} projectId={projectId} groupId={project.mainGroup}/>
         ))}
@@ -33,8 +40,16 @@ function ProjectDirectory(props: { projectId: string }) {
       </div>
 
       <div className='mt-3'>
-        <h3 className='font-semibold hover:cursor-pointer hover:underline'
-            onClick={() => dispatch(setActiveDetails({ id: project.mainGroup, parentId: projectId }))}>Components</h3>
+        <div className='flex'>
+          <h3
+            className='font-semibold hover:cursor-pointer hover:underline flex items-center gap-3 w-full'
+            onClick={() => dispatch(setActiveDetails({ id: project.mainGroup, parentId: projectId }))}
+          >
+            Components
+          </h3>
+          <GroupActionIcons groupId={project.mainGroup} />
+        </div>
+
         <GroupDirectory excludeGroupTitle groupId={project.mainGroup} parentId={projectId}/>
       </div>
     </div>

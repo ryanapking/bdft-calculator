@@ -4,6 +4,7 @@ import { getDataTypeFromId, GROUP, PART } from '../../data/dataTypes.ts';
 import { useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
 import { RxComponent1, RxComponentInstance } from 'react-icons/rx';
+import GroupActionIcons from './GroupActionIcons.tsx';
 
 const highlightBg = 'bg-gray-200';
 
@@ -63,14 +64,15 @@ function GroupDirectory(props: GroupDirectoryProps) {
   return (
     <div className='text-sm'>
       {excludeGroupTitle ? null :
-        <div className={highlight}>
+        <div className={`flex ${highlight}`}>
           <button
-            className='w-full hover:cursor-pointer hover:underline flex items-center gap-2'
+            className='w-full hover:cursor-pointer hover:underline text-left flex items-center gap-2 shrink'
             onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}
           >
             <RxComponent1 />
             {group.title}
           </button>
+          <GroupActionIcons groupId={groupId}/>
         </div>
       }
 
