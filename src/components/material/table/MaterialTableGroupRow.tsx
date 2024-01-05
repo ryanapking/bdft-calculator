@@ -1,6 +1,6 @@
-import { getDataTypeFromId, GROUP } from '../../data/dataTypes.ts';
+import { getDataTypeFromId, GROUP } from '../../../data/dataTypes.ts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../data/store.ts';
+import { RootState } from '../../../data/store.ts';
 import MaterialTablePartRow from './MaterialTablePartRow.tsx';
 
 type Props = {

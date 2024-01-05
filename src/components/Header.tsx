@@ -4,6 +4,8 @@ import { RootState, useAppDispatch } from '../data/store.ts';
 import { beginImport, setActiveProject } from '../data/displaySlice.ts';
 import { addProject } from '../data/projectActions.ts';
 import { FcCalculator } from 'react-icons/fc';
+import { RxPlusCircled } from 'react-icons/rx';
+import { CiImport } from 'react-icons/ci';
 
 function Header() {
   const projectIds = useSelector((state: RootState) => state.projects.ids);
@@ -25,8 +27,8 @@ function Header() {
             <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>
           )}
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => dispatch(beginImport())}>Import Project</Dropdown.Item>
-          <Dropdown.Item onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
+          <Dropdown.Item icon={CiImport} onClick={() => dispatch(beginImport())}>Import Project</Dropdown.Item>
+          <Dropdown.Item icon={RxPlusCircled} onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
         </Dropdown>
       </div>
 

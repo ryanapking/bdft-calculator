@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../data/store.ts';
+import { RootState } from '../../../data/store.ts';
 import ProjectTableRow from './ProjectTableRow.tsx';
 
 function ProjectTable(props: { projectId: string }) {

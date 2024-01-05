@@ -1,7 +1,7 @@
-import { MaterialUsageSummary } from '../../data/materialsSlice.ts';
+import { MaterialUsageSummary } from '../../../data/materialsSlice.ts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../data/store.ts';
-import MaterialTable from '../material/MaterialTable.tsx';
+import { RootState } from '../../../data/store.ts';
+import MaterialTable from '../../material/table/MaterialTable.tsx';
 import { useState } from 'react';
 
 type Props = {

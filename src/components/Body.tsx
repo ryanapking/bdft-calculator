@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../data/store.ts';
 import { PROJECT, GROUP, PART, MATERIAL, getDataTypeFromId } from '../data/dataTypes.ts';
-import PartForm from './part/PartForm.tsx';
-import MaterialForm from './material/MaterialForm.tsx';
 import ProjectDetails from './project/ProjectDetails.tsx';
 import { ReactElement } from 'react';
 import GroupDetails from './group/GroupDetails.tsx';
+import PartDetails from './part/PartDetails.tsx';
+import MaterialDetails from './material/MaterialDetails.tsx';
 
 function Body() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
@@ -33,10 +33,10 @@ function Body() {
       return printBody(<GroupDetails key={activeDetails.id} groupId={activeDetails.id} parentId={activeDetails.parentId} />);
     case PART:
       if (!partIds.includes(activeDetails.id)) return null;
-      return printBody(<PartForm key={activeDetails.id} partId={activeDetails.id} parentId={activeDetails.parentId} />);
+      return printBody(<PartDetails key={activeDetails.id} partId={activeDetails.id} parentId={activeDetails.parentId} />);
     case MATERIAL:
       if (!materialIds.includes(activeDetails.id)) return null;
-      return printBody(<MaterialForm key={activeDetails.id} materialId={activeDetails.id} parentId={activeDetails.parentId}/>);
+      return printBody(<MaterialDetails key={activeDetails.id} materialId={activeDetails.id} parentId={activeDetails.parentId}/>);
     default: return printBody();
   }
 }

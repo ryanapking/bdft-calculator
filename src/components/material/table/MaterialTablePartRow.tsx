@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../data/store.ts';
-import { LFT } from '../../data/dataTypes.ts';
+import { RootState } from '../../../data/store.ts';
+import { LFT } from '../../../data/dataTypes.ts';
 
 type Props = {
   partId: string,

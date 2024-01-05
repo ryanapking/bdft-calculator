@@ -140,7 +140,7 @@ function calculateMisc(part: Part, material: Material): MaterialList {
     entities: {
       [material.id]: {
         id: material.id,
-        type: SQFT.id,
+        type: MISC.id,
         amt: 0,
         cost: part.c,
       }

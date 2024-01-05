@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../data/store.ts';
+import { RootState } from '../../../data/store.ts';
 import MaterialTableGroupRow from './MaterialTableGroupRow.tsx';
-import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
+import { getMaterialTypeFromId } from '../../../data/dataTypes.ts';
 
 function MaterialTable(props: {materialId: string, altBorder: string}) {
   const { materialId, altBorder} = props;
