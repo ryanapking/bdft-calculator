@@ -16,7 +16,7 @@ function Body() {
 
   function printBody(bodyContent?: ReactElement) {
     return (
-      <div className='w-full'>
+      <div className='grow overflow-x-auto overflow-y-auto p-4'>
         {bodyContent}
       </div>
     )

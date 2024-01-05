@@ -12,14 +12,13 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <main className='flex'>
-          <div className='h-screen w-72'>
+        <main className='w-screen max-w-screen h-screen max-h-screen overflow-clip flex flex-col'>
+          <Header />
+          <div className='flex shrink grow overflow-clip'>
             <SideBar />
-          </div>
-          <div className='grow p-5'>
-            <Header />
             <Body />
           </div>
+
           <GlobalModal />
         </main>
       </PersistGate>

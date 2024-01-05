@@ -1,21 +1,50 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 import { getDataTypeFromId, GROUP, PART } from '../../data/dataTypes.ts';
-import PartLink from '../part/PartLink.tsx';
 import { useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
+import { RxComponent1, RxComponentInstance } from 'react-icons/rx';
 
-type Props = {
-  groupId: string,
+const highlightBg = 'bg-gray-200';
+
+type PartLinkProps = {
+  partId: string,
   parentId: string,
-  altTitle?: string
+  highlight?: boolean
 }
 
-function GroupDirectory(props: Props) {
+function PartLink(props: PartLinkProps) {
+  const {
+    partId,
+    parentId,
+    highlight = false
+  } = props;
+  const part = useSelector((state: RootState) => state.parts.entities[partId]);
+  const dispatch = useAppDispatch();
+  const background = highlight ? highlightBg : '';
+
+  return (
+    <button
+      className={`w-full hover:cursor-pointer hover:underline flex items-center gap-2 ${background}`}
+      onClick={() => dispatch(setActiveDetails({ id: partId, parentId }))}
+    >
+      <RxComponentInstance />
+      {part.title ? part.title : '(empty title)'}
+    </button>
+  )
+}
+
+type GroupDirectoryProps = {
+  groupId: string,
+  parentId: string,
+  excludeGroupTitle?: boolean
+}
+
+function GroupDirectory(props: GroupDirectoryProps) {
   const {
     groupId,
     parentId,
-    altTitle = '',
+    excludeGroupTitle = false,
   } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails.id);
@@ -29,18 +58,21 @@ function GroupDirectory(props: Props) {
     }
   }
 
-  const highlight = groupId === activeDetails ? 'bg-gray-200' : '';
+  const highlight = groupId === activeDetails ? highlightBg : '';
 
   return (
     <div className='text-sm'>
-      <div className={`hover:bg-gray-100 ${highlight}`}>
-        <h2
-          className='hover:cursor-pointer hover:underline}'
-          onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}
-        >
-          {altTitle ? altTitle : group.title}
-        </h2>
-      </div>
+      {excludeGroupTitle ? null :
+        <div className={highlight}>
+          <button
+            className='w-full hover:cursor-pointer hover:underline flex items-center gap-2'
+            onClick={() => dispatch(setActiveDetails({ id: groupId, parentId }))}
+          >
+            <RxComponent1 />
+            {group.title}
+          </button>
+        </div>
+      }
 
       <ul className="pl-5">
         {group.children.map(childId => printChild(childId))}
