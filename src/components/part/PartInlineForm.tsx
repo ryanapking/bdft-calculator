@@ -5,8 +5,13 @@ import { PartPartial, savePartPartial } from '../../data/partActions.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
 
-function PartInlineForm(props: {partId: string}) {
-  const { partId } = props;
+type Props = {
+  partId: string,
+  autoFocus?: boolean,
+}
+
+function PartInlineForm(props: Props) {
+  const { partId, autoFocus = false } = props;
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
   const project = useSelector((state: RootState) => state.projects.entities[state.display.activeProject]);
   const dispatch = useAppDispatch();
@@ -24,8 +29,8 @@ function PartInlineForm(props: {partId: string}) {
     titleInput: 'w-full max-w-md',
     allFields: 'w-full flex gap-3 justify-end',
     mandatoryFields: 'flex gap-3',
-    conditionalFields: 'w-[250px] flex gap-3 justify-end',
-    narrowInput: 'w-[55px]',
+    conditionalFields: 'w-[250px] flex gap-3 ml-5 justify-between',
+    narrowInput: 'w-[75px]',
   };
 
   return (
@@ -35,7 +40,7 @@ function PartInlineForm(props: {partId: string}) {
         stringVal={part.title}
         className={classes.titleInput}
         saveString={title => savePart({title})}
-        autoFocus
+        autoFocus={autoFocus}
       />
       <div className={classes.allFields}>
         <div className={classes.mandatoryFields}>

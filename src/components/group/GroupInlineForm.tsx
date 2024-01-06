@@ -5,13 +5,28 @@ import { addGroup, GroupPartial, saveGroupPartial } from '../../data/groupAction
 import { Button } from 'flowbite-react';
 import { addPart } from '../../data/partActions.ts';
 
-function GroupInlineForm(props: {groupId: string}) {
-  const { groupId } = props;
+type Props = {
+  groupId: string,
+  focusChild: () => void,
+  autoFocus?: boolean,
+}
+function GroupInlineForm(props: Props) {
+  const { groupId, focusChild, autoFocus = false } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const dispatch = useAppDispatch();
 
   function saveGroup(changes: GroupPartial) {
     dispatch(saveGroupPartial(groupId, changes));
+  }
+
+  function addChildGroup() {
+    focusChild();
+    dispatch(addGroup(groupId, true, false))
+  }
+
+  function addChildPart() {
+    focusChild();
+    dispatch(addPart(groupId, true, false));
   }
 
   return (
@@ -20,7 +35,7 @@ function GroupInlineForm(props: {groupId: string}) {
         id='title'
         stringVal={group.title}
         saveString={(value) => saveGroup({title: value})}
-        autoFocus
+        autoFocus={autoFocus}
       />
       <div className='w-full flex gap-3 justify-end'>
         <InlineInput
@@ -31,20 +46,12 @@ function GroupInlineForm(props: {groupId: string}) {
           className='w-[75px]'
           saveNumber={(quantity) => saveGroup({qty: quantity})}
         />
-        <Button
-          outline
-          color='light'
-          size='sm'
-          className='w-64'
-          onClick={() => dispatch(addPart(groupId, true, false))}
-        >Add Part</Button>
-        <Button
-          outline
-          color='light'
-          size='sm'
-          className='w-64'
-          onClick={() => dispatch(addGroup(groupId, true, false))}
-        >Add Subgroup</Button>
+        <Button outline color='light' size='sm' className='w-64' onClick={addChildPart}>
+          Add Part
+        </Button>
+        <Button outline color='light' size='sm' className='w-64' onClick={addChildGroup}>
+          Add Subgroup
+        </Button>
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ function SortableGroupTree(props: {groupId: string}) {
 
   const [ activeItem, setActiveItem ] = useState<SortableChild|null>(null);
   const [ dropDepth, setDropDepth ] = useState<number>(0);
+  const [ autoFocusIndex, setAutoFocusIndex ] = useState(0);
 
   function calculateRelocation(activeItem: SortableChild, activeIndex: number, dropIndex: number, dropDepth: number): ChildRelocation {
     // If we are moving an item from before, we need to account for that
@@ -127,7 +128,7 @@ function SortableGroupTree(props: {groupId: string}) {
   }
 
   function printSortableChildren() {
-    return sortableChildren.map((item) => {
+    return sortableChildren.map((item, index) => {
       return (
         <SortableTreeItem
           key={item.id}
@@ -135,6 +136,8 @@ function SortableGroupTree(props: {groupId: string}) {
           dropDepth={dropDepth}
           active={item.id === activeItem?.id}
           collapsed={activeItem?.descendants.includes(item.id)}
+          autoFocus={index === autoFocusIndex}
+          focusChild={() => setAutoFocusIndex(index + 1)}
         />
       );
     });

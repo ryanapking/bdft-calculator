@@ -11,14 +11,18 @@ type Props = {
   collapsed?: boolean,
   active?: boolean,
   dropDepth?: number,
+  autoFocus?: boolean,
+  focusChild: () => void,
 }
 
 function SortableTreeItem(props: Props) {
   const {
     item,
+    focusChild,
     collapsed = false,
     active = false,
     dropDepth = 0,
+    autoFocus = false,
   } = props;
 
   const {
@@ -56,7 +60,10 @@ function SortableTreeItem(props: Props) {
     <div style={paddingLeft}>
       <div style={style} ref={setNodeRef}>
         <TreeItem shadow={active} item={item} handleAttributes={attributes} handleListeners={listeners}>
-          {itemType === GROUP ? <GroupInlineForm groupId={item.id.toString()} /> : <PartInlineForm partId={item.id.toString()} />}
+          {itemType === GROUP
+            ? <GroupInlineForm focusChild={focusChild} autoFocus={autoFocus} groupId={item.id.toString()} />
+            : <PartInlineForm autoFocus={autoFocus} partId={item.id.toString()} />
+          }
         </TreeItem>
       </div>
     </div>
