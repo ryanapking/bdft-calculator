@@ -31,8 +31,8 @@ function MaterialDetails(props:{materialId: string, parentId: string}) {
       <h5 className='text-xs font-light mb-5'>Material</h5>
       {material.type === MISC.id ? null : <MaterialForm materialId={materialId} />}
       <div className='p-6 bg-gray-100 max-w-3xl'>
-        <h3 className='text-xl font-semibold pl-3'>{material.title} Components</h3>
-        <MaterialTable materialId={materialId} altBorder={'border-b border-gray-300'} />
+        <h3 className='text-xl font-semibold pl-3 pb-6'>{material.title} Components</h3>
+        <MaterialTable materialId={materialId} altBorder={'border-t border-gray-300'} />
       </div>
     </div>
   )

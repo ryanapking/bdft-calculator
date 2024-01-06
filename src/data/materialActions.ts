@@ -1,5 +1,11 @@
-import { BDFT, getId, MATERIAL, MISC } from './dataTypes.ts';
-import { Material, update as updateMaterial } from './materialsSlice.ts';
+import { BDFT, getId, getMaterialTypeFromId, MATERIAL, MISC } from './dataTypes.ts';
+import {
+  Material,
+  MaterialEntities,
+  MaterialList,
+  MaterialUsageSummary,
+  update as updateMaterial
+} from './materialsSlice.ts';
 import { AppDispatch } from './store.ts';
 import { recalculateActiveProject } from './projectActions.ts';
 
@@ -37,4 +43,27 @@ export function saveMaterialUpdates(updates: MaterialUpdates) {
     dispatch(updateMaterial(updates));
     dispatch(recalculateActiveProject());
   }
+}
+
+export function calculateMaterialWaste(usage: MaterialUsageSummary, material: Material) {
+  if (getMaterialTypeFromId(material.type) === MISC) {
+    return {
+      waste: 0,
+      totalAmt: 0,
+      totalCost: usage.cost,
+    };
+  }
+  const waste = +(usage.amt * (material.waste / 100)).toFixed(3);
+  const totalAmt = +(usage.amt + waste).toFixed(3);
+  const totalCost = +(material.cost * totalAmt).toFixed(2);
+  return { waste, totalAmt, totalCost };
+}
+
+export function calculateListWithWaste(materialList: MaterialList, materials: MaterialEntities) {
+  return materialList.ids.reduce((projectCost, materialId) => {
+    const material = materials[materialId];
+    const usage = materialList.entities[materialId];
+    const { totalCost: materialCost } = calculateMaterialWaste(usage, material);
+    return projectCost + materialCost;
+  }, 0);
 }

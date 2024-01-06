@@ -22,34 +22,34 @@ function MaterialTablePartRow(props: Props) {
 
   let tableRow = (
     <>
-      <div className={`col-span-4 pl-3 ${altBorder}`}>{part.title}</div>
-      <div className={`col-span-2 text-center ${altBorder}`}><DecimalAligned num={part.l} /></div>
-      <div className={`col-span-2 text-center ${altBorder}`}><DecimalAligned num={part.w} /></div>
-      <div className={`col-span-2 text-right ${altBorder}`}><DecimalAligned num={usage.amt} /></div>
-      <div className={`col-span-2 text-right pr-3 ${altBorder}`}>{part.qty * multiplier}</div>
+      <div className='col-span-4 pl-3'>{part.title}</div>
+      <div className='col-span-2 text-center'><DecimalAligned num={part.l} /></div>
+      <div className='col-span-2 text-center'><DecimalAligned num={part.w} /></div>
+      <div className='col-span-2 text-right'><DecimalAligned num={usage.amt} /></div>
+      <div className='col-span-2 text-right pr-3'>{part.qty * multiplier}</div>
     </>
   );
 
   if (materialType === MISC) tableRow = (
     <>
-      <div className={`col-span-8 pl-3 ${altBorder}`}>{part.title}</div>
-      <div className={`col-span-2 text-right ${altBorder}`}><DecimalAligned num={part.c} currency /></div>
-      <div className={`col-span-2 text-right pr-3 ${altBorder}`}>{part.qty * multiplier}</div>
+      <div className='col-span-8 pl-3'>{part.title}</div>
+      <div className='col-span-2 text-right'><DecimalAligned num={part.c} currency /></div>
+      <div className='col-span-2 text-right pr-3'>{part.qty * multiplier}</div>
     </>
   );
 
   if (materialType === LFT) tableRow = (
     <>
-      <div className={`col-span-4 pl-3 ${altBorder}`}>{part.title}</div>
-      <div className={`col-span-2 text-center ${altBorder}`}><DecimalAligned num={part.l}/></div>
-      <div className={`col-span-2 ${altBorder}`}></div>
-      <div className={`col-span-2 text-right ${altBorder}`}><DecimalAligned num={usage.amt}/></div>
-      <div className={`col-span-2 text-right pr-3 ${altBorder}`}>{part.qty * multiplier}</div>
+      <div className='col-span-4 pl-3'>{part.title}</div>
+      <div className='col-span-2 text-center'><DecimalAligned num={part.l}/></div>
+      <div className='col-span-2'></div>
+      <div className='col-span-2 text-right'><DecimalAligned num={usage.amt}/></div>
+      <div className='col-span-2 text-right pr-3'>{part.qty * multiplier}</div>
     </>
   );
 
   return (
-    <div className='grid grid-cols-12'>
+    <div className={`grid grid-cols-12 ${altBorder}`}>
       {tableRow}
     </div>
   );

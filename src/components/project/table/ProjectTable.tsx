@@ -1,13 +1,17 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../data/store.ts';
 import ProjectTableRow from './ProjectTableRow.tsx';
+import { calculateListWithWaste } from '../../../data/materialActions.ts';
 
 function ProjectTable(props: { projectId: string }) {
   const { projectId } = props;
   const project = useSelector((state: RootState) => state.projects.entities[projectId]);
   const mainGroup = useSelector((state: RootState) => state.groups.entities[project.mainGroup]);
+  const materials = useSelector((state: RootState) => state.materials.entities);
+
+  const projectCost = calculateListWithWaste(mainGroup.calc, materials);
   const bgColors = ['bg-neutral-100', 'bg-neutral-300', ];
-  const altBorders = ['border-b border-neutral-300', 'border-b border-neutral-100'];
+  const altBorders = ['border-t border-neutral-300', 'border-t border-neutral-100'];
 
   return (
     <div className='font-mono min-w-[1200px]'>
@@ -27,7 +31,7 @@ function ProjectTable(props: { projectId: string }) {
         </div>
       )}
       <div className='grid grid-cols-12 py-1'>
-        <div className='col-start-12 text-right pr-3'>${mainGroup.calc.totalCost.toFixed(2)}</div>
+        <div className='col-start-12 text-right pr-3'>${projectCost.toFixed(2)}</div>
       </div>
     </div>
   );

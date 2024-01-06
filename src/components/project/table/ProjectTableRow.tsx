@@ -4,6 +4,7 @@ import { RootState } from '../../../data/store.ts';
 import MaterialTable from '../../material/table/MaterialTable.tsx';
 import { useState } from 'react';
 import { getMaterialTypeFromId, MISC } from '../../../data/dataTypes.ts';
+import { calculateMaterialWaste } from '../../../data/materialActions.ts';
 
 type Props = {
   usageSummary: MaterialUsageSummary,
@@ -16,7 +17,9 @@ function ProjectTableRow(props: Props) {
 
   const [ expanded, setExpanded ] = useState(false);
 
-  const isMisc = (getMaterialTypeFromId(material.type) === MISC);
+  const materialType = getMaterialTypeFromId(material.type);
+  const { totalAmt, totalCost } = calculateMaterialWaste(usageSummary, material);
+  const isMisc = (materialType === MISC);
 
   return (
     <div>
@@ -24,13 +27,13 @@ function ProjectTableRow(props: Props) {
         <div className='col-span-4 hover:cursor-pointer pl-3' onClick={() => setExpanded(!expanded)}>
           {material.title} {expanded ? '-' : '+'}
         </div>
-        <div className='col-start-8 text-right'>{isMisc ? '' : usageSummary.amt.toFixed(3)}</div>
-        <div className='col-start-9 pl-3'>{isMisc ? '' : usageSummary.type}</div>
+        <div className='col-start-8 text-right'>{isMisc ? '' : totalAmt.toFixed(3)}</div>
+        <div className='col-start-9 pl-3'>{isMisc ? '' : materialType.shorthand}</div>
         <div className='col-start-10 text-right'>{isMisc ? '' : '$' + material.cost.toFixed(2)}</div>
-        <div className='col-start-11 pl-3'>{isMisc ? '' : '/ ' + usageSummary.type}</div>
-        <div className='col-start-12 text-right pr-3'>${usageSummary.cost.toFixed(2)}</div>
+        <div className='col-start-11 pl-3'>{isMisc ? '' : '/ ' + materialType.shorthand}</div>
+        <div className='col-start-12 text-right pr-3'>${totalCost.toFixed(2)}</div>
         {expanded ?
-          <div className='col-start-2 col-span-6'>
+          <div className='col-start-2 col-span-6 pt-3 pb-6'>
             <MaterialTable materialId={material.id} altBorder={altBorder}/>
           </div>
           : null

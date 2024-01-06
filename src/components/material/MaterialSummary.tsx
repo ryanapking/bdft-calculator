@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
-import { MISC } from '../../data/dataTypes.ts';
-import { ReactElement } from 'react';
+import { getMaterialTypeFromId, MISC } from '../../data/dataTypes.ts';
+import { calculateMaterialWaste } from '../../data/materialActions.ts';
 
 function MaterialSummary(props: {materialId: string, projectId: string, groupId: string}) {
   const { materialId, projectId, groupId } = props;
@@ -11,31 +11,33 @@ function MaterialSummary(props: {materialId: string, projectId: string, groupId:
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
   const dispatch = useAppDispatch();
 
+  const materialType = getMaterialTypeFromId(material.type);
   const usageData = group.calc.entities?.[materialId];
+  const { totalAmt, totalCost } = usageData ? calculateMaterialWaste(usageData, material) : {totalCost: 0, totalAmt: 0};
   const highlight = materialId === activeDetails.id ? 'bg-gray-200' : '';
 
   // Hide empty miscellaneous materials
-  if (material.type === MISC.id && !usageData) return null;
+  if (materialType === MISC && !usageData) return null;
 
-  const data: { [key: string]: ReactElement|null } = {
-    usageCost: usageData ? <p>${usageData.cost.toFixed(2)}</p> : null,
-    materialCost: <p>${material.cost.toFixed(2)} / {material.type}</p>,
-    usageAmt: usageData ? <p>{usageData.amt} {usageData.type}</p> : <p>unused</p>,
-  };
+  const usageInfo = [
+    <p key={0}>${material.cost.toFixed(2)} / {materialType.shorthand}</p>,
+    <p key={1}>{totalAmt} {usageData?.type}</p>,
+    <p key={2}>${totalCost.toFixed(2)}</p>,
+    <p key={3}>unused</p>
+  ];
 
-  let displayData = ['usageCost', 'materialCost', 'usageAmt'];
-  if (material.type === MISC.id) displayData = ['usageCost'];
+  let includeUsageInfo = [0, 1, 2];
+  if (materialType === MISC) includeUsageInfo = [2];
+  else if (!totalAmt) includeUsageInfo = [1, 3];
 
   return (
     <div
       className={`text-xs ml-3 pl-1 hover:cursor-pointer hover:underline ${highlight}`}
       onClick={() => dispatch(setActiveDetails({id: materialId, parentId: projectId}))}
     >
-      <h3 className={`text-base`}>
-        {material.title}
-      </h3>
+      <h3 className={`text-base`}>{material.title}</h3>
       <div className='pl-5 inline-block'>
-        {displayData.map(id => data[id])}
+        {includeUsageInfo.map(infoIndex => usageInfo[infoIndex])}
       </div>
     </div>
   );
