@@ -1,4 +1,4 @@
-import { getDataTypeFromId, GROUP } from '../../../data/dataTypes.ts';
+import { getDataTypeFromId, GROUP, MaterialType } from '../../../data/dataTypes.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../data/store.ts';
 import MaterialTablePartRow from './MaterialTablePartRow.tsx';
@@ -8,12 +8,14 @@ type Props = {
   materialId: string,
   multiplier: number,
   altBorder: string,
+  materialType: MaterialType,
 }
 function MaterialTableGroupRow(props: Props) {
   const {
     groupId,
     materialId ,
     altBorder,
+    materialType,
     multiplier = 1,
   } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
@@ -29,6 +31,7 @@ function MaterialTableGroupRow(props: Props) {
               groupId={childId}
               materialId={materialId}
               multiplier={group.qty * multiplier}
+              materialType={materialType}
               altBorder={altBorder}
             />
           );
@@ -44,6 +47,7 @@ function MaterialTableGroupRow(props: Props) {
               partId={childId}
               altBorder={altBorder}
               multiplier={group.qty * multiplier}
+              materialType={materialType}
             />
           );
         }

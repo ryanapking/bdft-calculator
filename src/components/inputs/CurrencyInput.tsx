@@ -2,7 +2,8 @@ import { TextInput } from 'flowbite-react';
 import { useEffect, useState, useRef, ComponentProps } from 'react';
 import { BiDollar } from 'react-icons/bi';
 
-const currencyRegex = /^(\d*)(\.?)(\d*?)$/;
+// up to 4 digits and 2 decimal places
+const currencyRegex = /(\d{0,4}(?=\.|$))\.?((?<=\.)\d{0,2})?/;
 
 type Props = Omit<ComponentProps<typeof TextInput>, 'value' | 'type'> & {
   value: number,
@@ -25,11 +26,10 @@ function CurrencyInput(props: Props) {
 
   function inputChanged(target: HTMLInputElement) {
     setCursor(target.selectionStart);
-    if (currencyRegex.test(target.value)) {
-      const asFloat = parseFloat(target.value);
-      const asTwoDecimalFloat = parseFloat(asFloat.toFixed(2));
-      onValueChange(asTwoDecimalFloat);
-    }
+    if (target.value === '.') setCursor(2);
+    const [ fullValue, left, right] = currencyRegex.exec(target.value) ?? ['0', '0', ''];
+    const parsedValue = !left && !right ? 0 : +fullValue;
+    onValueChange(parsedValue);
   }
 
   return (

@@ -1,7 +1,7 @@
 import { CustomFlowbiteTheme, TextInput } from 'flowbite-react';
 import { useState, ComponentProps } from 'react';
 
-const fourDecimals = /\d*(\.?)(\d{0,4})/;
+const trimDecimals = /\d*(\.?)(\d{0,3})/;
 const splitRight = /(\d*?)(0*$)/;
 
 const customTheme: CustomFlowbiteTheme['textInput'] = {
@@ -33,7 +33,7 @@ function InchInput(props: Props) {
   const [ trail, setTrail ] = useState<string>('');
 
   function inputChanged(inputString: string) {
-    const [ trimmedVal, decimal, trimmedRight ] = fourDecimals.exec(inputString) ?? ['0', '', ''];
+    const [ trimmedVal, decimal, trimmedRight ] = trimDecimals.exec(inputString) ?? ['0', '', ''];
     const [ , rightVal, rightZeros ] = splitRight.exec(trimmedRight) ?? ['', '', ''];
     const trail = rightVal ? rightZeros : decimal + rightZeros;
     setTrail(trail);
