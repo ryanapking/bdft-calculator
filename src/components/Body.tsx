@@ -6,6 +6,7 @@ import { ReactElement } from 'react';
 import GroupDetails from './group/GroupDetails.tsx';
 import PartDetails from './part/PartDetails.tsx';
 import MaterialDetails from './material/MaterialDetails.tsx';
+import ProjectMaterialDetails from './project/ProjectMaterialDetails.tsx';
 
 function Body() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
@@ -23,6 +24,8 @@ function Body() {
   }
 
   if (!activeDetails.id) return printBody();
+
+  if (activeDetails.id === 'materials') return printBody(<ProjectMaterialDetails />);
 
   switch (getDataTypeFromId(activeDetails.id)) {
     case PROJECT:

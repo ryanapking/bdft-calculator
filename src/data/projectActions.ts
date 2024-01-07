@@ -105,6 +105,24 @@ export function addMaterialToProject(projectId: string, materials: Array<string>
   };
 }
 
+export function reorderProjectMaterial(projectId: string, materialId: string, fromIndex: number, toIndex: number) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const projectMaterials = getState().projects.entities[projectId].materials;
+    if (projectMaterials[fromIndex] !== materialId) return;
+
+    const copy = [...projectMaterials];
+    copy.splice(fromIndex, 1);
+    copy.splice(toIndex, 0, materialId);
+
+    dispatch(updateProject({
+      id: projectId,
+      changes: {
+        materials: copy,
+      }
+    }));
+  };
+}
+
 export function removeMaterialFromProject(materialId: string, projectId: string) {
  return (dispatch: AppDispatch, getState: () => RootState) => {
    const state = getState();

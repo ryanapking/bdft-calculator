@@ -45,6 +45,16 @@ export function saveMaterialUpdates(updates: MaterialUpdates) {
   }
 }
 
+export type MaterialPartial = Partial<Omit<Material, 'id'>>
+
+export function saveMaterialPartial(materialId: string, changes: MaterialPartial) {
+  return (dispatch: AppDispatch) => {
+    const update = { id: materialId, changes };
+    dispatch(updateMaterial(update));
+    dispatch(recalculateActiveProject());
+  }
+}
+
 export function calculateMaterialWaste(usage: MaterialUsageSummary, material: Material) {
   if (getMaterialTypeFromId(material.type) === MISC) {
     return {

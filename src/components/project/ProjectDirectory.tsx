@@ -18,12 +18,22 @@ function ProjectDirectory(props: { projectId: string }) {
   return (
     <div className='text-lg font-light'>
       <div className='sticky top-0 bg-white py-3 border-b'>
-        <h2 className='hover:cursor-pointer hover:underline text-lg font-semibold' onClick={() => dispatch(setActiveDetails({ id: projectId, parentId: '' }))}>{project.title}</h2>
+        <h2
+          className='hover:cursor-pointer hover:underline text-lg font-semibold'
+          onClick={() => dispatch(setActiveDetails({ id: projectId, parentId: '' }))}
+        >
+          {project.title}
+        </h2>
       </div>
 
       <div className='mt-3'>
         <div className='flex justify-between'>
-          <h3 className='font-semibold'>Materials</h3>
+          <h3
+            className='font-semibold hover:cursor-pointer hover:underline'
+            onClick={() => dispatch(setActiveDetails({id: 'materials', parentId: projectId}))}
+          >
+            Materials
+          </h3>
           <button
             title='add material'
             className='hover:bg-gray-200 hover:cursor-pointer px-1 text-sm'
