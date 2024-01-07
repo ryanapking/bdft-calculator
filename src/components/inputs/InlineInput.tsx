@@ -21,6 +21,7 @@ type Props = ComponentProps<typeof TextInput> & {
   numberVal?: number,
   saveNumber?: (value: number) => void,
   type?: string,
+  outerClass?: string,
 }
 
 function InlineInput(props: Props) {
@@ -31,6 +32,7 @@ function InlineInput(props: Props) {
     saveString = () => {},
     saveNumber = () => {},
     type = 'string',
+    outerClass = '',
     ...remainingProps
   } = props;
 
@@ -60,7 +62,7 @@ function InlineInput(props: Props) {
 
   if (AltComponent) {
     return (
-      <div className='flex gap-2 items-center'>
+      <div className={`flex gap-2 items-center ${outerClass}`}>
         {label ? <Label value={label + ':'}/> : null}
         <AltComponent
           {...remainingProps}
@@ -76,7 +78,7 @@ function InlineInput(props: Props) {
   }
 
   return (
-    <div className='flex gap-2 items-center'>
+    <div className={`flex gap-2 items-center ${outerClass}`}>
       {label ? <Label value={label + ':'}/> : null}
       <TextInput
         {...remainingProps}

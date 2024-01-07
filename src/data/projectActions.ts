@@ -88,20 +88,24 @@ export function deleteProject(projectId: string) {
   }
 }
 
-export function addMaterialToProject(projectId: string, materials: Array<string>) {
-  return (dispatch: AppDispatch) => {
+export function addMaterialToProject(projectId: string, redirect:boolean = true) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const project = getState().projects.entities[projectId];
+
     const material = getEmptyMaterial();
     dispatch(createMaterial(material));
 
     const updates = {
       id: projectId,
       changes: {
-        materials: [...materials, material.id],
+        materials: [...project.materials, material.id],
       }
     };
 
     dispatch(updateProject(updates));
-    dispatch(setActiveDetails({id: material.id, parentId: projectId}));
+    if (redirect) {
+      dispatch(setActiveDetails({id: material.id, parentId: projectId}));
+    }
   };
 }
 
@@ -120,6 +124,21 @@ export function reorderProjectMaterial(projectId: string, materialId: string, fr
         materials: copy,
       }
     }));
+  };
+}
+
+export function setDefaultMaterial(projectId: string, materialId: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    const project = getState().projects.entities[projectId];
+    if (!project.materials.includes(materialId)) return;
+
+    dispatch(updateProject({
+      id: projectId,
+      changes: {
+        defaultMaterial: materialId,
+      }
+    }));
+    dispatch(recalculateGroup(project.mainGroup));
   };
 }
 

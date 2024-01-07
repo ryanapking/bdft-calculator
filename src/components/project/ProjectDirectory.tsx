@@ -37,7 +37,7 @@ function ProjectDirectory(props: { projectId: string }) {
           <button
             title='add material'
             className='hover:bg-gray-200 hover:cursor-pointer px-1 text-sm'
-            onClick={() => dispatch(addMaterialToProject(projectId, project.materials))}
+            onClick={() => dispatch(addMaterialToProject(projectId))}
           >
             <RxPlus/>
           </button>

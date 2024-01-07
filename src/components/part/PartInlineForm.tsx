@@ -54,6 +54,7 @@ function PartInlineForm(props: Props) {
           />
           <MaterialsSelector
             id='material'
+            color='transparent'
             value={part.m}
             includeEmptyOption
             miscId={project.miscMaterial}

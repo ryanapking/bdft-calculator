@@ -28,7 +28,7 @@ function MaterialSummary(props: {materialId: string, projectId: string, groupId:
 
   let includeUsageInfo = [0, 1, 2];
   if (materialType === MISC) includeUsageInfo = [2];
-  else if (!totalAmt) includeUsageInfo = [1, 3];
+  else if (!totalAmt) includeUsageInfo = [0, 3];
 
   return (
     <div

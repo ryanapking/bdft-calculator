@@ -1,4 +1,4 @@
-import { Select } from 'flowbite-react';
+import Select from './Select.tsx';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 import { ComponentProps } from 'react';

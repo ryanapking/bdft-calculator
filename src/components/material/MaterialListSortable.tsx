@@ -17,6 +17,7 @@ import MaterialInlineForm from './MaterialInlineForm.tsx';
 
 type ListItemProps = {
   materialId: string,
+  projectId: string,
   handleAttributes?: DraggableAttributes,
   handleListeners?: undefined|SyntheticListenerMap
 }
@@ -24,6 +25,7 @@ type ListItemProps = {
 function ListItem(props: ListItemProps) {
   const {
     materialId,
+    projectId,
     handleAttributes = null,
     handleListeners = null
   } = props;
@@ -31,14 +33,14 @@ function ListItem(props: ListItemProps) {
   return (
     <div className='flex p-3 items-center border bg-white'>
       <div className='p-2 mr-3 hover:bg-gray-100 hover:cursor-grab rounded' {...handleAttributes} {...handleListeners}>
-        <RxDragHandleDots2 size={15}/>
+        <RxDragHandleDots2 size='1rem'/>
       </div>
-      <MaterialInlineForm materialId={materialId} />
+      <MaterialInlineForm materialId={materialId} projectId={projectId}/>
     </div>
   );
 }
 
-function SortableListItem({ materialId, active }: { materialId: string, active: boolean }) {
+function SortableListItem({ materialId, projectId, active }: { materialId: string, projectId: string, active: boolean }) {
   const {
     attributes,
     listeners,
@@ -57,7 +59,7 @@ function SortableListItem({ materialId, active }: { materialId: string, active: 
   return (
     <div style={style} ref={setNodeRef} className={active ? 'bg-gray-200' : ''}>
       <div className={active ? 'invisible' : ''}>
-        <ListItem materialId={materialId} handleAttributes={attributes} handleListeners={listeners} />
+        <ListItem materialId={materialId} projectId={projectId} handleAttributes={attributes} handleListeners={listeners} />
       </div>
     </div>
   );
@@ -92,12 +94,13 @@ function MaterialListSortable(props: { projectId: string, list: Array<string>}) 
           <SortableListItem
             key={materialId}
             materialId={materialId}
+            projectId={projectId}
             active={materialId === activeId}
           />
         ))}
       </SortableContext>
       <DragOverlay>
-        {activeId ? <ListItem materialId={activeId} /> : null}
+        {activeId ? <ListItem materialId={activeId} projectId={projectId}/> : null}
       </DragOverlay>
     </DndContext>
   );
