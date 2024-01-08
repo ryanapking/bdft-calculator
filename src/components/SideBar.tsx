@@ -1,10 +1,10 @@
 import { RootState, useAppDispatch } from '../data/store.ts';
 import { useSelector } from 'react-redux';
 import ProjectDirectory from './project/ProjectDirectory.tsx';
-import { beginImport, setActiveProject } from '../data/displaySlice.ts';
+import { beginImport, setActiveProject, setCreating } from '../data/displaySlice.ts';
 import { Button } from 'flowbite-react';
 import ButtonConfirm from './inputs/ButtonConfirm.tsx';
-import { addProject, fetchSampleProject } from '../data/projectActions.ts';
+import { fetchSampleProject } from '../data/projectActions.ts';
 import { PropsWithChildren } from 'react';
 
 function SideBarContainer({ children }: PropsWithChildren) {
@@ -43,7 +43,7 @@ function SideBar() {
             </div>
           ))}
         </div>
-        <Button color='blue' onClick={() => dispatch(addProject())}>Create New Project</Button>
+        <Button color='blue' onClick={() => dispatch(setCreating(true))}>Create New Project</Button>
         <Button color='success' onClick={() => dispatch(beginImport())}>Import Project</Button>
         <ButtonConfirm buttonText='Load Sample Project' onConfirm={() => dispatch(fetchSampleProject())}>
           Are you sure you want to load the sample project?

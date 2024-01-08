@@ -1,6 +1,7 @@
 import { AppDispatch, RootState } from './store.ts';
 import {
   Group,
+  GroupPartial,
   addChild,
   removeChild,
   create as createGroup,
@@ -113,21 +114,7 @@ export function duplicateGroup(parentId: string, groupId: string) {
   }
 }
 
-type GroupUpdate = {
-  id: string,
-  changes: Omit<Group, 'id' | 'children' | 'calc'>
-};
-
-export function saveGroupUpdates(updates: GroupUpdate) {
-  return (dispatch: AppDispatch) => {
-    dispatch(updateGroup(updates));
-    dispatch(recalculateActiveProject());
-  }
-}
-
-export type GroupPartial = Partial<Omit<Group, 'id' | 'children'>>
-
-export function saveGroupPartial(groupId: string, changes: GroupPartial) {
+export function saveGroupUpdates(groupId: string, changes: GroupPartial) {
   return (dispatch: AppDispatch) => {
     const update = { id: groupId, changes };
     dispatch(updateGroup(update));

@@ -3,7 +3,7 @@ import { clearPendingDelete } from './displaySlice.ts';
 import { getDataTypeFromId, GROUP, MATERIAL, PART, PROJECT } from './dataTypes.ts';
 import { deletePart } from './partActions.ts';
 import { deleteGroup } from './groupActions.ts';
-import { deleteProject, removeMaterialFromProject } from './projectActions.ts';
+import { deleteProject, recalculateActiveProject, removeMaterialFromProject } from './projectActions.ts';
 
 export function processPendingDelete() {
   return (dispatch: AppDispatch, getState: () => RootState) => {
@@ -13,9 +13,11 @@ export function processPendingDelete() {
     switch(getDataTypeFromId(pendingDelete.id)) {
       case PART:
         dispatch(deletePart(pendingDelete.parentId, pendingDelete.id));
+        dispatch(recalculateActiveProject());
         break;
       case GROUP:
         dispatch(deleteGroup(pendingDelete.parentId, pendingDelete.id));
+        dispatch(recalculateActiveProject());
         break;
       case MATERIAL:
         dispatch(removeMaterialFromProject(pendingDelete.id, pendingDelete.parentId));

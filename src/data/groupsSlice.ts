@@ -11,6 +11,8 @@ export type Group = {
   calc: MaterialList,
 };
 
+export type GroupPartial = Partial<Omit<Group, 'id' | 'children'>>
+
 export type GroupEntities = {
   [key: string]: Group,
 }

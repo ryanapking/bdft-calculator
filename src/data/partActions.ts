@@ -14,7 +14,7 @@ import { recalculateActiveProject } from './projectActions.ts';
 function getEmptyPart(): Part {
   return {
     id: getId(PART),
-    title: 'New Part',
+    title: 'New Component',
     qty: 1,
     l: 12,
     w: 3,

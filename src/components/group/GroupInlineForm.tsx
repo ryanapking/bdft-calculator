@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import InlineInput from '../inputs/InlineInput.tsx';
-import { addGroup, GroupPartial, saveGroupPartial } from '../../data/groupActions.ts';
+import { addGroup, saveGroupUpdates as save } from '../../data/groupActions.ts';
 import { Button } from 'flowbite-react';
 import { addPart } from '../../data/partActions.ts';
 
@@ -14,10 +14,6 @@ function GroupInlineForm(props: Props) {
   const { groupId, focusChild, autoFocus = false } = props;
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const dispatch = useAppDispatch();
-
-  function saveGroup(changes: GroupPartial) {
-    dispatch(saveGroupPartial(groupId, changes));
-  }
 
   function addChildGroup() {
     focusChild();
@@ -34,7 +30,7 @@ function GroupInlineForm(props: Props) {
       <InlineInput
         id='title'
         stringVal={group.title}
-        saveString={(value) => saveGroup({title: value})}
+        saveString={(value) => save(groupId, {title: value})}
         autoFocus={autoFocus}
       />
       <div className='w-full flex gap-3 justify-end'>
@@ -44,10 +40,10 @@ function GroupInlineForm(props: Props) {
           type='quantity'
           numberVal={group.qty}
           className='w-[75px]'
-          saveNumber={(quantity) => saveGroup({qty: quantity})}
+          saveNumber={(quantity) => save(groupId, {qty: quantity})}
         />
         <Button outline color='light' size='sm' className='w-64' onClick={addChildPart}>
-          Add Part
+          Add Component
         </Button>
         <Button outline color='light' size='sm' className='w-64' onClick={addChildGroup}>
           Add Subgroup

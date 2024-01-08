@@ -11,6 +11,8 @@ export type Project = {
   notes: string,
 }
 
+export type ProjectPartial = Omit<Partial<Project>, 'id'|'mainGroup'|'miscMaterial'>
+
 const projectsAdapter = createEntityAdapter({
   sortComparer: (a: Project, b: Project) => a.title.localeCompare(b.title),
 });

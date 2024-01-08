@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import ModalConfirm from './inputs/ModalConfirm.tsx';
-import { clearAlert, clearPendingDelete } from '../data/displaySlice.ts';
+import { clearAlert, clearPendingDelete, setCreating } from '../data/displaySlice.ts';
 import { getDataTypeFromId } from '../data/dataTypes.ts';
 import { processPendingDelete } from '../data/displayActions.ts';
 import { deleteMessages } from '../data/messages.ts';
 import ImportModal from './project/import/ImportModal.tsx';
-import ProjectCreateModal from './project/ProjectCreateModal.tsx';
+import TextInputModal from './inputs/TextInputModal.tsx';
+import { addProject } from '../data/projectActions.ts';
 
 function GlobalModal() {
   const pendingDelete = useSelector((state: RootState) => state.display.pendingDelete);
@@ -30,7 +31,13 @@ function GlobalModal() {
   );
 
   if (creating) return (
-    <ProjectCreateModal />
+    <TextInputModal
+      submitText='Create'
+      close={() => dispatch(setCreating(false))}
+      onSubmit={title => dispatch(addProject(title))}
+    >
+      <h1 className='text-3xl font-semibold mb-3'>Create a Project</h1>
+    </TextInputModal>
   );
 
   return null;

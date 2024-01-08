@@ -14,6 +14,7 @@ import {
 } from './materialsSlice.ts';
 import {
   Project,
+  ProjectPartial,
   create as createProject,
   update as updateProject,
   destroy as destroyProject,
@@ -49,7 +50,7 @@ export function addProject(title?: string) {
     dispatch(createGroup(mainGroup));
 
     const defaultMaterial = getEmptyMaterial();
-    defaultMaterial.title = 'Default Material'
+    defaultMaterial.title = 'Default Material';
     dispatch(createMaterial(defaultMaterial));
 
     const miscMaterial = getMiscMaterial();
@@ -59,17 +60,19 @@ export function addProject(title?: string) {
     if (title) newProject.title = title;
     dispatch(createProject(newProject));
     dispatch(setActiveProject(newProject.id));
+    dispatch(setActiveDetails({
+      id: newProject.mainGroup,
+      parentId: newProject.id
+    }));
   };
 }
 
-type ProjectUpdate = {
-  id: string,
-  changes: Omit<Project, 'id' | 'materials' | 'mainGroup' | 'miscMaterial'>,
-};
-
-export function saveProjectUpdates(update: ProjectUpdate) {
+export function saveProjectUpdates(projectId: string, changes: ProjectPartial) {
  return (dispatch: AppDispatch) => {
-   dispatch(updateProject(update));
+   dispatch(updateProject({
+     id: projectId,
+     changes,
+   }));
    dispatch(recalculateActiveProject());
  };
 }
