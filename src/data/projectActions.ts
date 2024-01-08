@@ -43,18 +43,20 @@ function getEmptyProject(mainGroupId: string, defaultMaterialId: string, miscMat
   };
 }
 
-export function addProject() {
+export function addProject(title?: string) {
   return (dispatch: AppDispatch) => {
     const mainGroup = getEmptyGroup();
     dispatch(createGroup(mainGroup));
 
     const defaultMaterial = getEmptyMaterial();
+    defaultMaterial.title = 'Default Material'
     dispatch(createMaterial(defaultMaterial));
 
     const miscMaterial = getMiscMaterial();
     dispatch(createMaterial(miscMaterial));
 
     const newProject = getEmptyProject(mainGroup.id, defaultMaterial.id, miscMaterial.id);
+    if (title) newProject.title = title;
     dispatch(createProject(newProject));
     dispatch(setActiveProject(newProject.id));
   };

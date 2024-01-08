@@ -9,6 +9,8 @@ function ProjectTable(props: { projectId: string }) {
   const mainGroup = useSelector((state: RootState) => state.groups.entities[project.mainGroup]);
   const materials = useSelector((state: RootState) => state.materials.entities);
 
+  const projectMaterials = [...project.materials, project.miscMaterial];
+  const usedMaterials = projectMaterials.filter(materialId => mainGroup.calc.ids.includes(materialId));
   const projectCost = calculateListWithWaste(mainGroup.calc, materials);
   const bgColors = ['bg-neutral-100', 'bg-neutral-300', ];
   const altBorders = ['border-t border-neutral-300', 'border-t border-neutral-100'];
@@ -21,7 +23,7 @@ function ProjectTable(props: { projectId: string }) {
         <div className='col-start-10 text-right self-end'>Cost</div>
         <div className='col-start-12 text-right pr-3 self-end'>Total</div>
       </div>
-      {mainGroup.calc.ids.map((materialId, index) =>
+      {usedMaterials.map((materialId, index) =>
         <div className={bgColors[index % 2]} key={materialId}>
           <ProjectTableRow
             usageSummary={mainGroup.calc.entities[materialId]}

@@ -47,7 +47,7 @@ function MaterialForm(props: { materialId: string }) {
     <form className={classes.form} onSubmit={e => e.preventDefault()}>
       <div className={classes.inputGroup}>
         <Label htmlFor='title' value='Material Title'/>
-        <TextInput id='title' value={titleInput} onChange={e => setTitleInput(e.target.value)}/>
+        <TextInput id='title' autoFocus value={titleInput} onChange={e => setTitleInput(e.target.value)}/>
       </div>
       <div className={classes.inputGroup}>
         <Label htmlFor="materialType" value="Material Type"/>

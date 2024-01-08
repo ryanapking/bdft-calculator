@@ -6,11 +6,13 @@ import { getDataTypeFromId } from '../data/dataTypes.ts';
 import { processPendingDelete } from '../data/displayActions.ts';
 import { deleteMessages } from '../data/messages.ts';
 import ImportModal from './project/import/ImportModal.tsx';
+import ProjectCreateModal from './project/ProjectCreateModal.tsx';
 
 function GlobalModal() {
   const pendingDelete = useSelector((state: RootState) => state.display.pendingDelete);
   const alert = useSelector((state: RootState) => state.display.alert);
   const importing = useSelector((state: RootState) => state.display.importing);
+  const creating = useSelector((state: RootState) => state.display.creating);
   const dispatch = useAppDispatch();
 
   if (alert) return (
@@ -25,7 +27,11 @@ function GlobalModal() {
 
   if (importing) return (
     <ImportModal />
-  )
+  );
+
+  if (creating) return (
+    <ProjectCreateModal />
+  );
 
   return null;
 }

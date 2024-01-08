@@ -44,7 +44,13 @@ function ProjectDirectory(props: { projectId: string }) {
         </div>
 
         {project.materials.map(materialId => (
-          <MaterialSummary key={materialId} materialId={materialId} projectId={projectId} groupId={project.mainGroup}/>
+          <MaterialSummary
+            key={materialId}
+            materialId={materialId}
+            projectId={projectId}
+            groupId={project.mainGroup}
+            isDefault={materialId === project.defaultMaterial}
+          />
         ))}
         <MaterialSummary materialId={project.miscMaterial} projectId={projectId} groupId={project.mainGroup}/>
       </div>

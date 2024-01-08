@@ -3,9 +3,23 @@ import { RootState, useAppDispatch } from '../../data/store.ts';
 import { setActiveDetails } from '../../data/displaySlice.ts';
 import { getMaterialTypeFromId, MISC } from '../../data/dataTypes.ts';
 import { calculateMaterialWaste } from '../../data/materialActions.ts';
+import { RxStar } from 'react-icons/rx';
 
-function MaterialSummary(props: {materialId: string, projectId: string, groupId: string}) {
-  const { materialId, projectId, groupId } = props;
+type Props = {
+  materialId: string,
+  projectId: string,
+  groupId: string,
+  isDefault?: boolean,
+}
+
+function MaterialSummary(props: Props) {
+  const {
+    materialId,
+    projectId,
+    groupId,
+    isDefault = false
+  } = props;
+
   const material = useSelector((state: RootState) => state.materials.entities[materialId]);
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
@@ -35,7 +49,10 @@ function MaterialSummary(props: {materialId: string, projectId: string, groupId:
       className={`text-xs ml-3 pl-1 hover:cursor-pointer hover:underline ${highlight}`}
       onClick={() => dispatch(setActiveDetails({id: materialId, parentId: projectId}))}
     >
-      <h3 className={`text-base`}>{material.title}</h3>
+      <h3 className={`text-base flex items-center gap-3`}>
+        {material.title}
+        {isDefault ? <RxStar size='.75rem' /> : ''}
+      </h3>
       <div className='pl-5 inline-block'>
         {includeUsageInfo.map(infoIndex => usageInfo[infoIndex])}
       </div>

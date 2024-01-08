@@ -1,8 +1,7 @@
 import { Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
-import { beginImport, setActiveProject } from '../data/displaySlice.ts';
-import { addProject } from '../data/projectActions.ts';
+import { beginImport, setActiveProject, setCreating } from '../data/displaySlice.ts';
 import { FcCalculator } from 'react-icons/fc';
 import { RxPlusCircled } from 'react-icons/rx';
 import { CiImport } from 'react-icons/ci';
@@ -28,7 +27,7 @@ function Header() {
           )}
           <Dropdown.Divider />
           <Dropdown.Item icon={CiImport} onClick={() => dispatch(beginImport())}>Import Project</Dropdown.Item>
-          <Dropdown.Item icon={RxPlusCircled} onClick={() => dispatch(addProject())}>Create</Dropdown.Item>
+          <Dropdown.Item icon={RxPlusCircled} onClick={() => dispatch(setCreating(true))}>Create</Dropdown.Item>
         </Dropdown>
       </div>
 

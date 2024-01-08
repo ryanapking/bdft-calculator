@@ -9,6 +9,7 @@ export interface DisplayState {
   activeProject: string,
   activeDetails: DisplayEntity,
   pendingDelete: DisplayEntity,
+  creating: boolean,
   importing: boolean,
   alert: string,
 }
@@ -23,6 +24,7 @@ const initialState: DisplayState = {
     id: '',
     parentId: '',
   },
+  creating: false,
   importing: false,
   alert: '',
 }
@@ -58,6 +60,9 @@ export const displaySlice = createSlice({
     endImport: (state) => {
       state.importing = false;
     },
+    setCreating: (state, action: PayloadAction<boolean>) => {
+      state.creating = action.payload;
+    },
     setAlert: (state, action: PayloadAction<string>) => {
       state.alert = action.payload;
     },
@@ -76,6 +81,7 @@ export const {
   clearPendingDelete,
   beginImport,
   endImport,
+  setCreating,
   setAlert,
   clearAlert,
 } = displaySlice.actions
