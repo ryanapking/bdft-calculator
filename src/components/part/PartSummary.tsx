@@ -13,7 +13,7 @@ function PartSummary(props: {partId: string}) {
 
   return (
     <div>
-      <h5 className='text-sm font-semibold mb-2 text-gray-900'>Calculated Usage (Quantity not included)</h5>
+      <h5 className='text-xl font-light mb-2 text-gray-900'>Calculated Usage (Quantity not included)</h5>
       <Table className='max-w-md'>
         <Table.Head>
           <Table.HeadCell>{materialType.label}</Table.HeadCell>

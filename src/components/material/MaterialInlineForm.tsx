@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import InlineInput from '../inputs/InlineInput.tsx';
-import { MaterialPartial, saveMaterialPartial } from '../../data/materialActions.ts';
+import { saveMaterialUpdates } from '../../data/materialActions.ts';
 import { PiPercent } from 'react-icons/pi';
 import { BDFT, getMaterialTypeFromId, MATERIALS_TYPES, THICKNESSES } from '../../data/dataTypes.ts';
 import { Radio } from 'flowbite-react';
 import { setDefaultMaterial } from '../../data/projectActions.ts';
 import Select from '../inputs/Select.tsx';
+import { MaterialPartial } from '../../data/materialsSlice.ts';
 
 function MaterialInlineForm(props: { materialId: string, projectId: string }) {
   const { materialId, projectId } = props;
@@ -15,11 +16,11 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
   const dispatch = useAppDispatch();
 
   const materialType = getMaterialTypeFromId(material.type);
-  
-  function save(fields: MaterialPartial) {
-    dispatch(saveMaterialPartial(materialId, fields));
+
+  function save(changes: MaterialPartial) {
+    dispatch(saveMaterialUpdates(materialId, changes))
   }
-  
+
   return (
     <div className='grid grid-cols-12 gap-3 items-center'>
       <InlineInput
@@ -44,7 +45,7 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
         className={materialType !== BDFT ? 'invisible col-span-2' : 'col-span-2'}
         required
         value={material.thickness}
-        onChange={e => save({ thickness: + e.target.value})}
+        onChange={e => save({ thickness: +e.target.value})}
       >
         {THICKNESSES.map(thickness => (
           <option key={thickness.value} value={thickness.value}>{thickness.label}</option>)

@@ -2,7 +2,7 @@ import { BDFT, getId, getMaterialTypeFromId, MATERIAL, MISC } from './dataTypes.
 import {
   Material,
   MaterialEntities,
-  MaterialList,
+  MaterialList, MaterialPartial,
   MaterialUsageSummary,
   update as updateMaterial
 } from './materialsSlice.ts';
@@ -33,21 +33,7 @@ export function getMiscMaterial(): Material {
   };
 }
 
-type MaterialUpdates = {
-  id: string,
-  changes: Omit<Material, 'id'>,
-}
-
-export function saveMaterialUpdates(updates: MaterialUpdates) {
-  return (dispatch: AppDispatch) => {
-    dispatch(updateMaterial(updates));
-    dispatch(recalculateActiveProject());
-  }
-}
-
-export type MaterialPartial = Partial<Omit<Material, 'id'>>
-
-export function saveMaterialPartial(materialId: string, changes: MaterialPartial) {
+export function saveMaterialUpdates(materialId: string, changes: MaterialPartial) {
   return (dispatch: AppDispatch) => {
     const update = { id: materialId, changes };
     dispatch(updateMaterial(update));

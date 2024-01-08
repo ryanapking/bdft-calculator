@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Label, Spinner, Textarea, TextInput } from 'flowbite-react';
+import { Button, Label, Textarea, TextInput } from 'flowbite-react';
 import { useAppDispatch } from '../../data/store.ts';
 import { savePartUpdates } from '../../data/partActions.ts';
-import useDelayedSave from '../../effects/useDelayedSave.ts';
 import InchInput from '../inputs/InchInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
@@ -30,34 +29,42 @@ function PartForm(props: {partId: string}) {
   const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
   const materialType = getMaterialTypeFromId(currentMaterial.type);
 
-  function savePart() {
-    dispatch(savePartUpdates({
-      id: partId,
-      changes: {
-        title: titleInput,
-        l: lengthInput,
-        w: widthInput,
-        h: heightInput,
-        qty: quantityInput,
-        m: materialInput,
-        c: costInput,
-        notes: notesInput,
-      }
+  function save(e: FormEvent) {
+    e.preventDefault()
+    dispatch(savePartUpdates(partId, {
+      title: titleInput,
+      l: lengthInput,
+      w: widthInput,
+      h: heightInput,
+      qty: quantityInput,
+      m: materialInput,
+      c: costInput,
+      notes: notesInput,
     }));
   }
 
-  const savePending = useDelayedSave([titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput, costInput, notesInput], savePart, 500);
-
-  if (!part) return null;
+  const savePending = useMemo(() => {
+    return (
+      titleInput !== part.title
+      || lengthInput !== part.l
+      || widthInput !== part.w
+      || heightInput !== part.h
+      || quantityInput !== part.qty
+      || materialInput !== part.m
+      || costInput !== part.c
+      || notesInput !== part.notes
+    );
+  }, [part, titleInput, lengthInput, widthInput, heightInput, quantityInput, materialInput, costInput, notesInput]);
 
   const classes = {
     form: 'my-5',
     inputGroup: 'max-w-md my-1 w-full',
     flexedInputGroup: 'max-w-md flex gap-3',
+    submitButton: 'mt-5'
   };
 
   return (
-    <form className={classes.form} onSubmit={e => e.preventDefault()}>
+    <form className={classes.form} onSubmit={save}>
       <div className={classes.inputGroup}>
         <Label htmlFor='title' value='Part Title'/>
         <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
@@ -108,7 +115,7 @@ function PartForm(props: {partId: string}) {
         <Label htmlFor='notes' value='Notes'/>
         <Textarea id='notes' rows={4} value={notesInput} onChange={e => setNotesInput(e.target.value)}/>
       </div>
-      {savePending ? <Spinner/> : null}
+      {savePending ? <Button type='submit' color='blue' className={classes.submitButton}>Save Changes</Button> : null}
     </form>
   )
 }

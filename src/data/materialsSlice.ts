@@ -11,6 +11,8 @@ export type Material = {
   notes: string,
 }
 
+export type MaterialPartial = Partial<Omit<Material, 'id'>>
+
 export type MaterialEntities = {
   [key: string]: Material,
 }

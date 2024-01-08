@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
-import { Label, TextInput, Select, Spinner, Textarea } from 'flowbite-react';
+import { Label, TextInput, Select, Textarea, Button } from 'flowbite-react';
 import { saveMaterialUpdates } from '../../data/materialActions.ts';
 import { THICKNESSES } from '../../data/dataTypes.ts';
 import { MATERIALS_TYPES } from '../../data/dataTypes.ts';
-import useDelayedSave from '../../effects/useDelayedSave.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
 import QuantityInput from '../inputs/QuantityInput.tsx';
 import { PiPercent } from 'react-icons/pi';
@@ -22,29 +21,37 @@ function MaterialForm(props: { materialId: string }) {
   const [ waste, setWaste ] = useState<number>(material.waste);
   const [ notesInput, setNotesInput ] = useState<string>(material.notes);
 
-  function save() {
-    dispatch(saveMaterialUpdates({
-      id: materialId,
-      changes: {
-        title: titleInput,
-        type: materialType,
-        cost,
-        thickness: +thicknessInput,
-        waste,
-        notes: notesInput,
-      }
+  function save(e: FormEvent) {
+    e.preventDefault();
+    dispatch(saveMaterialUpdates(materialId, {
+      title: titleInput,
+      type: materialType,
+      cost,
+      thickness: +thicknessInput,
+      waste,
+      notes: notesInput,
     }));
   }
 
-  const delayedSavePending = useDelayedSave([titleInput, cost, materialType, thicknessInput, waste, notesInput], save, 500);
+  const savePending = useMemo(() => {
+    return (
+      titleInput !== material.title
+      || materialType !== material.type
+      || cost !== material.cost
+      || thicknessInput !== material.thickness
+      || waste !== material.waste
+      || notesInput !== material.notes
+    );
+  }, [material, titleInput, cost, materialType, thicknessInput, waste, notesInput])
 
   const classes = {
-    form: 'my-5',
+    form: 'mt-5 mb-10',
     inputGroup: 'max-w-md my-1 w-full',
+    submitButton: 'my-5',
   };
 
   return (
-    <form className={classes.form} onSubmit={e => e.preventDefault()}>
+    <form className={classes.form} onSubmit={save}>
       <div className={classes.inputGroup}>
         <Label htmlFor='title' value='Material Title'/>
         <TextInput id='title' autoFocus value={titleInput} onChange={e => setTitleInput(e.target.value)}/>
@@ -78,7 +85,7 @@ function MaterialForm(props: { materialId: string }) {
         <Label htmlFor='notes' value='Notes'/>
         <Textarea id='notes' rows={4} value={notesInput} onChange={e => setNotesInput(e.target.value)}/>
       </div>
-      {delayedSavePending ? <Spinner/> : null}
+      {savePending ? <Button type='submit' className={classes.submitButton} color='blue'>Save Changes</Button> : null}
     </form>
   )
 }

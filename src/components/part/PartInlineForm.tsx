@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import InlineInput from '../inputs/InlineInput.tsx';
-import { PartPartial, savePartPartial } from '../../data/partActions.ts';
+import { savePartUpdates } from '../../data/partActions.ts';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
+import { PartPartial } from '../../data/partsSlice.ts';
 
 type Props = {
   partId: string,
@@ -20,8 +21,8 @@ function PartInlineForm(props: Props) {
   const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
   const materialType = getMaterialTypeFromId(currentMaterial.type);
 
-  function savePart(changes: PartPartial) {
-    dispatch(savePartPartial(partId, changes));
+  function save(changes: PartPartial) {
+    dispatch(savePartUpdates(partId, changes));
   }
 
   const classes = {
@@ -39,7 +40,7 @@ function PartInlineForm(props: Props) {
         id='title'
         stringVal={part.title}
         className={classes.titleInput}
-        saveString={title => savePart({title})}
+        saveString={title => save({title})}
         autoFocus={autoFocus}
       />
       <div className={classes.allFields}>
@@ -50,7 +51,7 @@ function PartInlineForm(props: Props) {
             type='quantity'
             className={classes.narrowInput}
             numberVal={part.qty}
-            saveNumber={qty => savePart({ qty })}
+            saveNumber={qty => save({ qty })}
           />
           <MaterialsSelector
             id='material'
@@ -60,7 +61,7 @@ function PartInlineForm(props: Props) {
             miscId={project.miscMaterial}
             emptyOptionLabel='Project Default'
             materialIds={project.materials}
-            onValueChange={m => savePart({ m })}
+            onValueChange={m => save({ m })}
           />
         </div>
         <div className={classes.conditionalFields}>
@@ -71,7 +72,7 @@ function PartInlineForm(props: Props) {
               type='inch'
               className={classes.narrowInput}
               numberVal={part.l}
-              saveNumber={l => savePart({ l })}
+              saveNumber={l => save({ l })}
             />
             : null
           }
@@ -82,7 +83,7 @@ function PartInlineForm(props: Props) {
               type='inch'
               className={classes.narrowInput}
               numberVal={part.w}
-              saveNumber={w => savePart({ w })}
+              saveNumber={w => save({ w })}
             />
             : null
           }
@@ -93,7 +94,7 @@ function PartInlineForm(props: Props) {
               type='inch'
               className={classes.narrowInput}
               numberVal={part.h}
-              saveNumber={h => savePart({ h })}
+              saveNumber={h => save({ h })}
             />
             : null
           }
@@ -102,7 +103,7 @@ function PartInlineForm(props: Props) {
               id='cost'
               type='currency'
               numberVal={part.c}
-              saveNumber={c => savePart({ c })}
+              saveNumber={c => save({ c })}
             />
             : null
           }

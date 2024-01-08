@@ -15,6 +15,8 @@ export type Part = {
   calc: MaterialList,
 }
 
+export type PartPartial = Partial<Omit<Part, 'id'>>
+
 export type PartEntities = {
   [key: string]: Part,
 }

@@ -2,6 +2,7 @@ import { AppDispatch, RootState } from './store.ts';
 import { getId, PART, BDFT, SQFT, LFT, MISC } from './dataTypes.ts';
 import {
   Part,
+  PartPartial,
   create as createPart,
   destroy as destroyPart,
   update as updatePart,
@@ -46,21 +47,7 @@ export function addPart(parentId: string, prepend: boolean = false, redirect: bo
   };
 }
 
-type PartChanges = {
-  id: string,
-  changes: Omit<Part, 'id' | 'calc'>
-}
-
-export function savePartUpdates(partChanges: PartChanges) {
-  return (dispatch: AppDispatch) => {
-    dispatch(updatePart(partChanges));
-    dispatch(recalculateActiveProject());
-  };
-}
-
-export type PartPartial = Partial<Omit<Part, 'id'>>
-
-export function savePartPartial(partId: string, changes: PartPartial) {
+export function savePartUpdates(partId: string, changes: PartPartial) {
   return (dispatch: AppDispatch) => {
     const update = { id: partId, changes };
     dispatch(updatePart(update));
