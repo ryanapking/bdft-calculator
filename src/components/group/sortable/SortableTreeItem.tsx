@@ -2,27 +2,22 @@ import {  useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CHILD_OFFSET, SortableChild } from './utilities.ts';
 import TreeItem from './TreeItem.tsx';
-import { getDataTypeFromId, GROUP } from '../../../data/dataTypes.ts';
-import GroupInlineForm from '../GroupInlineForm.tsx';
-import PartInlineForm from '../../part/PartInlineForm.tsx';
+import { PropsWithChildren } from 'react';
 
 type Props = {
   item: SortableChild,
-  collapsed?: boolean,
-  active?: boolean,
-  dropDepth?: number,
-  autoFocus?: boolean,
-  focusChild: () => void,
+  collapsed: boolean,
+  active: boolean,
+  dropDepth: number,
 }
 
-function SortableTreeItem(props: Props) {
+function SortableTreeItem(props: PropsWithChildren<Props>) {
   const {
     item,
-    focusChild,
-    collapsed = false,
-    active = false,
-    dropDepth = 0,
-    autoFocus = false,
+    collapsed,
+    active,
+    dropDepth,
+    children,
   } = props;
 
   const {
@@ -54,16 +49,11 @@ function SortableTreeItem(props: Props) {
 
   if (collapsed) return null;
 
-  const itemType = getDataTypeFromId(item.id.toString());
-
   return (
     <div style={paddingLeft}>
       <div style={style} ref={setNodeRef}>
         <TreeItem shadow={active} item={item} handleAttributes={attributes} handleListeners={listeners}>
-          {itemType === GROUP
-            ? <GroupInlineForm focusChild={focusChild} autoFocus={autoFocus} groupId={item.id.toString()} />
-            : <PartInlineForm autoFocus={autoFocus} partId={item.id.toString()} />
-          }
+          {children}
         </TreeItem>
       </div>
     </div>

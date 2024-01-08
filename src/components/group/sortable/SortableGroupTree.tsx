@@ -19,6 +19,8 @@ import SortableTreeItem from './SortableTreeItem.tsx';
 import { useState } from 'react';
 import TreeItem from './TreeItem.tsx';
 import { Badge } from 'flowbite-react';
+import GroupInlineForm from '../GroupInlineForm.tsx';
+import PartInlineForm from '../../part/PartInlineForm.tsx';
 
 function SortableGroupTree(props: {groupId: string}) {
   const dispatch = useAppDispatch();
@@ -111,7 +113,7 @@ function SortableGroupTree(props: {groupId: string}) {
 
   function handleDragEnd(e: DragEndEvent) {
     setActiveItem(null);
-    // setDropDepth(0);
+    setDropDepth(0);
 
     if (!e.over) return;
 
@@ -127,20 +129,23 @@ function SortableGroupTree(props: {groupId: string}) {
     dispatch(relocateChild(relocation));
   }
 
-  function printSortableChildren() {
-    return sortableChildren.map((item, index) => {
+  function printInlineForm(index: number, item: SortableChild) {
+    if (getDataTypeFromId(item.id.toString()) === GROUP) {
       return (
-        <SortableTreeItem
-          key={item.id}
-          item={item}
-          dropDepth={dropDepth}
-          active={item.id === activeItem?.id}
-          collapsed={activeItem?.descendants.includes(item.id)}
-          autoFocus={index === autoFocusIndex}
+        <GroupInlineForm
           focusChild={() => setAutoFocusIndex(index + 1)}
+          autoFocus={index === autoFocusIndex}
+          groupId={item.id.toString()}
         />
       );
-    });
+    }
+
+    return (
+      <PartInlineForm
+        autoFocus={index === autoFocusIndex}
+        partId={item.id.toString()}
+      />
+    );
   }
 
   return (
@@ -153,7 +158,17 @@ function SortableGroupTree(props: {groupId: string}) {
         collisionDetection={closestCenter}
       >
         <SortableContext items={sortableChildren} strategy={verticalListSortingStrategy}>
-          {printSortableChildren()}
+          {sortableChildren.map((item, index) => (
+            <SortableTreeItem
+              key={item.id}
+              item={item}
+              dropDepth={dropDepth}
+              active={item.id === activeItem?.id}
+              collapsed={!!activeItem && activeItem.descendants.includes(item.id)}
+            >
+              {printInlineForm(index, item)}
+            </SortableTreeItem>
+          ))}
         </SortableContext>
 
         <DragOverlay>
