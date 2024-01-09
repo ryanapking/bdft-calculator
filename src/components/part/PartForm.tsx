@@ -1,7 +1,7 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
-import { Button, Label, Textarea, TextInput } from 'flowbite-react';
+import { Button, Label, Textarea } from 'flowbite-react';
 import { useAppDispatch } from '../../data/store.ts';
 import { savePartUpdates } from '../../data/partActions.ts';
 import InchInput from '../inputs/InchInput.tsx';
@@ -9,6 +9,7 @@ import QuantityInput from '../inputs/QuantityInput.tsx';
 import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
 import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
 import CurrencyInput from '../inputs/CurrencyInput.tsx';
+import TextInput from '../inputs/TextInput.tsx';
 
 function PartForm(props: {partId: string}) {
   const { partId} = props;
@@ -85,19 +86,19 @@ function PartForm(props: {partId: string}) {
         {materialType.partFields.includes('l') &&
           <div className={classes.inputGroup}>
             <Label htmlFor='length' value='Length (inches)'/>
-            <InchInput id='length' value={lengthInput} alignLeft onValueChange={length => setLengthInput(length)}/>
+            <InchInput id='length' value={lengthInput} onValueChange={length => setLengthInput(length)}/>
           </div>
         }
         {materialType.partFields.includes('w') &&
           <div className={classes.inputGroup}>
             <Label htmlFor='width' value='Width (inches)'/>
-            <InchInput id='width' value={widthInput} alignLeft onValueChange={width => setWidthInput(width)}/>
+            <InchInput id='width' value={widthInput}  onValueChange={width => setWidthInput(width)}/>
           </div>
         }
         {materialType.partFields.includes('h') &&
           <div className={classes.inputGroup}>
             <Label htmlFor='height' value='Height (inches)'/>
-            <InchInput id='height' value={heightInput} alignLeft onValueChange={height => setHeightInput(height)}/>
+            <InchInput id='height' value={heightInput} onValueChange={height => setHeightInput(height)}/>
           </div>
         }
         {materialType.partFields.includes('c') &&

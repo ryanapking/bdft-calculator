@@ -150,6 +150,7 @@ function SortableGroupTree(props: {groupId: string}) {
 
   return (
     <div className='w-full max-w-5xl mb-96'>
+      <h3 className='text-xl font-light mb-3'>Group Items:</h3>
       <DndContext
         onDragEnd={handleDragEnd}
         onDragMove={handleDragMove}
@@ -175,7 +176,10 @@ function SortableGroupTree(props: {groupId: string}) {
           {activeItem ?
             <TreeItem item={activeItem} dragging>
               {activeItem.title}
-              {activeItem.descendants.length ? <Badge color='failure' className='ml-3'>{activeItem.descendants.length + 1}</Badge> : null}
+              {activeItem.descendants.length ?
+                <Badge color='failure' className='ml-3'>{activeItem.descendants.length + 1}</Badge>
+                : null
+              }
             </TreeItem>
             : null
           }

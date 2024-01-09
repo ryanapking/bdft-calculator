@@ -22,15 +22,16 @@ function TreeItem(props: PropsWithChildren<Props>) {
     handleListeners = null,
   } = props;
 
+  const bg = shadow ? 'bg-gray-200' : 'bg-white';
   const style = dragging ? {
     transform: `translate(${CHILD_OFFSET * item.depth + 40}px)`,
   } : {};
 
   return (
-    <div className={shadow ? 'bg-gray-200 border' : 'bg-white border'} style={style}>
+    <div className={`border ${bg}`} style={style}>
       <div className={`p-3 flex items-center ${shadow ? 'invisible' : ''}`}>
         <div className='p-2 mr-3 hover:bg-gray-100 hover:cursor-grab rounded' {...handleAttributes} {...handleListeners}>
-          <RxDragHandleDots2 size={15}/>
+          <RxDragHandleDots2 size='1rem'/>
         </div>
         {children}
       </div>

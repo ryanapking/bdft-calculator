@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import InlineInput from '../inputs/InlineInput.tsx';
 import { saveMaterialUpdates } from '../../data/materialActions.ts';
-import { PiPercent } from 'react-icons/pi';
 import { BDFT, getMaterialTypeFromId, MATERIALS_TYPES, THICKNESSES } from '../../data/dataTypes.ts';
 import { Radio } from 'flowbite-react';
 import { setDefaultMaterial } from '../../data/projectActions.ts';
@@ -30,10 +29,12 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
         saveString={title => save({ title })}
       />
       <Select
-        id="materialType"
-        color='transparent'
-        className='col-span-2 bg-transparent'
+        id='materialType'
+        transparent
         required
+        center
+        className='col-span-2 bg-transparent'
+        label={materialType.label}
         value={material.type}
         onChange={e => save({ type: e.target.value })}
       >
@@ -41,9 +42,11 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
       </Select>
       <Select
         id="thickness"
-        color='transparent'
-        className={materialType !== BDFT ? 'invisible col-span-2' : 'col-span-2'}
+        transparent
         required
+        center
+        label={THICKNESSES.find(x => x.value === material.thickness)?.label ?? material.thickness.toString()}
+        className={materialType !== BDFT ? 'invisible col-span-2' : 'col-span-2'}
         value={material.thickness}
         onChange={e => save({ thickness: +e.target.value})}
       >
@@ -54,15 +57,16 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
       <InlineInput
         id='waste'
         type='quantity'
-        icon={PiPercent}
-        outerClass='col-span-2'
+        outerClass='col-span-2 text-center'
+        suffix='%'
+        center
         numberVal={material.waste}
         saveNumber={waste => save({ waste })}
       />
       <InlineInput
         id='cost'
         type='currency'
-        outerClass='col-span-2'
+        outerClass='col-span-2 text-center'
         numberVal={material.cost}
         saveNumber={cost => save({ cost })}
       />

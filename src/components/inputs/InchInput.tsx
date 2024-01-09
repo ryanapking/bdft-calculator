@@ -1,33 +1,18 @@
-import { CustomFlowbiteTheme, TextInput } from 'flowbite-react';
 import { useState, ComponentProps } from 'react';
+import SuffixTextInput from './SuffixTextInput.tsx';
 
 const trimDecimals = /\d*(\.?)(\d{0,3})/;
 const splitRight = /(\d*?)(0*$)/;
 
-const customTheme: CustomFlowbiteTheme['textInput'] = {
-  field: {
-    input: {
-      withRightIcon: {
-        on: 'pr-5 text-right',
-      },
-      colors: {
-        transparent: 'bg-transparent border-transparent',
-      },
-    }
-  },
-};
-
-type Props = Omit<ComponentProps<typeof TextInput>, 'value'> & {
+type Props = Omit<ComponentProps<typeof SuffixTextInput>, 'value' | 'suffix'> & {
   onValueChange: ( _:number ) => void,
   value: number,
-  alignLeft?: boolean,
 }
 
 function InchInput(props: Props) {
   const {
     value,
     onValueChange,
-    alignLeft = false,
     ...remainingProps
   } = props;
   const [ trail, setTrail ] = useState<string>('');
@@ -43,16 +28,12 @@ function InchInput(props: Props) {
     if (parsed !== value) onValueChange(parsed);
   }
 
-  return (
-    <TextInput
-      {...remainingProps}
-      type='text'
-      value={value + trail}
-      theme={customTheme}
-      rightIcon={alignLeft ? undefined : () => <span className='text-gray-400'>"</span>}
-      onChange={e => inputChanged(e.target.value)}
-    />
-  )
+  return <SuffixTextInput
+    {...remainingProps}
+    suffix='"'
+    value={value + trail}
+    onChange={e => inputChanged(e.target.value)}
+  />
 }
 
 export default InchInput;

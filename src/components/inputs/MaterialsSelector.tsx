@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../data/store.ts';
 import { ComponentProps } from 'react';
 
-type Props = ComponentProps<typeof Select> & {
-  id: string,
+type Props = Omit<ComponentProps<typeof Select>, 'value' | 'label'> & {
   materialIds: Array<string>,
   value: string,
   onValueChange: (_:string) => void,
@@ -15,7 +14,6 @@ type Props = ComponentProps<typeof Select> & {
 
 function MaterialsSelector(props: Props) {
   const {
-    id,
     value,
     materialIds,
     onValueChange,
@@ -30,8 +28,8 @@ function MaterialsSelector(props: Props) {
   return (
     <Select
       {...remainingProps}
-      id={id}
       value={value}
+      label={value ? materials[value].title : emptyOptionLabel}
       onChange={(event) => onValueChange(event.target.value)}
     >
       {includeEmptyOption ?

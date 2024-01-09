@@ -1,5 +1,6 @@
 import { FormEvent, PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { Button, Label, Modal, TextInput } from 'flowbite-react';
+import { Button, Label, Modal } from 'flowbite-react';
+import TextInput from './TextInput.tsx';
 
 type Props = {
   submitText?: string,

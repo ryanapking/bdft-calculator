@@ -1,20 +1,11 @@
-import { ComponentProps, useState } from 'react';
-import { CustomFlowbiteTheme, Label, TextInput } from 'flowbite-react';
+import { ComponentPropsWithoutRef, useState } from 'react';
+import { Label } from 'flowbite-react';
+import TextInput from './TextInput.tsx';
 import QuantityInput from './QuantityInput.tsx';
 import InchInput from './InchInput.tsx';
 import CurrencyInput from './CurrencyInput.tsx';
 
-const customTheme: CustomFlowbiteTheme['textInput'] = {
-  field: {
-    input: {
-      colors: {
-        transparent: 'bg-transparent border-transparent',
-      }
-    }
-  },
-};
-
-type Props = ComponentProps<typeof TextInput> & {
+type Props = ComponentPropsWithoutRef<typeof TextInput> & {
   label?: string,
   stringVal?: string,
   saveString?: (value: string) => void,
@@ -22,6 +13,7 @@ type Props = ComponentProps<typeof TextInput> & {
   saveNumber?: (value: number) => void,
   type?: string,
   outerClass?: string,
+  suffix?: string,
 }
 
 function InlineInput(props: Props) {
@@ -33,6 +25,7 @@ function InlineInput(props: Props) {
     saveNumber = () => {},
     type = 'string',
     outerClass = '',
+    suffix = '',
     ...remainingProps
   } = props;
 
@@ -40,55 +33,69 @@ function InlineInput(props: Props) {
   if (type === 'string') value = stringVal;
   else value = numberVal;
 
-  const [ editing, setEditing ] = useState(false);
   const [ newValue, setNewValue ] = useState<string|number>(value);
 
   function startEditing() {
     setNewValue(value);
-    setEditing(true);
   }
 
   function stopEditing() {
-    setEditing(false);
     if (newValue === value) return;
     if (type === 'string') saveString(String(newValue));
     else saveNumber(+newValue);
   }
 
-  let AltComponent = null;
-  if (type === 'quantity') AltComponent = QuantityInput;
-  else if (type === 'inch') AltComponent = InchInput;
-  else if (type === 'currency') AltComponent = CurrencyInput;
+  let inputComponent;
 
-  if (AltComponent) {
-    return (
-      <div className={`flex gap-2 items-center ${outerClass}`}>
-        {label ? <Label value={label + ':'}/> : null}
-        <AltComponent
-          {...remainingProps}
-          value={+newValue}
-          theme={customTheme}
-          color={editing ? 'gray' : 'transparent'}
-          onBlur={stopEditing}
-          onFocus={startEditing}
-          onValueChange={value => setNewValue(value)}
-        />
-      </div>
-    );
-  }
+  if(type === 'quantity') inputComponent = (
+    <QuantityInput
+      {...remainingProps}
+      value={+newValue}
+      transparent
+      suffix={suffix}
+      onBlur={stopEditing}
+      onFocus={startEditing}
+      onValueChange={value => setNewValue(value)}
+    />
+  );
+
+  if (type === 'inch') inputComponent = (
+    <InchInput
+      {...remainingProps}
+      value={+newValue}
+      transparent
+      onBlur={stopEditing}
+      onFocus={startEditing}
+      onValueChange={value => setNewValue(value)}
+    />
+  );
+
+  if (type === 'currency') inputComponent = (
+    <CurrencyInput
+      {...remainingProps}
+      value={+newValue}
+      transparent
+      onBlur={stopEditing}
+      onFocus={startEditing}
+      onValueChange={value => setNewValue(value)}
+    />
+  );
+
+  if (!inputComponent) inputComponent = (
+    <TextInput
+      {...remainingProps}
+      transparent
+      value={newValue}
+      onBlur={stopEditing}
+      onFocus={startEditing}
+      onChange={e => setNewValue(e.target.value)}
+    />
+  );
 
   return (
-    <div className={`flex gap-2 items-center ${outerClass}`}>
-      {label ? <Label value={label + ':'}/> : null}
-      <TextInput
-        {...remainingProps}
-        value={newValue}
-        theme={customTheme}
-        color={editing ? 'gray' : 'transparent'}
-        onBlur={stopEditing}
-        onFocus={startEditing}
-        onChange={e => setNewValue(e.target.value)}
-      />
+    <div className={`flex flex-col items-center ${outerClass}`}>
+      {label ? <Label className='text-xs font-light' value={label + ':'}/> : null}
+      {inputComponent}
     </div>
   );
 }

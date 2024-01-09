@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-align-inherit {
+    text-align: inherit;
+}
+
+select:not([size]) {
+    background-image: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
