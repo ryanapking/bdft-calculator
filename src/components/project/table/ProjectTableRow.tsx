@@ -29,9 +29,9 @@ function ProjectTableRow(props: Props) {
         </div>
         <div className='col-start-8 text-right'>{isMisc ? '' : totalAmt.toFixed(3)}</div>
         <div className='col-start-9 pl-3'>{isMisc ? '' : materialType.shorthand}</div>
-        <div className='col-start-10 text-right'>{isMisc ? '' : '$' + material.cost.toFixed(2)}</div>
+        <div className='col-start-10 text-right'>{isMisc ? '' : material.cost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</div>
         <div className='col-start-11 pl-3'>{isMisc ? '' : '/ ' + materialType.shorthand}</div>
-        <div className='col-start-12 text-right pr-3'>${totalCost.toFixed(2)}</div>
+        <div className='col-start-12 text-right pr-3'>{totalCost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</div>
         {expanded ?
           <div className='col-start-2 col-span-6 pt-3 pb-6'>
             <MaterialTable materialId={material.id} altBorder={altBorder}/>

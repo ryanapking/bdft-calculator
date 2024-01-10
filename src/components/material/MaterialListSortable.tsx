@@ -32,7 +32,7 @@ function ListItem(props: ListItemProps) {
 
   return (
     <div className='flex p-3 items-center border bg-white'>
-      <div className='p-2 mr-3 hover:bg-gray-100 hover:cursor-grab rounded' {...handleAttributes} {...handleListeners}>
+      <div className='p-2 mr-3 hover:bg-gray-100 hover:cursor-grab rounded' {...handleAttributes} {...handleListeners} tabIndex={-1}>
         <RxDragHandleDots2 size='1rem'/>
       </div>
       <InlineMaterialForm materialId={materialId} projectId={projectId}/>

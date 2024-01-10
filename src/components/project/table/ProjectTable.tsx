@@ -33,7 +33,7 @@ function ProjectTable(props: { projectId: string }) {
         </div>
       )}
       <div className='grid grid-cols-12 py-1'>
-        <div className='col-start-12 text-right pr-3'>${projectCost.toFixed(2)}</div>
+        <div className='col-start-12 text-right pr-3'>{projectCost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</div>
       </div>
     </div>
   );

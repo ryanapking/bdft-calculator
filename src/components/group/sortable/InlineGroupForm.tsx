@@ -35,7 +35,9 @@ function InlineGroupForm(props: Props) {
   return (
     <div className={Classes.container}>
       <div className={Classes.left.base}>
-        <RxComponent1/>
+        <div className={Classes.left.icon}>
+          <RxComponent1/>
+        </div>
         <InlineInput
           id='title'
           large

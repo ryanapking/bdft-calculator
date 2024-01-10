@@ -154,40 +154,42 @@ function SortableGroupTree(props: {groupId: string}) {
   return (
     <div className='w-full max-w-5xl mb-96'>
       <h3 className='text-xl font-light mb-3'>Group Items:</h3>
-      <DndContext
-        onDragEnd={handleDragEnd}
-        onDragMove={handleDragMove}
-        onDragStart={handleDragStart}
-        onDragCancel={handleDragCancel}
-        collisionDetection={closestCenter}
-      >
-        <SortableContext items={sortableChildren} strategy={verticalListSortingStrategy}>
-          {sortableChildren.map((item, index) => (
-            <SortableTreeItem
-              key={item.id}
-              item={item}
-              dropDepth={dropDepth}
-              active={item.id === activeItem?.id}
-              collapsed={!!activeItem && activeItem.descendants.includes(item.id)}
-            >
-              {printInlineForm(index, item)}
-            </SortableTreeItem>
-          ))}
-        </SortableContext>
+      <div className='bg-gray-200 pl-1'>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          onDragMove={handleDragMove}
+          onDragStart={handleDragStart}
+          onDragCancel={handleDragCancel}
+          collisionDetection={closestCenter}
+        >
+          <SortableContext items={sortableChildren} strategy={verticalListSortingStrategy}>
+            {sortableChildren.map((item, index) => (
+              <SortableTreeItem
+                key={item.id}
+                item={item}
+                dropDepth={dropDepth}
+                active={item.id === activeItem?.id}
+                collapsed={!!activeItem && activeItem.descendants.includes(item.id)}
+              >
+                {printInlineForm(index, item)}
+              </SortableTreeItem>
+            ))}
+          </SortableContext>
 
-        <DragOverlay>
-          {activeItem ?
-            <TreeItem item={activeItem} dragging>
-              {activeItem.title}
-              {activeItem.descendants.length ?
-                <Badge color='failure' className='ml-3'>{activeItem.descendants.length + 1}</Badge>
-                : null
-              }
-            </TreeItem>
-            : null
-          }
-        </DragOverlay>
-      </DndContext>
+          <DragOverlay>
+            {activeItem ?
+              <TreeItem item={activeItem} dragging>
+                {activeItem.title}
+                {activeItem.descendants.length ?
+                  <Badge color='failure' className='ml-3'>{activeItem.descendants.length + 1}</Badge>
+                  : null
+                }
+              </TreeItem>
+              : null
+            }
+          </DragOverlay>
+        </DndContext>
+      </div>
     </div>
   );
 }

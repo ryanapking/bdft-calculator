@@ -45,7 +45,9 @@ function InlinePartForm(props: Props) {
   return (
     <div className={Classes.container}>
       <div className={Classes.left.base}>
-        <RxComponentInstance />
+        <div className={Classes.left.icon}>
+          <RxComponentInstance/>
+        </div>
         <InlineInput
           id='title'
           stringVal={part.title}

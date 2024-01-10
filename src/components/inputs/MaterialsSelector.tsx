@@ -6,7 +6,7 @@ import { ComponentProps } from 'react';
 type Props = Omit<ComponentProps<typeof Select>, 'value' | 'label'> & {
   materialIds: Array<string>,
   value: string,
-  onValueChange: (_:string) => void,
+  onValueChange: (materialId:string) => void,
   includeEmptyOption?: boolean,
   emptyOptionLabel?: string,
   miscId?: string,

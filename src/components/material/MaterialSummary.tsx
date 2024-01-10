@@ -34,9 +34,9 @@ function MaterialSummary(props: Props) {
   if (materialType === MISC && !usageData) return null;
 
   const usageInfo = [
-    <p key={0}>${material.cost.toFixed(2)} / {materialType.shorthand}</p>,
+    <p key={0}>{material.cost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})} / {materialType.shorthand}</p>,
     <p key={1}>{totalAmt} {usageData?.type}</p>,
-    <p key={2}>${totalCost.toFixed(2)}</p>,
+    <p key={2}>{totalCost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>,
     <p key={3}>unused</p>
   ];
 

@@ -22,7 +22,7 @@ function PartSummary(props: {partId: string}) {
         <Table.Body>
           <Table.Row>
             <Table.Cell>{usage.amt}</Table.Cell>
-            <Table.Cell>${usage.cost.toFixed(2)}</Table.Cell>
+            <Table.Cell>{usage.cost.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>

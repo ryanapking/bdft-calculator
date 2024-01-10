@@ -2,10 +2,11 @@ export default {
   container: 'w-full flex gap-2 justify-between items-center',
   left: {
     base: 'grow shrink flex items-center gap-2',
+    icon: 'shrink-0',
     title: 'w-full',
   },
   center: {
-    base: 'w-[600px] grid grid-cols-6 gap-2',
+    base: 'w-[600px] min-w-[600px] grid grid-cols-6 gap-2',
     material: 'col-start-1 col-span-2 text-center flex flex-col',
     length: 'col-start-3',
     width: 'col-start-4',
