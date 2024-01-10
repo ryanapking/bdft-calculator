@@ -12,7 +12,7 @@ function GroupActionIcons(props: { groupId: string }) {
       <button
         title='add component group'
         className='flex items-center gap1 hover:cursor-pointer hover:bg-gray-200'
-        onClick={() => dispatch(addGroup(groupId, true, false))}
+        onClick={() => dispatch(addGroup(groupId, 0, false))}
       >
         <RxPlus/>
         <RxComponent1/>
@@ -20,7 +20,7 @@ function GroupActionIcons(props: { groupId: string }) {
       <button
         title='add component'
         className='flex items-center gap1 hover:cursor-pointer hover:bg-gray-200'
-        onClick={() => dispatch(addPart(groupId, true, false))}
+        onClick={() => dispatch(addPart(groupId, 0, false))}
       >
         <RxPlus/>
         <RxComponentInstance/>

@@ -37,7 +37,7 @@ export function getEmptyGroup(): Group {
   };
 }
 
-export function addGroup(parentId: string, prepend: boolean = false, redirect: boolean = true) {
+export function addGroup(parentId: string, atIndex: number = -1, redirect: boolean = true) {
   return (dispatch: AppDispatch) => {
     const group = getEmptyGroup();
     dispatch(createGroup(group));
@@ -45,7 +45,7 @@ export function addGroup(parentId: string, prepend: boolean = false, redirect: b
     dispatch(addChild({
       groupId: parentId,
       childId: group.id,
-      prepend,
+      atIndex,
     }));
 
     if (redirect) dispatch(setActiveDetails({id: group.id, parentId}));

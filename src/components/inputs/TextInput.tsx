@@ -6,17 +6,20 @@ const classes = {
     gray: 'bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500',
     transparent: 'bg-transparent border-transparent active:bg-gray-50 focus:bg-gray-50',
   },
+  large: 'text-xl font-light'
 }
 
 type Props = Omit<ComponentProps<'input'>, 'type'> & {
   transparent?: boolean,
   center?: boolean,
+  large?: boolean,
 }
 
 const TextInput = forwardRef((props: Props, ref: ForwardedRef<HTMLInputElement>) => {
   const {
     transparent = false,
     center = false,
+    large = false,
     className,
     ...remainingProps
   } = props;
@@ -25,6 +28,7 @@ const TextInput = forwardRef((props: Props, ref: ForwardedRef<HTMLInputElement>)
   if (transparent) inputClasses.push(classes.colors.transparent);
   if (className) inputClasses.push(className);
   if (center) inputClasses.push('text-center');
+  if (large) inputClasses.push(classes.large);
 
   return (
     <input type="text" ref={ref} {...remainingProps} className={inputClasses.join(' ')}/>

@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../data/store.ts';
-import InlineInput from '../inputs/InlineInput.tsx';
-import { saveMaterialUpdates } from '../../data/materialActions.ts';
-import { BDFT, getMaterialTypeFromId, MATERIALS_TYPES, THICKNESSES } from '../../data/dataTypes.ts';
+import { RootState, useAppDispatch } from '../../../data/store.ts';
+import InlineInput from '../../inputs/InlineInput.tsx';
+import { saveMaterialUpdates } from '../../../data/materialActions.ts';
+import { BDFT, getMaterialTypeFromId, MATERIALS_TYPES, THICKNESSES } from '../../../data/dataTypes.ts';
 import { Radio } from 'flowbite-react';
-import { setDefaultMaterial } from '../../data/projectActions.ts';
-import Select from '../inputs/Select.tsx';
-import { MaterialPartial } from '../../data/materialsSlice.ts';
+import { setDefaultMaterial } from '../../../data/projectActions.ts';
+import Select from '../../inputs/Select.tsx';
+import { MaterialPartial } from '../../../data/materialsSlice.ts';
 
-function MaterialInlineForm(props: { materialId: string, projectId: string }) {
+function InlineMaterialForm(props: { materialId: string, projectId: string }) {
   const { materialId, projectId } = props;
   const material = useSelector((state: RootState) => state.materials.entities[materialId]);
   const project = useSelector((state: RootState) => state.projects.entities[projectId]);
@@ -80,4 +80,4 @@ function MaterialInlineForm(props: { materialId: string, projectId: string }) {
   );
 }
 
-export default MaterialInlineForm;
+export default InlineMaterialForm;

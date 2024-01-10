@@ -32,9 +32,9 @@ export const groupsSlice = createSlice({
     updateMany: groupsAdapter.updateMany,
     destroy: groupsAdapter.removeOne,
     destroyMany: groupsAdapter.removeMany,
-    addChild: (state, action: PayloadAction<{ groupId: string, childId: string, prepend?: boolean }>) => {
-      const { groupId, childId, prepend = false } = action.payload;
-      if (prepend) state.entities[groupId].children.unshift(childId);
+    addChild: (state, action: PayloadAction<{ groupId: string, childId: string, atIndex?: number }>) => {
+      const { groupId, childId, atIndex = -1 } = action.payload;
+      if (atIndex >= 0) state.entities[groupId].children.splice(atIndex, 0, childId);
       else state.entities[groupId].children.push(childId);
     },
     removeChild: (state, action: PayloadAction<{ groupId: string, childId: string}>) => {

@@ -31,15 +31,15 @@ function getEmptyPart(): Part {
   };
 }
 
-export function addPart(parentId: string, prepend: boolean = false, redirect: boolean = true) {
+export function addPart(parentId: string, atIndex: number = -1, redirect: boolean = true) {
   return (dispatch: AppDispatch) => {
     const newPart = getEmptyPart();
     dispatch(createPart(newPart));
 
     dispatch(addChild({
-      prepend: prepend,
       groupId: parentId,
-      childId: newPart.id
+      childId: newPart.id,
+      atIndex,
     }));
 
     dispatch(recalculateActiveProject());

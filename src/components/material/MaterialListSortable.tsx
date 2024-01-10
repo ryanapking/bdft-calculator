@@ -13,7 +13,7 @@ import { RxDragHandleDots2 } from 'react-icons/rx';
 import { reorderProjectMaterial } from '../../data/projectActions.ts';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { useState } from 'react';
-import MaterialInlineForm from './MaterialInlineForm.tsx';
+import InlineMaterialForm from './table/InlineMaterialForm.tsx';
 
 type ListItemProps = {
   materialId: string,
@@ -35,7 +35,7 @@ function ListItem(props: ListItemProps) {
       <div className='p-2 mr-3 hover:bg-gray-100 hover:cursor-grab rounded' {...handleAttributes} {...handleListeners}>
         <RxDragHandleDots2 size='1rem'/>
       </div>
-      <MaterialInlineForm materialId={materialId} projectId={projectId}/>
+      <InlineMaterialForm materialId={materialId} projectId={projectId}/>
     </div>
   );
 }

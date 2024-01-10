@@ -19,8 +19,8 @@ import SortableTreeItem from './SortableTreeItem.tsx';
 import { useState } from 'react';
 import TreeItem from './TreeItem.tsx';
 import { Badge } from 'flowbite-react';
-import GroupInlineForm from '../GroupInlineForm.tsx';
-import PartInlineForm from '../../part/PartInlineForm.tsx';
+import InlineGroupForm from './InlineGroupForm.tsx';
+import InlinePartForm from './InlinePartForm.tsx';
 
 function SortableGroupTree(props: {groupId: string}) {
   const dispatch = useAppDispatch();
@@ -132,18 +132,21 @@ function SortableGroupTree(props: {groupId: string}) {
   function printInlineForm(index: number, item: SortableChild) {
     if (getDataTypeFromId(item.id.toString()) === GROUP) {
       return (
-        <GroupInlineForm
-          focusChild={() => setAutoFocusIndex(index + 1)}
-          autoFocus={index === autoFocusIndex}
+        <InlineGroupForm
           groupId={item.id.toString()}
+          autoFocus={index === autoFocusIndex}
+          focusNext={() => setAutoFocusIndex(index + 1)}
         />
       );
     }
 
     return (
-      <PartInlineForm
-        autoFocus={index === autoFocusIndex}
+      <InlinePartForm
         partId={item.id.toString()}
+        parentId={item.parent.toString()}
+        partIndex={item.index}
+        autoFocus={index === autoFocusIndex}
+        focusNext={() => setAutoFocusIndex(index + 1)}
       />
     );
   }

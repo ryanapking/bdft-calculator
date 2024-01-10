@@ -94,7 +94,7 @@ function InlineInput(props: Props) {
 
   return (
     <div className={`flex flex-col items-center ${outerClass}`}>
-      {label ? <Label className='text-xs font-light' value={label + ':'}/> : null}
+      {label ? <Label className='text-xs font-light' value={label}/> : null}
       {inputComponent}
     </div>
   );

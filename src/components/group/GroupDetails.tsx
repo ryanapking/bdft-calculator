@@ -48,8 +48,8 @@ function GroupDetails(props: { groupId: string, parentId: string }) {
       }
       <div className='max-w-5xl'>
         <div className='flex gap-3 mb-5'>
-          <Button outline color='light' onClick={() => dispatch(addPart(groupId, true, false))}>Add Component</Button>
-          <Button outline color='light' onClick={() => dispatch(addGroup(groupId, true, false))}>Add Subgroup</Button>
+          <Button outline color='light' onClick={() => dispatch(addPart(groupId, 0, false))}>Add Component</Button>
+          <Button outline color='light' onClick={() => dispatch(addGroup(groupId, 0, false))}>Add Subgroup</Button>
         </div>
         <SortableGroupTree groupId={groupId}/>
       </div>

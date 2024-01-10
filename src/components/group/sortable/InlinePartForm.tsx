@@ -1,20 +1,25 @@
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../data/store.ts';
-import InlineInput from '../inputs/InlineInput.tsx';
-import { savePartUpdates } from '../../data/partActions.ts';
-import MaterialsSelector from '../inputs/MaterialsSelector.tsx';
-import { getMaterialTypeFromId } from '../../data/dataTypes.ts';
-import { PartPartial } from '../../data/partsSlice.ts';
-import { RxPlus } from 'react-icons/rx';
+import { RootState, useAppDispatch } from '../../../data/store.ts';
+import InlineInput from '../../inputs/InlineInput.tsx';
+import { addPart, savePartUpdates } from '../../../data/partActions.ts';
+import MaterialsSelector from '../../inputs/MaterialsSelector.tsx';
+import { getMaterialTypeFromId } from '../../../data/dataTypes.ts';
+import { PartPartial } from '../../../data/partsSlice.ts';
+import { RxComponent1, RxComponentInstance } from 'react-icons/rx';
 import { Label } from 'flowbite-react';
+import Classes from './inlineFormStyles.ts';
+import { addGroup } from '../../../data/groupActions.ts';
 
 type Props = {
   partId: string,
+  parentId: string,
+  partIndex: number,
+  focusNext: () => void,
   autoFocus?: boolean,
 }
 
-function PartInlineForm(props: Props) {
-  const { partId, autoFocus = false } = props;
+function InlinePartForm(props: Props) {
+  const { partId, parentId, partIndex, focusNext, autoFocus = false } = props;
   const part = useSelector((state: RootState) => state.parts.entities[partId]);
   const project = useSelector((state: RootState) => state.projects.entities[state.display.activeProject]);
   const dispatch = useAppDispatch();
@@ -27,35 +32,31 @@ function PartInlineForm(props: Props) {
     dispatch(savePartUpdates(partId, changes));
   }
 
-  const classes = {
-    container: 'w-full flex gap-2 justify-between',
-    left: 'g-blue-100 grow shrink flex items-end',
-    center: 'g-slate-200 w-[700px] grid grid-cols-6 gap-2',
-    right: 'g-red-200 flex items-end',
-    addButton: 'w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100',
-    titleInput: 'w-full',
-    narrowInput: 'w-[75px]',
-    material: 'col-start-1 col-span-2 text-center flex flex-col',
-    length: 'col-start-3',
-    width: 'col-start-4',
-    height: '',
-    cost: 'col-start-5',
-    qty: 'col-start-6 text-center',
-  };
+  function addSiblingGroup() {
+    focusNext();
+    dispatch(addGroup(parentId, partIndex + 1, false));
+  }
+
+  function addSiblingPart() {
+    focusNext();
+    dispatch(addPart(parentId, partIndex + 1, false));
+  }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.left}>
+    <div className={Classes.container}>
+      <div className={Classes.left.base}>
+        <RxComponentInstance />
         <InlineInput
           id='title'
           stringVal={part.title}
-          className={classes.titleInput}
+          className={Classes.left.title}
           saveString={title => save({title})}
           autoFocus={autoFocus}
+          large
         />
       </div>
-      <div className={classes.center}>
-        <div className={classes.material}>
+      <div className={Classes.center.base}>
+        <div className={Classes.center.material}>
           <Label className='text-xs font-light'>Material</Label>
           <MaterialsSelector
             id='material'
@@ -69,14 +70,13 @@ function PartInlineForm(props: Props) {
             onValueChange={m => save({ m })}
           />
         </div>
-
         {materialType.partFields.includes('l') ?
           <InlineInput
             id='length'
             label='Length'
             type='inch'
             center
-            outerClass={classes.length}
+            outerClass={Classes.center.length}
             numberVal={part.l}
             saveNumber={l => save({ l })}
           />
@@ -88,21 +88,9 @@ function PartInlineForm(props: Props) {
             label='Width'
             type='inch'
             center
-            outerClass={classes.width}
+            outerClass={Classes.center.width}
             numberVal={part.w}
             saveNumber={w => save({ w })}
-          />
-          : null
-        }
-        {materialType.partFields.includes('h') ?
-          <InlineInput
-            id='height'
-            label='Height'
-            type='inch'
-            center
-            outerClass={classes.height}
-            numberVal={part.h}
-            saveNumber={h => save({ h })}
           />
           : null
         }
@@ -111,7 +99,7 @@ function PartInlineForm(props: Props) {
             id='cost'
             type='currency'
             label='Cost'
-            outerClass={classes.cost}
+            outerClass={Classes.center.cost}
             numberVal={part.c}
             saveNumber={c => save({ c })}
           />
@@ -121,16 +109,20 @@ function PartInlineForm(props: Props) {
           id='qty'
           label='Qty'
           type='quantity'
-          outerClass={classes.qty}
+          outerClass={Classes.center.qty}
           numberVal={part.qty}
           saveNumber={qty => save({ qty })}
         />
       </div>
-      <div className={classes.right}>
-        <button className={classes.addButton}><RxPlus /></button>
+      <div className={Classes.right.base}>
+        <Label className='text-xs font-light' value='+ New Sibling'/>
+        <div className={Classes.right.buttonGroup}>
+          <button type='button' className={Classes.right.button} onClick={addSiblingGroup}><RxComponent1/></button>
+          <button className={Classes.right.button} onClick={addSiblingPart}><RxComponentInstance/></button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default PartInlineForm;
+export default InlinePartForm;
