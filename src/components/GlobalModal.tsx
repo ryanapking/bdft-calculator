@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
 import ModalConfirm from './inputs/ModalConfirm.tsx';
-import { clearAlert, clearPendingDelete, setCreating } from '../data/displaySlice.ts';
+import { clearAlert, clearPendingBulkDelete, clearPendingDelete, setCreating } from '../data/displaySlice.ts';
 import { getDataTypeFromId } from '../data/dataTypes.ts';
-import { processPendingDelete } from '../data/displayActions.ts';
+import { processPendingBulkDelete, processPendingDelete } from '../data/displayActions.ts';
 import { deleteMessages } from '../data/messages.ts';
 import ImportModal from './project/import/ImportModal.tsx';
 import TextInputModal from './inputs/TextInputModal.tsx';
@@ -11,6 +11,7 @@ import { addProject } from '../data/projectActions.ts';
 
 function GlobalModal() {
   const pendingDelete = useSelector((state: RootState) => state.display.pendingDelete);
+  const pendingBulkDelete = useSelector((state: RootState) => state.display.pendingBulkDelete);
   const alert = useSelector((state: RootState) => state.display.alert);
   const importing = useSelector((state: RootState) => state.display.importing);
   const creating = useSelector((state: RootState) => state.display.creating);
@@ -23,6 +24,12 @@ function GlobalModal() {
   if (pendingDelete.id) return (
     <ModalConfirm openModal={true} onConfirm={() => dispatch(processPendingDelete())} onCancel={() => dispatch(clearPendingDelete())}>
       {deleteMessages[getDataTypeFromId(pendingDelete.id).idPrefix]}
+    </ModalConfirm>
+  );
+
+  if (pendingBulkDelete.length) return (
+    <ModalConfirm openModal={true} onConfirm={() => dispatch(processPendingBulkDelete())} onCancel={() => dispatch(clearPendingBulkDelete())}>
+      Are you sure you want to delete these {pendingBulkDelete.length === 1 ? 'this item' : `these ${pendingBulkDelete.length} items`}?
     </ModalConfirm>
   );
 

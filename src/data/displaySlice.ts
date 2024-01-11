@@ -9,6 +9,7 @@ export interface DisplayState {
   activeProject: string,
   activeDetails: DisplayEntity,
   pendingDelete: DisplayEntity,
+  pendingBulkDelete: Array<DisplayEntity>,
   creating: boolean,
   importing: boolean,
   alert: string,
@@ -24,6 +25,7 @@ const initialState: DisplayState = {
     id: '',
     parentId: '',
   },
+  pendingBulkDelete: [],
   creating: false,
   importing: false,
   alert: '',
@@ -54,6 +56,12 @@ export const displaySlice = createSlice({
       state.pendingDelete.id = '';
       state.pendingDelete.parentId = '';
     },
+    setPendingBulkDelete: (state, action: PayloadAction<Array<DisplayEntity>>) => {
+      state.pendingBulkDelete = action.payload;
+    },
+    clearPendingBulkDelete: (state) => {
+      state.pendingBulkDelete = [];
+    },
     beginImport: (state) => {
       state.importing = true;
     },
@@ -79,6 +87,8 @@ export const {
   clearActiveDetailsIf,
   setPendingDelete,
   clearPendingDelete,
+  setPendingBulkDelete,
+  clearPendingBulkDelete,
   beginImport,
   endImport,
   setCreating,

@@ -1,23 +1,22 @@
 import {  useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { CHILD_OFFSET, SortableChild } from './utilities.ts';
+import { CHILD_OFFSET } from './utilities.ts';
 import TreeItem from './TreeItem.tsx';
-import { PropsWithChildren } from 'react';
+import { ComponentProps } from 'react';
 
-type Props = {
-  item: SortableChild,
+type Props = ComponentProps<typeof TreeItem> & {
   collapsed: boolean,
   active: boolean,
   dropDepth: number,
 }
 
-function SortableTreeItem(props: PropsWithChildren<Props>) {
+function SortableTreeItem(props: Props) {
   const {
     item,
     collapsed,
     active,
     dropDepth,
-    children,
+    ...treeItemProps
   } = props;
 
   const {
@@ -52,12 +51,16 @@ function SortableTreeItem(props: PropsWithChildren<Props>) {
   return (
     <div style={paddingLeft}>
       <div style={style} ref={setNodeRef}>
-        <TreeItem shadow={active} item={item} handleAttributes={attributes} handleListeners={listeners}>
-          {children}
-        </TreeItem>
+        <TreeItem
+          {...treeItemProps}
+          item={item}
+          shadow={active}
+          handleAttributes={attributes}
+          handleListeners={listeners}
+        />
       </div>
     </div>
-  )
+  );
 }
 
 export default SortableTreeItem;

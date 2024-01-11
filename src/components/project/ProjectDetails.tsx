@@ -4,10 +4,11 @@ import ProjectTable from './table/ProjectTable.tsx';
 import { useState } from 'react';
 import ProjectForm from './ProjectForm.tsx';
 import { Dropdown } from 'flowbite-react';
-import { setPendingDelete } from '../../data/displaySlice.ts';
+import { setActiveProject, setPendingDelete } from '../../data/displaySlice.ts';
 import { exportProject, saveProjectUpdates } from '../../data/projectActions.ts';
 import { CiEdit, CiExport, CiTrash } from 'react-icons/ci';
 import TextInputModal from '../inputs/TextInputModal.tsx';
+import { VscClose } from 'react-icons/vsc';
 
 function ProjectDetails(props: {projectId: string}) {
   const { projectId } = props;
@@ -22,6 +23,7 @@ function ProjectDetails(props: {projectId: string}) {
       <Dropdown className='text-3xl' inline label={<h1 className='text-3xl font-semibold'>{project.title}</h1>}>
         <Dropdown.Item icon={CiEdit} onClick={() => setEditTitle(true)}>Edit Project Title</Dropdown.Item>
         <Dropdown.Item icon={CiExport} onClick={() => dispatch(exportProject(projectId))}>Export Project</Dropdown.Item>
+        <Dropdown.Item icon={VscClose} onClick={() => dispatch(setActiveProject(''))}>Close Project</Dropdown.Item>
         <Dropdown.Item icon={CiTrash} onClick={() => dispatch(setPendingDelete({ id: projectId, parentId: '' }))}>
           Delete Project
         </Dropdown.Item>

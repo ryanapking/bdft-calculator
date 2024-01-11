@@ -18,9 +18,10 @@ import { CHILD_OFFSET, gatherSortableChildren, SortableChild } from './utilities
 import SortableTreeItem from './SortableTreeItem.tsx';
 import { useState } from 'react';
 import TreeItem from './TreeItem.tsx';
-import { Badge } from 'flowbite-react';
+import { Badge, Button } from 'flowbite-react';
 import InlineGroupForm from './InlineGroupForm.tsx';
 import InlinePartForm from './InlinePartForm.tsx';
+import { setPendingBulkDelete } from '../../../data/displaySlice.ts';
 
 function SortableGroupTree(props: {groupId: string}) {
   const dispatch = useAppDispatch();
@@ -32,6 +33,46 @@ function SortableGroupTree(props: {groupId: string}) {
   const [ activeItem, setActiveItem ] = useState<SortableChild|null>(null);
   const [ dropDepth, setDropDepth ] = useState<number>(0);
   const [ autoFocusIndex, setAutoFocusIndex ] = useState(0);
+  const [ showSelectors, setShowSelectors ] = useState(false);
+  const [ selection, setSelection ] = useState<Array<string>>([]);
+
+  function setSelector(item: SortableChild, checked: boolean) {
+    if (checked) selectItem(item)
+    else deselectItem(item);
+  }
+
+  function selectItem(item: SortableChild) {
+    const itemId = item.id.toString();
+    const descendants = item.descendants.map(id => id.toString());
+    const newSelection = [...selection, itemId, ...descendants];
+    setSelection([ ...new Set(newSelection)]);
+  }
+
+  function deselectItem(item: SortableChild) {
+    const itemId = item.id.toString();
+    const descendants = item.descendants.map(id => id.toString());
+    const ancestors = sortableChildren
+      .filter(item => {
+        return item.descendants.includes(itemId);
+      })
+      .map(item => item.id.toString());
+    const removeItems = [ itemId, ...descendants, ...ancestors];
+    const newSelection = selection.filter(currentId => !removeItems.includes(currentId));
+    setSelection(newSelection);
+  }
+
+  function changeSelectingStatus() {
+    setSelection([]);
+    setShowSelectors(!showSelectors);
+  }
+
+  function deleteSelection() {
+    const deleteItems = sortableChildren
+      .filter(item => selection.includes(item.id.toString()))
+      .map(item => ({id: item.id.toString(), parentId: item.parent.toString()}));
+
+    dispatch(setPendingBulkDelete(deleteItems));
+  }
 
   function calculateRelocation(activeItem: SortableChild, activeIndex: number, dropIndex: number, dropDepth: number): ChildRelocation {
     // If we are moving an item from before, we need to account for that
@@ -153,7 +194,16 @@ function SortableGroupTree(props: {groupId: string}) {
 
   return (
     <div className='w-full max-w-5xl mb-96'>
-      <h3 className='text-xl font-light mb-3'>Group Items:</h3>
+      <div className='flex justify-between items-end py-3'>
+        <h3 className='text-xl font-light'>Group Items:</h3>
+        <div className='flex gap-3'>
+          <Button color='gray' onClick={changeSelectingStatus}>{showSelectors ? 'Cancel Deletion' : 'Delete Items'}</Button>
+          {showSelectors
+            ? <Button disabled={selection.length < 1} color='failure' onClick={() => deleteSelection()}>{'Delete Selected Items'}</Button>
+            : null
+          }
+        </div>
+      </div>
       <div className='bg-gray-200 pl-1'>
         <DndContext
           onDragEnd={handleDragEnd}
@@ -167,6 +217,9 @@ function SortableGroupTree(props: {groupId: string}) {
               <SortableTreeItem
                 key={item.id}
                 item={item}
+                selected={showSelectors && selection.includes(item.id.toString())}
+                showSelector={showSelectors}
+                onSelectChange={selected => setSelector(item, selected)}
                 dropDepth={dropDepth}
                 active={item.id === activeItem?.id}
                 collapsed={!!activeItem && activeItem.descendants.includes(item.id)}
