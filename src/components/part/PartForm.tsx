@@ -67,7 +67,7 @@ function PartForm(props: {partId: string}) {
   return (
     <form className={classes.form} onSubmit={save}>
       <div className={classes.inputGroup}>
-        <Label htmlFor='title' value='Part Title'/>
+        <Label htmlFor='title' value='Title'/>
         <TextInput id='title' value={titleInput} onChange={event => setTitleInput(event.target.value)}/>
       </div>
       <div className={classes.inputGroup}>
@@ -85,19 +85,19 @@ function PartForm(props: {partId: string}) {
       <div className={classes.flexedInputGroup}>
         {materialType.partFields.includes('l') &&
           <div className={classes.inputGroup}>
-            <Label htmlFor='length' value='Length (inches)'/>
+            <Label htmlFor='length' value='Length'/>
             <InchInput id='length' value={lengthInput} onValueChange={length => setLengthInput(length)}/>
           </div>
         }
         {materialType.partFields.includes('w') &&
           <div className={classes.inputGroup}>
-            <Label htmlFor='width' value='Width (inches)'/>
+            <Label htmlFor='width' value='Width'/>
             <InchInput id='width' value={widthInput}  onValueChange={width => setWidthInput(width)}/>
           </div>
         }
         {materialType.partFields.includes('h') &&
           <div className={classes.inputGroup}>
-            <Label htmlFor='height' value='Height (inches)'/>
+            <Label htmlFor='height' value='Height'/>
             <InchInput id='height' value={heightInput} onValueChange={height => setHeightInput(height)}/>
           </div>
         }

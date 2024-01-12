@@ -40,6 +40,7 @@ function GlobalModal() {
   if (creating) return (
     <TextInputModal
       submitText='Create'
+      inputLabel='Title'
       close={() => dispatch(setCreating(false))}
       onSubmit={title => dispatch(addProject(title))}
     >

@@ -265,7 +265,7 @@ export function importProject(projectImport: ProjectExport) {
   };
 }
 
-export function importProjectAsNew(projectImport: ProjectExport) {
+export function importProjectAsNew(projectImport: ProjectExport, appendImport: boolean = true) {
   return (dispatch: AppDispatch) => {
     // Generate new IDs
     projectImport.project.id = getId(PROJECT);
@@ -301,8 +301,9 @@ export function importProjectAsNew(projectImport: ProjectExport) {
         });
       });
 
-    // Append to name
-    projectImport.project.title += ' (Import)';
+    if (appendImport) {
+      projectImport.project.title += ' (Import)';
+    }
 
     dispatch(importProject(projectImport));
   }
@@ -319,6 +320,6 @@ export function fetchSampleProject() {
       return;
     }
 
-    dispatch(importProjectAsNew(sampleProject));
+    dispatch(importProjectAsNew(sampleProject, false));
   };
 }

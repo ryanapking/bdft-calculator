@@ -1,7 +1,7 @@
 import { Dropdown } from 'flowbite-react';
 import { useSelector} from 'react-redux';
 import { RootState, useAppDispatch } from '../data/store.ts';
-import { beginImport, setActiveProject, setCreating } from '../data/displaySlice.ts';
+import { beginImport, setActiveDetails, setActiveProject, setCreating } from '../data/displaySlice.ts';
 import { FcCalculator } from 'react-icons/fc';
 import { RxPlusCircled } from 'react-icons/rx';
 import { CiImport } from 'react-icons/ci';
@@ -20,7 +20,7 @@ function Header() {
       </div>
 
       <div className='flex items-center gap-6'>
-        <button className=''>How to Use</button>
+        <button onClick={() => dispatch(setActiveDetails({id: '', parentId: ''}))}>About</button>
         <Dropdown inline label="Your Projects" size={'xs'}>
           {projectIds.map(id =>
             <Dropdown.Item key={id} onClick={() => dispatch(setActiveProject(id))}>{projects[id].title}</Dropdown.Item>

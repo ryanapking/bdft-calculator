@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../../data/store.ts';
-import { ChildRelocation, relocateChild } from '../../../data/groupActions.ts';
+import { addGroup, ChildRelocation, relocateChild } from '../../../data/groupActions.ts';
 import { getDataTypeFromId, GROUP } from '../../../data/dataTypes.ts';
 import {
   Active,
@@ -18,16 +18,17 @@ import { CHILD_OFFSET, gatherSortableChildren, SortableChild } from './utilities
 import SortableTreeItem from './SortableTreeItem.tsx';
 import { useState } from 'react';
 import TreeItem from './TreeItem.tsx';
-import { Badge, Button } from 'flowbite-react';
+import { Badge, Button, Dropdown } from 'flowbite-react';
 import InlineGroupForm from './InlineGroupForm.tsx';
 import InlinePartForm from './InlinePartForm.tsx';
 import { setPendingBulkDelete } from '../../../data/displaySlice.ts';
+import { addPart } from '../../../data/partActions.ts';
 
-function SortableGroupTree(props: {groupId: string}) {
+function SortableGroupTree({ groupId }: {groupId: string}) {
   const dispatch = useAppDispatch();
   const allGroups = useSelector((state: RootState) => state.groups.entities);
   const allParts = useSelector((state: RootState) => state.parts.entities);
-  const group = allGroups[props.groupId];
+  const group = allGroups[groupId];
   const sortableChildren = gatherSortableChildren(allGroups, allParts, group);
 
   const [ activeItem, setActiveItem ] = useState<SortableChild|null>(null);
@@ -195,11 +196,15 @@ function SortableGroupTree(props: {groupId: string}) {
   return (
     <div className='w-full max-w-5xl mb-96'>
       <div className='flex justify-between items-end py-3'>
-        <h3 className='text-xl font-light'>Group Items:</h3>
+        <h3 className='text-xl font-light'>Components:</h3>
         <div className='flex gap-3'>
-          <Button color='gray' onClick={changeSelectingStatus}>{showSelectors ? 'Cancel Deletion' : 'Delete Items'}</Button>
+          <Dropdown label="Add" color='gray' dismissOnClick={false}>
+            <Dropdown.Item onClick={() => dispatch(addPart(groupId, 0, false))}>Component</Dropdown.Item>
+            <Dropdown.Item onClick={() => dispatch(addGroup(groupId, 0, false))}>Subgroup</Dropdown.Item>
+          </Dropdown>
+          <Button color='gray' onClick={changeSelectingStatus}>{showSelectors ? 'Cancel Delete' : 'Delete'}</Button>
           {showSelectors
-            ? <Button disabled={selection.length < 1} color='failure' onClick={() => deleteSelection()}>{'Delete Selected Items'}</Button>
+            ? <Button disabled={selection.length < 1} color='failure' onClick={() => deleteSelection()}>{'Delete Selected'}</Button>
             : null
           }
         </div>

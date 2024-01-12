@@ -7,6 +7,7 @@ import GroupDetails from './group/GroupDetails.tsx';
 import PartDetails from './part/PartDetails.tsx';
 import MaterialDetails from './material/MaterialDetails.tsx';
 import ProjectMaterialDetails from './project/ProjectMaterialDetails.tsx';
+import Info from './Info.tsx';
 
 function Body() {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
@@ -23,7 +24,7 @@ function Body() {
     )
   }
 
-  if (!activeDetails.id) return printBody();
+  if (!activeDetails.id) return printBody(<Info />);
 
   if (activeDetails.id === 'materials') return printBody(<ProjectMaterialDetails />);
 

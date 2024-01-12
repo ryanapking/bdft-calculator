@@ -2,10 +2,9 @@ import GroupForm from './GroupForm.tsx';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../data/store.ts';
 import SortableGroupTree from './sortable/SortableGroupTree.tsx';
-import { Button, Dropdown } from 'flowbite-react';
+import { Dropdown } from 'flowbite-react';
 import { setPendingDelete } from '../../data/displaySlice.ts';
-import { addPart } from '../../data/partActions.ts';
-import { addGroup, duplicateGroup, saveGroupUpdates as saveGroup } from '../../data/groupActions.ts';
+import { duplicateGroup, saveGroupUpdates as saveGroup } from '../../data/groupActions.ts';
 import { CiEdit, CiRepeat, CiTrash, } from 'react-icons/ci';
 import { useState } from 'react';
 import TextInputModal from '../inputs/TextInputModal.tsx';
@@ -47,10 +46,6 @@ function GroupDetails(props: { groupId: string, parentId: string }) {
         </div>
       }
       <div className='max-w-5xl'>
-        <div className='flex gap-3 mb-5'>
-          <Button outline color='light' onClick={() => dispatch(addPart(groupId, 0, false))}>Add Component</Button>
-          <Button outline color='light' onClick={() => dispatch(addGroup(groupId, 0, false))}>Add Subgroup</Button>
-        </div>
         <SortableGroupTree groupId={groupId}/>
       </div>
       {editTitle ?
