@@ -311,7 +311,7 @@ export function importProjectAsNew(projectImport: ProjectExport, appendImport: b
 
 export function fetchSampleProject() {
   return async (dispatch: AppDispatch) => {
-    const response = await fetch("/sample-project.json");
+    const response = await fetch("/bdft-calculator/sample-project.json");
     const sampleProject: ProjectExport = await response.json();
 
     const valid = validateProjectImport(sampleProject);
