@@ -24,9 +24,11 @@ function InlinePartForm(props: Props) {
   const project = useSelector((state: RootState) => state.projects.entities[state.display.activeProject]);
   const dispatch = useAppDispatch();
 
-  const currentMaterialId = part.m ? part.m : project.defaultMaterial;
+  const currentMaterialId = part?.m ? part.m : project.defaultMaterial;
   const currentMaterial = useSelector((state: RootState) => state.materials.entities[currentMaterialId]);
   const materialType = getMaterialTypeFromId(currentMaterial.type);
+
+  if (!part) return null;
 
   function save(changes: PartPartial) {
     dispatch(savePartUpdates(partId, changes));

@@ -24,6 +24,8 @@ function PartLink(props: PartLinkProps) {
   const dispatch = useAppDispatch();
   const background = highlight ? highlightBg : '';
 
+  if (!part) return null;
+
   return (
     <button
       className={`w-full hover:cursor-pointer hover:underline flex items-center gap-2 ${background}`}

@@ -15,6 +15,10 @@ function Body() {
   const groupIds = useSelector((state: RootState) => state.groups.ids);
   const materialIds = useSelector((state: RootState) => state.materials.ids);
   const partIds = useSelector((state: RootState) => state.parts.ids);
+  const activeProjectExists = useSelector((state: RootState) => {
+    if (!state.display.activeProject) return false;
+    return state.projects.ids.includes(state.display.activeProject);
+  });
 
   function printBody(bodyContent?: ReactElement) {
     return (
@@ -24,7 +28,7 @@ function Body() {
     )
   }
 
-  if (!activeDetails.id) return printBody(<Info />);
+  if (!activeDetails.id || !activeProjectExists) return printBody(<Info />);
 
   if (activeDetails.id === 'materials') return printBody(<ProjectMaterialDetails />);
 

@@ -25,6 +25,8 @@ function MaterialSummary(props: Props) {
   const activeDetails = useSelector((state: RootState) => state.display.activeDetails);
   const dispatch = useAppDispatch();
 
+  if (!material) return null;
+
   const materialType = getMaterialTypeFromId(material.type);
   const usageData = group.calc.entities?.[materialId];
   const { totalAmt, totalCost } = usageData ? calculateMaterialWaste(usageData, material) : {totalCost: 0, totalAmt: 0};

@@ -29,8 +29,8 @@ export function gatherSortableChildren(allGroups: GroupEntities, allParts: PartE
     }
 
     const childSortable = {
-      id: child.id,
-      title: child.title,
+      id: child?.id ?? '',
+      title: child?.title ?? '',
       parent: group.id,
       depth: depth,
       index: currentIndex,

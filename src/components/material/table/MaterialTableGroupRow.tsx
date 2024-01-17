@@ -21,6 +21,8 @@ function MaterialTableGroupRow(props: Props) {
   const group = useSelector((state: RootState) => state.groups.entities[groupId]);
   const allParts = useSelector((state: RootState) => state.parts.entities);
 
+  if (!group) return null;
+
   return (
     <>
       {group.children.map((childId) => {
@@ -38,8 +40,8 @@ function MaterialTableGroupRow(props: Props) {
         }
         else {
           const part = allParts[childId];
-          const usage = part.calc.entities[part.calc.ids[0]]
-          if (usage.id !== materialId) return null;
+          const usage = part?.calc.entities[part.calc.ids[0]]
+          if (usage?.id !== materialId) return null;
 
           return (
             <MaterialTablePartRow

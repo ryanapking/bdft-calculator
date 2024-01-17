@@ -16,6 +16,7 @@ import displaySlice from './displaySlice.ts';
 import groupsSlice from './groupsSlice.ts';
 import materialsSlice from './materialsSlice.ts';
 import { useDispatch } from "react-redux";
+import crossTabSync from './crossTabSync.ts';
 
 const combinedReducers = combineReducers({
   display: persistReducer({key: 'display', storage}, displaySlice),
@@ -36,6 +37,7 @@ export const store = configureStore({
 })
 
 export const persistor = persistStore(store);
+crossTabSync(store, ['projects', 'parts', 'groups', 'materials']);
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
